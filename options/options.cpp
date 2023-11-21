@@ -62,6 +62,7 @@ enum optionIndex
   PROFILING_LOG_FILENAME,
   PSEUDO_INIT_PROP,
   ASSUME_PROP,
+  ASSERTION_FOLDER,
   CEGPROPHARR,
   NO_CEGP_TIMED_AXIOM_RED,
   NO_CEGP_CONSEC_AXIOM_RED,
@@ -363,6 +364,13 @@ const option::Descriptor usage[] = {
     Arg::None,
     "  --assume-prop \tenable assuming property in pre-state (default "
     "disabled)" },
+  { ASSERTION_FOLDER,
+    0,
+    "",
+    "assertion-folder",
+    Arg::NonEmpty,
+    "  --assertion-folder \tLoad external assertions from folder"
+  },
   { CEGPROPHARR,
     0,
     "",
@@ -777,6 +785,7 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
           break;
         case PSEUDO_INIT_PROP: pseudo_init_prop_ = true; break;
         case ASSUME_PROP: assume_prop_ = true; break;
+        case ASSERTION_FOLDER: assertion_foler_ = opt.arg; break;
         case CEGPROPHARR: ceg_prophecy_arrays_ = true; break;
         case NO_CEGP_TIMED_AXIOM_RED: cegp_timed_axiom_red_ = false; break;
         case NO_CEGP_CONSEC_AXIOM_RED: cegp_consec_axiom_red_ = false; break;

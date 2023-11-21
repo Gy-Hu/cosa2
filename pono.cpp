@@ -345,6 +345,11 @@ int main(int argc, char ** argv)
       }
 
       Term prop = propvec[pono_options.prop_idx_];
+      if(pono_options.property_file_!=""){
+        PropertyInterface assertion(pono_options.property_file_, fts);
+        prop = assertion.AddAssertions(prop);
+      }
+        
 
       TermVec additional_properties;
       if(pono_options.assertion_foler_ != "") {

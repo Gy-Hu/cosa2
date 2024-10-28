@@ -93,6 +93,9 @@ namespace pono
     smt::UnorderedTermSet actual_statevars_;
     smt::UnorderedTermSet no_next_vars_; //  the inputs
     smt::UnorderedTermSet no_next_vars_nxt_; //  the next state of inputs
+    
+    smt::TermVec constraints_curr_var_;
+    std::vector<smt::UnorderedTermSet>  vars_in_constraints_;
     smt::Term all_constraints_; // all constraints
     smt::Term init_prime_;
     smt::UnorderedTermMap nxt_state_updates_; // a map from prime var -> next

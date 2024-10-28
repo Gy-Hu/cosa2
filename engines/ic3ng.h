@@ -61,7 +61,9 @@ namespace pono
 
     smt::SmtSolver & solver() override { return solver_; }
     std::string print_frame_stat() const ;
-    void print_time_stat(std::ostream & os) const ;
+    void print_time_stat(std::ostream & os) const;
+
+    void virtual set_helper_term_predicates(const smt::TermVec & ) const override;
 
   protected:
     std::ofstream debug_fout;
@@ -140,7 +142,6 @@ namespace pono
       bool get_pre_state );
 
     void extend_predicates(Model *cex, smt::TermVec & conj_inout);
-    void load_predicates(const std::string & fname);
     smt::TermVec loaded_predicates_;
     std::unordered_map<Model *, PerCexInfo> model_info_map_;
 

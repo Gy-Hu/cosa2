@@ -149,7 +149,6 @@ void IC3ng::initialize() {
 
   lowest_frame_touched_ = frames.size() - 1;
 
-  load_predicates("predicates.smt2");
 }
 
 void IC3ng::append_frame()

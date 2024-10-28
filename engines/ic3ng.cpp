@@ -106,7 +106,6 @@ void IC3ng::initialize() {
   has_assumptions = false;
   assert(!nxt_state_updates_.empty());
 
-  smt::TermVec constraints_curr_var_;  
   for (const auto & c_initnext : ts_.constraints()) {
     // if (!c_initnext.second)
     //  continue; // should not matter
@@ -114,11 +113,16 @@ void IC3ng::initialize() {
     assert(ts_.no_next(c_initnext.first));
     // if (no_next) {
     constraints_curr_var_.push_back(c_initnext.first);
+    vars_in_constraints_.push_back({});
+    smt::get_free_symbolic_consts(constraints_curr_var_.back(), vars_in_constraints_.back());
+
     // translate input_var to next input_var
     // but the state var ...
     // we will get to next anyway
     constraints_curr_var_.push_back(
       next_trans_replace(ts_.next(c_initnext.first)));
+    vars_in_constraints_.push_back({});
+    smt::get_free_symbolic_consts(constraints_curr_var_.back(), vars_in_constraints_.back());
     // } // else skip
   }
   all_constraints_ = has_assumptions ? smart_and(constraints_curr_var_) : solver_true_;
@@ -145,7 +149,6 @@ void IC3ng::initialize() {
 
   lowest_frame_touched_ = frames.size() - 1;
 
-  load_predicates("predicates.smt2");
 }
 
 void IC3ng::append_frame()
@@ -203,14 +206,43 @@ ic3_rel_ind_check_result IC3ng::rel_ind_check( unsigned prevFidx,
   std::unordered_map<smt::Term,std::vector<std::pair<int,int>>> input_asts_slices = {
     {bad_next_to_assert, { {0,0} }}
   };
+  if (has_assumptions) {
+    // get free vars of bad_next_to_assert
+    // for each constraint, if there are intersection of vars
+    //   add contraint to input_asts_slices
+    #error todo
+    smt::UnorderedTermSet var_set_;
+    get_free_symbolic_consts(bad_next_to_assert, var_set_ );
 
-  #warning "TODO:"
-  // A better way here is to only **transitively** add those constraints containing variables in bad_next_to_assert
-  // If adding a constraint brings in more variables, you need to also consider those constraints
-  // containing the newly added variable
-  if (has_assumptions)
-    input_asts_slices.emplace(all_constraints_, std::vector<std::pair<int,int>>({ {0,0} }));
-    
+    // Below is to collect constraints that have common variables with bad_next_to_assert
+    bool changed = false;
+    do {
+      for (size_t cidx = 0; cidx < constraints_curr_var_.size(); ++ cidx) {
+        if (input_asts_slices.find(constraints_curr_var_.at(cidx)) != input_asts_slices.end())
+          continue;
+
+        bool found = false;
+        // for each variable in var_set_, see if there are any common variables
+        for (const auto & v : var_set_) {
+          if (vars_in_constraints_.at(cidx).find(v) != vars_in_constraints_.at(cidx).end()) {
+            found = true;
+            break;
+          }
+        }
+        if (found) {
+          input_asts_slices.emplace(constraints_curr_var_.at(cidx));
+          for (const auto & v : vars_in_constraints_.at(cidx)) {
+            auto res = var_set_.emplace(v);
+            if (res.second)
+              changed = true;
+          }
+        }
+      } // end of for each constraint
+    } while(changed);
+    // HZ: will not insert all constraints
+    // input_asts_slices.emplace(all_constraints_, std::vector<std::pair<int,int>>({ {0,0} }));
+  } // end of has assumption
+
   partial_model_getter.GetVarListForAsts_in_bitlevel(input_asts_slices, varlist_slice);
   // after this step varlist_slice may contain 
   // 1. current state var , 2. current input var
@@ -349,12 +381,67 @@ void IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
 
   auto model_info_pos = model_info_map_.find(cex);
   if (model_info_pos == model_info_map_.end()) {
-    // TODO: populate this information
+    PerVarInfo * var_info_ = cex->get_per_var_info();
+    if (!var_info_->related_info_populated) {
+      // TODO: setup related info
+      // based on structural varset check
+      smt::UnorderedTermSet vars_in_cex;
+      cex->compute_varset_noslice(vars_in_cex);
+      for (const auto & p : loaded_predicates_) {
+        smt::UnorderedTermSet vars_in_pred;
+        smt::get_free_symbolic_consts(p, vars_in_pred);
+        if(is_subset(vars_in_pred, vars_in_cex))
+          var_info_->preds_w_subset_vars.push_back(p);
+        else if(has_intersection(vars_in_pred, vars_in_cex))
+          var_info_->preds_w_related_vars.push_back(p);
+      }
+      var_info_->related_info_populated = true;
+    }
+
+    // compute the predicates to use below
+    smt::TermVec predicates_to_use;
+    {
+      solver_->push();
+      solver_->assert_formula(cex->to_expr(solver_));
+      for (const auto & p : var_info->preds_w_subset_vars) {
+        auto r = solver_->check_sat_assuming({p});
+        if (r.is_unsat()) {
+          predicates_to_use.push_back(p);
+          continue;
+        }
+        auto neg_p = smart_not(p);
+        r = solver_->check_sat_assuming({neg_p});
+        if (r.is_unsat()) {
+          predicates_to_use.push_back(neg_p);
+          continue;
+        }
+      }
+      if (predicates_to_use.empty()) {
+        for (const auto & p : var_info->preds_w_related_vars) {
+          auto r = solver_->check_sat_assuming({p});
+          if (r.is_unsat()) {
+            predicates_to_use.push_back(p);
+            continue;
+          }
+          auto neg_p = smart_not(p);
+          r = solver_->check_sat_assuming({neg_p});
+          if (r.is_unsat()) {
+            predicates_to_use.push_back(neg_p);
+            continue;
+          }
+        }
+      } // end of if predicates_to_use.empty()
+      solver_->pop();
+    }
+    // TODO: from preds_w_subset_vars -> PerCexInfo::preds_to_use
+    //  solve sat?
+    auto res = model_info_map_.emplace(cex, predicates_to_use);
+    model_info_pos = res.first;
   }
   auto preds = model_info_pos->second.preds_to_use;
   preds.insert(preds.end(), conj_inout.begin(), conj_inout.end() );
   conj_inout.swap(preds);
-}
+} // end of extend_predicates
 
 // ( ( not(S) /\ F /\ T ) \/ init_prime ) /\ ( cube' )
 //   cube (v[0]=1 /\ v[1]=0 /\ ...)
@@ -367,7 +454,7 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 
   smt::TermVec conjs;
   cex->to_expr_conj(solver_, conjs);
-  // extend_predicates(cex, conjs); // IC3INN
+  extend_predicates(cex, conjs); // IC3INN
 
   // TODO: sort conjs
   SortLemma(conjs, options_.ic3base_sort_lemma_descending);

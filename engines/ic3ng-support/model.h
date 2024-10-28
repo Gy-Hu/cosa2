@@ -55,6 +55,8 @@ public:
   Model(smt::SmtSolver & solver_, 
     const std::unordered_map <smt::Term,std::vector<std::pair<int,int>>> & varset_slice,
     PerVarInfo * var_info_ptr);
+  
+  PerVarInfo * get_per_var_info() const { return var_info_; }
   // Model(smt::SmtSolver & solver_, 
   //   const std::unordered_map <smt::Term,std::vector<std::pair<int,int>>> & varset_slice, // extract using these vars
   //   const std::unordered_map<smt::Term, smt::Term> & varmap // but use the map in here for the vars

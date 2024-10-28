@@ -6,8 +6,8 @@
 
 namespace pono {
 
-  void IC3ng::load_predicates(const std::string & fname) {
-    // TODO:
+  void IC3ng::set_helper_term_predicates(const smt::TermVec & preds) const {
+    loaded_predicates_ = preds;
   }
 
 } // namespace pono

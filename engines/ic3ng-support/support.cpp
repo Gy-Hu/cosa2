@@ -263,5 +263,4 @@ std::string IC3ng::print_frame_stat() const {
   return output;
 }
 
-
 } // end of namespace pono

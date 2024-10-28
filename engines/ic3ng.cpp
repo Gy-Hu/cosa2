@@ -203,6 +203,11 @@ ic3_rel_ind_check_result IC3ng::rel_ind_check( unsigned prevFidx,
   std::unordered_map<smt::Term,std::vector<std::pair<int,int>>> input_asts_slices = {
     {bad_next_to_assert, { {0,0} }}
   };
+
+  #warning "TODO:"
+  // A better way here is to only **transitively** add those constraints containing variables in bad_next_to_assert
+  // If adding a constraint brings in more variables, you need to also consider those constraints
+  // containing the newly added variable
   if (has_assumptions)
     input_asts_slices.emplace(all_constraints_, std::vector<std::pair<int,int>>({ {0,0} }));
     
@@ -365,7 +370,7 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   // extend_predicates(cex, conjs); // IC3INN
 
   // TODO: sort conjs
-  SortLemma(conjs, true);
+  SortLemma(conjs, options_.ic3base_sort_lemma_descending);
 
   auto cex_expr = smart_not(smart_and(conjs));
   // TODO: you may generate more than 1 clauses

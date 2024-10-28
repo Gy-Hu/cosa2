@@ -31,6 +31,7 @@ enum optionIndex
   UNKNOWN_OPTION,
   HELP,
   ENGINE,
+  EXTERNAL_PREDICATES_FILE,
   BOUND,
   PROP,
   VERBOSITY,
@@ -144,6 +145,13 @@ const option::Descriptor usage[] = {
     Arg::NonEmpty,
     "  --engine, -e <engine> \tSelect engine from [bmc, bmc-sp, ind, "
     "interp, mbic3, ic3bits, ic3ia, msat-ic3ia, ic3sa, sygus-pdr, ic3ng-bits]." },
+  { EXTERNAL_PREDICATES_FILE,
+    0,
+    "",
+    "external-predicates",
+    Arg::NonEmpty,
+    "  --external-predicates <file-name> \tThe file name to load predicates."
+  },
   { BOUND,
     0,
     "k",
@@ -684,6 +692,7 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
         case HELP:
           // not possible, because handled further above and exits the program
         case ENGINE: engine_ = to_engine(opt.arg); break;
+        case EXTERNAL_PREDICATES_FILE: external_predicates_file_ = opt.arg; break;
         case BOUND: bound_ = atoi(opt.arg); break;
         case PROP: prop_idx_ = atoi(opt.arg); break;
         case VERBOSITY: verbosity_ = atoi(opt.arg); break;

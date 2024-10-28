@@ -66,6 +66,8 @@ class Prover
    */
   smt::Term invar();
 
+  void virtual set_helper_term_predicates(const smt::TermVec & ) const {}
+
  protected:
   /** Take a term from the Prover's solver
    *  to the original transition system's solver

@@ -381,12 +381,67 @@ void IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
 
   auto model_info_pos = model_info_map_.find(cex);
   if (model_info_pos == model_info_map_.end()) {
-    // TODO: populate this information
+    PerVarInfo * var_info_ = cex->get_per_var_info();
+    if (!var_info_->related_info_populated) {
+      // TODO: setup related info
+      // based on structural varset check
+      smt::UnorderedTermSet vars_in_cex;
+      cex->compute_varset_noslice(vars_in_cex);
+      for (const auto & p : loaded_predicates_) {
+        smt::UnorderedTermSet vars_in_pred;
+        smt::get_free_symbolic_consts(p, vars_in_pred);
+        if(is_subset(vars_in_pred, vars_in_cex))
+          var_info_->preds_w_subset_vars.push_back(p);
+        else if(has_intersection(vars_in_pred, vars_in_cex))
+          var_info_->preds_w_related_vars.push_back(p);
+      }
+      var_info_->related_info_populated = true;
+    }
+
+    // compute the predicates to use below
+    smt::TermVec predicates_to_use;
+    {
+      solver_->push();
+      solver_->assert_formula(cex->to_expr(solver_));
+      for (const auto & p : var_info->preds_w_subset_vars) {
+        auto r = solver_->check_sat_assuming({p});
+        if (r.is_unsat()) {
+          predicates_to_use.push_back(p);
+          continue;
+        }
+        auto neg_p = smart_not(p);
+        r = solver_->check_sat_assuming({neg_p});
+        if (r.is_unsat()) {
+          predicates_to_use.push_back(neg_p);
+          continue;
+        }
+      }
+      if (predicates_to_use.empty()) {
+        for (const auto & p : var_info->preds_w_related_vars) {
+          auto r = solver_->check_sat_assuming({p});
+          if (r.is_unsat()) {
+            predicates_to_use.push_back(p);
+            continue;
+          }
+          auto neg_p = smart_not(p);
+          r = solver_->check_sat_assuming({neg_p});
+          if (r.is_unsat()) {
+            predicates_to_use.push_back(neg_p);
+            continue;
+          }
+        }
+      } // end of if predicates_to_use.empty()
+      solver_->pop();
+    }
+    // TODO: from preds_w_subset_vars -> PerCexInfo::preds_to_use
+    //  solve sat?
+    auto res = model_info_map_.emplace(cex, predicates_to_use);
+    model_info_pos = res.first;
   }
   auto preds = model_info_pos->second.preds_to_use;
   preds.insert(preds.end(), conj_inout.begin(), conj_inout.end() );
   conj_inout.swap(preds);
-}
+} // end of extend_predicates
 
 // ( ( not(S) /\ F /\ T ) \/ init_prime ) /\ ( cube' )
 //   cube (v[0]=1 /\ v[1]=0 /\ ...)
@@ -399,7 +454,7 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 
   smt::TermVec conjs;
   cex->to_expr_conj(solver_, conjs);
-  // extend_predicates(cex, conjs); // IC3INN
+  extend_predicates(cex, conjs); // IC3INN
 
   // TODO: sort conjs
   SortLemma(conjs, true);

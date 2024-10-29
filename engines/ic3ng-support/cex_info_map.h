@@ -17,6 +17,8 @@
 
 struct PerCexInfo {
   smt::TermVec preds_to_use;
+  
+  PerCexInfo(smt::TermVec && pred) : preds_to_use(pred) {}
 };
 
 struct PerVarInfo {

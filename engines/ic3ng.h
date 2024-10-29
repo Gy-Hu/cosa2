@@ -63,7 +63,7 @@ namespace pono
     std::string print_frame_stat() const ;
     void print_time_stat(std::ostream & os) const;
 
-    void virtual set_helper_term_predicates(const smt::TermVec & ) const override;
+    void virtual set_helper_term_predicates(const smt::TermVec & ) override;
 
   protected:
     std::ofstream debug_fout;

@@ -66,7 +66,7 @@ class Prover
    */
   smt::Term invar();
 
-  void virtual set_helper_term_predicates(const smt::TermVec & ) const {}
+  void virtual set_helper_term_predicates(const smt::TermVec & ) {}
 
  protected:
   /** Take a term from the Prover's solver

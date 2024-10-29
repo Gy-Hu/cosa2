@@ -358,7 +358,7 @@ int main(int argc, char ** argv)
       // get property name before it is rewritten
 
       std::vector<UnorderedTermMap> cex;
-      res = check_prop(pono_options, prop, rts, s, cex);
+      res = check_prop(pono_options, prop, rts, s, cex, {});
       // we assume that a prover never returns 'ERROR'
       assert(res != ERROR);
 

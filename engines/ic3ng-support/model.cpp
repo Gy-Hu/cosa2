@@ -100,6 +100,7 @@ Model::Model(smt::SmtSolver & solver_,
   const std::unordered_map <smt::Term,std::vector<std::pair<int,int>>> & varset_slice, 
   PerVarInfo * var_info_ptr) : var_info_(var_info_ptr)
 {
+  var_info_ptr->ref_count++;
   for (const auto & v_slice : varset_slice) {
     const auto & var = v_slice.first;
     auto val = solver_->get_value(var);

@@ -377,6 +377,9 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 
   smt::TermVec conjs;
   cex->to_expr_conj(solver_, conjs);
+  // HZ: TODO a better way is to check, if the vars are appearing too often
+  // if so, we extend the predicates
+  // otherwise, we will not use word-level preds
   extend_predicates(cex, conjs); // IC3INN
 
   // TODO: sort conjs

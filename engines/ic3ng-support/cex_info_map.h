@@ -24,6 +24,7 @@ struct PerCexInfo {
 struct PerVarInfo {
   std::unordered_set<smt::Term> vars_noslice_in_cex;
   std::string vars_noslice_canonical_string;
+  unsigned ref_count; // we want to know, if the CTIs are often about a certain vars or not
 
   bool related_info_populated;
   smt::Term related_trans;
@@ -31,7 +32,7 @@ struct PerVarInfo {
   smt::TermVec preds_w_related_vars;
 
   PerVarInfo(std::unordered_set<smt::Term> && vars, std::string && hashstring):
-    vars_noslice_in_cex(vars), vars_noslice_canonical_string(hashstring), related_info_populated(false)
+    vars_noslice_in_cex(vars), vars_noslice_canonical_string(hashstring), ref_count(0), related_info_populated(false)
    {}
 };
 

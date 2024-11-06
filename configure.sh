@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Syntax and structure borrowed from CVC4's configure.sh script
+# Syntax and structure borrowed from cvc5's configure.sh script
 
 CONF_FILE=Makefile.conf
 
@@ -15,8 +15,14 @@ Configures the CMAKE build environment.
 --build-dir=STR         custom build directory  (default: build)
 --with-msat             build with MathSAT which has a custom non-BSD compliant license.  (default : off)
                         Required for interpolant based model checking
---with-cvc4             build with CVC4 support (default: off)
+--with-msat-ic3ia       build with the open-source IC3IA implementation as a backend. (default: off)
+--with-coreir           build the CoreIR frontend (default: off)
+--with-coreir-extern    build the CoreIR frontend using an installation of coreir in /usr/local/lib (default: off)
 --debug                 build debug with debug symbols (default: off)
+--python                compile with python bindings (default: off)
+--static-lib            build a static library (default: shared)
+--static                build a static executable (default: dynamic); implies --static-lib
+--with-profiling        build with gperftools for profiling (default: off)
 EOF
   exit 0
 }
@@ -30,8 +36,14 @@ build_dir=build
 install_prefix=default
 build_type=default
 with_msat=default
-with_cvc4=default
+with_msat_ic3ia=default
+with_coreir=default
+with_coreir_extern=default
 debug=default
+python=default
+lib_type=SHARED
+static_exec=NO
+with_profiling=default
 
 buildtype=Release
 
@@ -60,17 +72,33 @@ do
             esac
             ;;
         --with-msat) with_msat=ON;;
-        --with-cvc4) with_cvc4=ON;;
+        --with-msat-ic3ia) with_msat_ic3ia=ON;;
+        --with-coreir) with_coreir=ON;;
+        --with-coreir-extern) with_coreir_extern=ON;;
         --debug)
             debug=yes;
             buildtype=Debug
             ;;
+        --python)
+            python=yes
+            ;;
+        --static-lib)
+            lib_type=STATIC
+            ;;
+        --static)
+            static_exec=YES;
+            lib_type=STATIC;
+            ;;
+        --with-profiling) with_profiling=ON;;
         *) die "unexpected argument: $1";;
     esac
     shift
 done
 
-cmake_opts="-DCMAKE_BUILD_TYPE=$buildtype"
+[ $lib_type = STATIC ] && [ $with_coreir = ON -o $with_coreir_extern = ON ] && \
+    die "CoreIR and static build are incompatible, must omit either '--static/--static-lib' or '--with-coreir/--with-coreir-extern'"
+
+cmake_opts="-DCMAKE_BUILD_TYPE=$buildtype -DPONO_LIB_TYPE=${lib_type} -DPONO_STATIC_EXEC=${static_exec}"
 
 [ $install_prefix != default ] \
     && cmake_opts="$cmake_opts -DCMAKE_INSTALL_PREFIX=$install_prefix"
@@ -78,8 +106,20 @@ cmake_opts="-DCMAKE_BUILD_TYPE=$buildtype"
 [ $with_msat != default ] \
     && cmake_opts="$cmake_opts -DWITH_MSAT=$with_msat"
 
-[ $with_cvc4 != default ] \
-    && cmake_opts="$cmake_opts -DWITH_CVC4=$with_cvc4"
+[ $with_msat_ic3ia != default ] \
+    && cmake_opts="$cmake_opts -DWITH_MSAT_IC3IA=$with_msat_ic3ia"
+
+[ $with_coreir != default ] \
+    && cmake_opts="$cmake_opts -DWITH_COREIR=$with_coreir"
+
+[ $with_coreir_extern != default ] \
+    && cmake_opts="$cmake_opts -DWITH_COREIR_EXTERN=$with_coreir_extern"
+
+[ $python != default ] \
+    && cmake_opts="$cmake_opts -DBUILD_PYTHON_BINDINGS=ON"
+
+[ $with_profiling != default ] \
+    && cmake_opts="$cmake_opts -DWITH_PROFILING=$with_profiling"
 
 root_dir=$(pwd)
 

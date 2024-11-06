@@ -1,39 +1,38 @@
 /*********************                                                        */
-/*! \file 
+/*! \file
  ** \verbatim
  ** Top contributors (to current version):
  **   Ahmed Irfan, Makai Mann
- ** This file is part of the cosa2 project.
+ ** This file is part of the pono project.
  ** Copyright (c) 2019 by the authors listed in the file AUTHORS
  ** in the top-level source directory) and their institutional affiliations.
  ** All rights reserved.  See the file LICENSE in the top-level source
  ** directory for licensing information.\endverbatim
  **
- ** \brief 
+ ** \brief
  **
- ** 
+ **
  **/
-
 
 #pragma once
 
-#include "kinduction.h"
+#include "engines/kinduction.h"
 
-namespace cosa {
+namespace pono {
 
 class BmcSimplePath : public KInduction
 {
  public:
-  BmcSimplePath(const Property & p, smt::SmtSolver & solver);
+  BmcSimplePath(const Property & p, const TransitionSystem & ts,
+                const smt::SmtSolver & solver,
+                PonoOptions opt = PonoOptions());
+
   ~BmcSimplePath();
 
   typedef KInduction super;
 
   ProverResult check_until(int k) override;
 
- private:
-  bool cover_step(int i);
-
 };  // BmcSimplePath
 
-}  // namespace cosa
+}  // namespace pono

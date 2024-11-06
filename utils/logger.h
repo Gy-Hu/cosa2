@@ -1,19 +1,18 @@
 /*********************                                                        */
-/*! \file 
+/*! \file
  ** \verbatim
  ** Top contributors (to current version):
  **   Makai Mann
- ** This file is part of the cosa2 project.
+ ** This file is part of the pono project.
  ** Copyright (c) 2019 by the authors listed in the file AUTHORS
  ** in the top-level source directory) and their institutional affiliations.
  ** All rights reserved.  See the file LICENSE in the top-level source
  ** directory for licensing information.\endverbatim
  **
- ** \brief 
+ ** \brief
  **
- ** 
+ **
  **/
-
 
 #pragma once
 
@@ -30,6 +29,14 @@
 /****************************** Support for printing smt-switch objects
  * *********************************/
 
+/** Takes a string and removes the curly brackets
+ *  Since fmt/format.h uses {} to denote an argument
+ *  it breaks if there are curly brackets in the string
+ *  @param s the string to start with
+ *  @return the same string but without curly brackets
+ */
+std::string remove_curly_brackets(std::string s);
+
 // Term
 template <>
 struct fmt::formatter<smt::Term>
@@ -43,7 +50,7 @@ struct fmt::formatter<smt::Term>
   template <typename FormatContext>
   auto format(const smt::Term & t, FormatContext & ctx)
   {
-    return format_to(ctx.out(), t->to_string());
+    return format_to(ctx.out(), remove_curly_brackets(t->to_string()));
   }
 };
 
@@ -60,7 +67,7 @@ struct fmt::formatter<smt::Sort>
   template <typename FormatContext>
   auto format(const smt::Sort & s, FormatContext & ctx)
   {
-    return format_to(ctx.out(), s->to_string());
+    return format_to(ctx.out(), remove_curly_brackets(s->to_string()));
   }
 };
 
@@ -122,12 +129,14 @@ struct fmt::formatter<smt::Result>
  * ************************************************/
 // Meant to be used as a singleton class -- instantiated as logger below
 
-namespace cosa {
+namespace pono {
 
 class Log
 {
  public:
   Log() : verbosity(0), verbosity_set(false) {}
+
+  Log(size_t v) : verbosity(v), verbosity_set(true) {}
 
   /* Logs to the terminal using Python-style format string
    * @param level the verbosity level to print this log (prints for any
@@ -136,9 +145,7 @@ class Log
    * @param args comma separated list of inputs for the format string
    */
   template <typename... Args>
-  void log(unsigned int level,
-           const std::string & format,
-           const Args &... args) const
+  void log(size_t level, const std::string & format, const Args &... args) const
   {
     if (level <= verbosity)
     {
@@ -154,8 +161,8 @@ class Log
    * @param args comma separated list of inputs for the format string
    */
   template <typename... Args>
-  void log(unsigned int lower,
-           unsigned int upper,
+  void log(size_t lower,
+           size_t upper,
            const std::string & format,
            const Args &... args) const
   {
@@ -168,7 +175,7 @@ class Log
   /* set verbosity -- can only be set once
    * @param v the verbosity to set
    */
-  void set_verbosity(unsigned int v)
+  void set_verbosity(size_t v)
   {
     if (!verbosity_set)
     {
@@ -176,15 +183,18 @@ class Log
     }
     else
     {
-      throw CosaException("Can only set logger verbosity once.");
+      throw PonoException("Can only set logger verbosity once.");
     }
   }
 
  protected:
-  int verbosity;
+  size_t verbosity;
   bool verbosity_set;
 };
 
 // globally avaiable logger instance
 extern Log logger;
-}  // namespace cosa
+
+void set_global_logger_verbosity(size_t v);
+
+}  // namespace pono

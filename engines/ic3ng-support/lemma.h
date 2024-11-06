@@ -18,8 +18,13 @@ namespace pono
       bool inline is_must_block() const { return cex_type == MUST_BLOCK; }
       bool inline is_may_block() const { return cex_type == MAY_BLOCK; }
       bool inline is_the_property() const { return cex_type == PROPERTY; }
+      bool inline is_constraint() const { return cex_type == CONSTRAINT; }
       unsigned inline dist_to_fail() const { return step_to_fail; }
       CexType inline get_type() const { return cex_type;} 
+      LCexOrigin to_prior_frame() const { 
+        if (is_must_block()) 
+          return LCexOrigin(MUST_BLOCK, step_to_fail+1);
+        return *this; }
 
       static LCexOrigin MustBlock(unsigned i) { return LCexOrigin(MUST_BLOCK, i); }
       static LCexOrigin MayBlock() { return LCexOrigin(MAY_BLOCK, 0); }
@@ -32,14 +37,14 @@ namespace pono
   class Lemma {
     public:
     
-    Lemma(const smt::Term & expr, Model * cex, LCexOrigin origin);
+    Lemma(const smt::Term & expr, Model * cex, LCexOrigin origin) : expr_(expr), 
+      cex_(cex),  origin_(origin) { }
     
     inline smt::Term  expr() const { return expr_; }
     inline Model *  cex() const { return cex_; }
     inline std::string to_string() const { return expr()->to_string(); }
     inline LCexOrigin origin() const { return origin_; }
 
-    # error "do we really need this?"
     // bool pushed;
 
     // Lemma * direct_push(ModelLemmaManager & mfm);
@@ -75,18 +80,19 @@ public:
   virtual smt::SmtSolver & solver() = 0;
 
 protected:
-  Model * new_model();
+  // Model * new_model();
   void register_new_model(Model *);
   Model * new_model(const std::unordered_map <smt::Term,std::vector<std::pair<int,int>>> & varset);
-  Model * new_model_replace_var(
-    const std::unordered_map <smt::Term,std::vector<std::pair<int,int>>> & varset,
-    const std::unordered_map<smt::Term, smt::Term> & varmap );
+  // Model * new_model_replace_var(
+  //   const std::unordered_map <smt::Term,std::vector<std::pair<int,int>>> & varset,
+  //   const std::unordered_map<smt::Term, smt::Term> & varmap );
 
   Lemma * new_lemma(
     const smt::Term & expr, Model * cex, LCexOrigin origin);
     
   std::vector<Lemma *> lemma_allocation_pool;
   std::vector<Model *> cube_allocation_pool;
+  std::unordered_map<std::string, PerVarInfo *> cube_var_info_allocation_pool;
 };
 
 } // namespace pono

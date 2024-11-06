@@ -31,6 +31,7 @@
 #include "frontends/btor2_encoder.h"
 #include "frontends/smv_encoder.h"
 #include "frontends/vmt_encoder.h"
+#include "frontends/external_term.h"
 #include "modifiers/control_signals.h"
 #include "modifiers/mod_ts_prop.h"
 #include "modifiers/prop_monitor.h"
@@ -53,7 +54,8 @@ ProverResult check_prop(PonoOptions pono_options,
                         Term & prop,
                         TransitionSystem & ts,
                         const SmtSolver & s,
-                        std::vector<UnorderedTermMap> & cex)
+                        std::vector<UnorderedTermMap> & cex,
+                        const TermVec & external_preds)
 {
   // get property name before it is rewritten
   const string prop_name = ts.get_name(prop);
@@ -133,6 +135,8 @@ ProverResult check_prop(PonoOptions pono_options,
     prover = make_prover(eng, p, ts, s, pono_options);
   }
   assert(prover);
+
+  prover->set_helper_term_predicates(external_preds);
 
   // TODO: handle this in a more elegant way in the future
   //       consider calling prover for CegProphecyArrays (so that underlying
@@ -295,10 +299,17 @@ int main(int argc, char ** argv)
             + pono_options.filename_ + " (" + to_string(num_props) + ")");
       }
 
+      TermVec external_predicates;
+      if (!pono_options.external_predicates_file_.empty()) {
+        ExternalTermInterface term_if(pono_options.external_predicates_file_, fts);
+        external_predicates = term_if.GetExternalPredicates();
+        // TODO add helper assertions/assumptions
+      }
+
       Term prop = propvec[pono_options.prop_idx_];
 
       vector<UnorderedTermMap> cex;
-      res = check_prop(pono_options, prop, fts, s, cex);
+      res = check_prop(pono_options, prop, fts, s, cex, external_predicates);
       // we assume that a prover never returns 'ERROR'
       assert(res != ERROR);
 
@@ -347,7 +358,7 @@ int main(int argc, char ** argv)
       // get property name before it is rewritten
 
       std::vector<UnorderedTermMap> cex;
-      res = check_prop(pono_options, prop, rts, s, cex);
+      res = check_prop(pono_options, prop, rts, s, cex, {});
       // we assume that a prover never returns 'ERROR'
       assert(res != ERROR);
 

@@ -31,6 +31,7 @@ enum optionIndex
   UNKNOWN_OPTION,
   HELP,
   ENGINE,
+  EXTERNAL_PREDICATES_FILE,
   BOUND,
   PROP,
   VERBOSITY,
@@ -143,7 +144,14 @@ const option::Descriptor usage[] = {
     "engine",
     Arg::NonEmpty,
     "  --engine, -e <engine> \tSelect engine from [bmc, bmc-sp, ind, "
-    "interp, mbic3, ic3bits, ic3ia, msat-ic3ia, ic3sa, sygus-pdr]." },
+    "interp, mbic3, ic3bits, ic3ia, msat-ic3ia, ic3sa, sygus-pdr, ic3ng-bits]." },
+  { EXTERNAL_PREDICATES_FILE,
+    0,
+    "",
+    "external-predicates",
+    Arg::NonEmpty,
+    "  --external-predicates <file-name> \tThe file name to load predicates."
+  },
   { BOUND,
     0,
     "k",
@@ -621,7 +629,8 @@ const std::unordered_set<Engine> ic3_variants_set({ IC3_BOOL,
                                                     IC3IA_ENGINE,
                                                     MSAT_IC3IA,
                                                     IC3SA_ENGINE,
-                                                    SYGUS_PDR });
+                                                    SYGUS_PDR,
+                                                    IC3NG_BITS });
 
 const std::unordered_set<Engine> & ic3_variants() { return ic3_variants_set; }
 
@@ -683,6 +692,7 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
         case HELP:
           // not possible, because handled further above and exits the program
         case ENGINE: engine_ = to_engine(opt.arg); break;
+        case EXTERNAL_PREDICATES_FILE: external_predicates_file_ = opt.arg; break;
         case BOUND: bound_ = atoi(opt.arg); break;
         case PROP: prop_idx_ = atoi(opt.arg); break;
         case VERBOSITY: verbosity_ = atoi(opt.arg); break;
@@ -889,6 +899,10 @@ string to_string(Engine e)
     }
     case SYGUS_PDR: {
       res = "sygus-pdr";
+      break;
+    }
+    case IC3NG_BITS: {
+      res = "ic3ng-bits";
       break;
     }
     default: {

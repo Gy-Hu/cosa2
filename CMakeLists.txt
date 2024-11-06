@@ -19,8 +19,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-#set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
-#set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 
 add_definitions(-DPONO_SRC_DIR=${PROJECT_SOURCE_DIR})
 
@@ -53,8 +51,6 @@ if (BISON_FOUND)
   message("-- Adding bison lib: ${BISON_PARENT_DIR}/../lib")
   link_directories("${BISON_PARENT_DIR}/../lib/")
 endif()
-
-find_library(LIBRT rt)
 
 message("-- FOUND FLEX EXECUTABLE: ${FLEX_EXECUTABLE}")
 message("-- FOUND FLEX INCLUDE DIRS: ${FLEX_INCLUDE_DIRS}")
@@ -157,10 +153,16 @@ set(SOURCES
   "${PROJECT_SOURCE_DIR}/engines/kinduction.cpp"
   "${PROJECT_SOURCE_DIR}/engines/mbic3.cpp"
   "${PROJECT_SOURCE_DIR}/engines/syguspdr.cpp"
+  "${PROJECT_SOURCE_DIR}/engines/ic3ng-support/lemma.cpp"
+  "${PROJECT_SOURCE_DIR}/engines/ic3ng-support/model.cpp"
+  "${PROJECT_SOURCE_DIR}/engines/ic3ng-support/support.cpp"
+  "${PROJECT_SOURCE_DIR}/engines/ic3ng-support/predload.cpp"
+  "${PROJECT_SOURCE_DIR}/engines/ic3ng.cpp"
   "${PROJECT_SOURCE_DIR}/frontends/btor2_encoder.cpp"
   "${PROJECT_SOURCE_DIR}/frontends/smv_encoder.cpp"
   "${PROJECT_SOURCE_DIR}/frontends/smv_node.cpp"
   "${PROJECT_SOURCE_DIR}/frontends/vmt_encoder.cpp"
+  "${PROJECT_SOURCE_DIR}/frontends/external_term.cpp"
   "${PROJECT_SOURCE_DIR}/modifiers/array_abstractor.cpp"
   "${PROJECT_SOURCE_DIR}/modifiers/control_signals.cpp"
   "${PROJECT_SOURCE_DIR}/modifiers/implicit_predicate_abstractor.cpp"
@@ -265,11 +267,6 @@ target_link_libraries(pono-lib PUBLIC "${PROJECT_SOURCE_DIR}/deps/btor2tools/bui
 target_link_libraries(pono-lib PUBLIC "${GMPXX_LIBRARIES}")
 target_link_libraries(pono-lib PUBLIC "${GMP_LIBRARIES}")
 target_link_libraries(pono-lib PUBLIC pthread)
-#target_link_libraries(pono-lib PUBLIC y)
-
-if (LIBRT)
-  target_link_libraries(pono-lib PUBLIC ${LIBRT})
-endif()
 
 if (GOOGLE_PERF)
   target_link_libraries(pono-lib PUBLIC ${GOOGLE_PERF})
@@ -295,7 +292,7 @@ target_include_directories(pono-bin PUBLIC
 target_link_libraries(pono-bin PUBLIC pono-lib)
 
 if ("${PONO_STATIC_EXEC}" STREQUAL "YES")
-  target_link_libraries(pono-bin PUBLIC -static -static-libgcc -static-libstdc++)
+  target_link_libraries(pono-bin PUBLIC -static)
 endif()
 
 # install smt-switch

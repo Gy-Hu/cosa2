@@ -85,6 +85,32 @@ void IC3FormulaModel::get_varset(std::unordered_set<smt::Term> & varset) const {
 }
 
 void reduce_unsat_core_to_fixedpoint(
+  const smt::Term & formula,
+  smt::TermList & core_inout,
+  const smt::SmtSolver & reducer_) {
+  // already pushed outside (because we want to disable all labels)
+  reducer_->assert_formula(formula);
+
+  // exit if the formula is unsat without assumptions.
+  smt::Result r = reducer_->check_sat();
+  if (r.is_unsat())
+    return;
+
+  while(true) {
+    r = reducer_->check_sat_assuming_list(core_inout);
+    assert(r.is_unsat());
+
+    smt::TermList core_out;
+    reducer_->get_unsat_assumptions(core_out);
+    if (core_inout.size() == core_out.size()) {
+      break; // fixed point is reached
+    }
+    assert(core_out.size() < core_inout.size());
+    core_inout.swap(core_out);  // namely, core_inout = core_out,  but no need to copy
+  }
+}
+
+void reduce_unsat_core_to_fixedpoint(
   const smt::Term & formula, 
   smt::UnorderedTermSet & core_inout,
   const smt::SmtSolver & reducer_) {
@@ -110,7 +136,6 @@ void reduce_unsat_core_to_fixedpoint(
   }
 } // reduce_unsat_core_to_fixedpoint
 
-// a helper function
 
 void remove_and_move_to_next(smt::TermList & pred_set, smt::TermList::iterator & pred_pos,
   const smt::UnorderedTermSet & unsatcore) {
@@ -182,6 +207,83 @@ void reduce_unsat_core_linear(
   } // end of while
 } // end of reduce_unsat_core_linear
 
+
+// a helper function : the rev version
+// it goes from the end to the beginning
+void remove_and_move_to_next_rev(smt::TermList & pred_set, smt::TermList::iterator & pred_pos,
+  const smt::UnorderedTermSet & unsatcore) {
+
+  auto pred_iter = pred_set.end(); // pred_pos;
+  auto pred_pos_new = pred_set.end();
+
+  pred_pos_new--;
+
+  bool reached = false;
+  bool next_pos_found = false;
+
+  while( pred_iter != pred_set.begin() ) {
+    pred_iter--;
+    
+    if (!reached && pred_iter == pred_pos) {
+      reached = true;
+    }
+    
+    if (unsatcore.find(*pred_iter) == unsatcore.end()) {
+      assert (reached);
+      pred_iter = pred_set.erase(pred_iter);
+    } else {
+      if (reached && ! next_pos_found) {
+        pred_pos_new = pred_iter;
+        pred_pos_new ++;
+        next_pos_found = true;
+      }
+    }
+  } // end of while
+
+  assert(reached);
+  if (! next_pos_found) {
+    assert (pred_iter == pred_set.begin());
+    pred_pos_new = pred_iter;
+  }
+  pred_pos = pred_pos_new;
+} // remove_and_move_to_next
+
+void reduce_unsat_core_linear_rev(
+    const smt::Term & formula,
+    smt::TermList & assumption_list,
+    const smt::SmtSolver & reducer_) {
+  
+  // already pushed outside (because we want to disable all labels)
+  reducer_->assert_formula(formula);
+
+  // exit if the formula is unsat without assumptions.
+  smt::Result r = reducer_->check_sat();
+  if (r.is_unsat())
+    return;
+
+  r = reducer_->check_sat_assuming_list(assumption_list);
+  assert(r.is_unsat());
+
+  auto to_remove_pos = assumption_list.end();
+
+  while(to_remove_pos != assumption_list.begin()) {
+    to_remove_pos--; // firstly, point to the last one
+    smt::Term term_to_remove = *to_remove_pos;
+
+    auto pos_after = assumption_list.erase(to_remove_pos);
+    r = reducer_->check_sat_assuming_list(assumption_list);
+    to_remove_pos = assumption_list.insert(pos_after, term_to_remove);
+    
+    if (r.is_sat()) {
+      continue; // we cannot remove this, so move to the next (prior one)
+    } else { // if unsat, we can remove
+      smt::UnorderedTermSet core_set;
+      reducer_->get_unsat_assumptions(core_set);
+      // below function will update assumption_list and to_remove_pos
+      remove_and_move_to_next_rev(assumption_list, to_remove_pos, core_set);
+    }
+  } // end of while
+} // end of reduce_unsat_core_linear
 
 }  // namespace syntax_analysis
 }  // namespace pono

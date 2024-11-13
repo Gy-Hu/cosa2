@@ -304,6 +304,10 @@ int main(int argc, char ** argv)
         ExternalTermInterface term_if(pono_options.external_predicates_file_, fts);
         external_predicates = term_if.GetExternalPredicates();
         // TODO add helper assertions/assumptions
+        std::cout << "Loaded " << external_predicates.size() << " predicates\n";
+        unsigned i=0;
+        for (const auto & p : external_predicates)
+          std::cout << i++ <<" : " << p->to_string() << std::endl;
       }
 
       Term prop = propvec[pono_options.prop_idx_];

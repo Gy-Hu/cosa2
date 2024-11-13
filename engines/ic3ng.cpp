@@ -170,6 +170,15 @@ void IC3ng::add_lemma_to_frame(Lemma * lemma, unsigned fidx) {
 
 }
 
+static bool set_intersect(const smt::UnorderedTermSet & a, const smt::UnorderedTermSet & b) {
+  const auto & smaller = a.size() < b.size() ? a : b;
+  const auto & other = a.size() < b.size() ? b : a;
+  for (const auto & e : smaller)
+    if (other.find(e) != other.end())
+      return true;
+  return false;
+}
+
 // F /\ T /\ not(p)
 // F /\ T /\ cube    sat?   
 
@@ -214,23 +223,18 @@ ic3_rel_ind_check_result IC3ng::rel_ind_check( unsigned prevFidx,
     get_free_symbolic_consts(bad_next_to_assert, var_set_ );
 
     // Below is to collect constraints that have common variables with bad_next_to_assert
-    bool changed = false;
+    bool changed;
     do {
+      changed = false;
       for (size_t cidx = 0; cidx < constraints_curr_var_.size(); ++ cidx) {
         // if we already include this assumption, we can skip
         if (input_asts_slices.find(constraints_curr_var_.at(cidx)) != input_asts_slices.end())
           continue;
 
         const auto & cnstr_vars = vars_in_constraints_.at(cidx);
-        bool found = false;
         // for each variable in var_set_, see if there are any common variables
-        for (const auto & v : var_set_) {
-          if (cnstr_vars.find(v) != cnstr_vars.end()) {
-            found = true;
-            break;
-          }
-        }
-        if (found) {
+        bool intersect = set_intersect(cnstr_vars, var_set_); 
+        if (intersect) {
           input_asts_slices.emplace(constraints_curr_var_.at(cidx),  std::vector<std::pair<int,int>>({ {0,0} }));
           for (const auto & v : cnstr_vars) {
             auto res = var_set_.emplace(v);
@@ -242,6 +246,7 @@ ic3_rel_ind_check_result IC3ng::rel_ind_check( unsigned prevFidx,
     } while(changed); // keep iterating until no new variable added
     // HZ: will not insert all constraints
     // input_asts_slices.emplace(all_constraints_, std::vector<std::pair<int,int>>({ {0,0} }));
+    D(3,"[get_model] # constraint: {}, used:{}", constraints_curr_var_.size(), input_asts_slices.size() - 1);
   } // end of has assumption
 
   partial_model_getter.GetVarListForAsts_in_bitlevel(input_asts_slices, varlist_slice);
@@ -283,6 +288,7 @@ bool IC3ng::recursive_block_all_in_queue() {
     fcex_t * fcex = proof_goals.top();
 
     D(2, "[recursive_block] Try to block {} @ F{}", (long long)(fcex), fcex->fidx);
+    D(3, "[recursive_block] Try to block {} @ F{}", fcex->cex->to_string(), fcex->fidx);
     // if we arrive at a new frame, eager push from prior frame
     if (fcex->fidx > prior_round_frame_no) {
       assert(fcex->fidx == prior_round_frame_no + 1);
@@ -351,19 +357,38 @@ static void SortLemma(smt::TermVec & inout, bool descending) {
     complexity_index_pair.push_back({ TermScore(t) ,idx});
     ++ idx;
   }
+
+  // HZ: it seems that descending sorting will put lower bits first
+  //       unegated first
+  //       negated second
+
+  //  0: ((_ extract 0 0) x)
+  //  1: ((_ extract 2 2) x)
+  // ....
+  // 10: (bvnot ((_ extract 1 1) x))
+
+  std::cout << "Before sorting:\n";
+  unsigned i = 0;
+  for (const auto & e : inout)
+    std::cout << " " << i++ << ": " << e->to_string() << "\n";
+  std::cout << "------------------\n";
+
   // sort in descending order (the `first` is compared first), so term-index with 
   // the highest score will rank first
-  if(descending)
+  if(descending) // from greater to smaller
     std::sort(complexity_index_pair.begin(), complexity_index_pair.end(), std::greater<>());
-  else
+  else // from smaller to greater
     std::sort(complexity_index_pair.begin(), complexity_index_pair.end(), std::less<>());
     
+
   // now map back to termvec
   smt::TermVec sorted_term;
   for (const auto & cpl_idx_pair : complexity_index_pair) {
     sorted_term.push_back(inout.at(cpl_idx_pair.second));
   }
   inout.swap(sorted_term); // this is the same as inout = sorted_term, but faster
+
+
 } // end of SortLemma
 
 // ( ( not(S) /\ F /\ T ) \/ init_prime ) /\ ( cube' )
@@ -380,10 +405,22 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   // HZ: TODO a better way is to check, if the vars are appearing too often
   // if so, we extend the predicates
   // otherwise, we will not use word-level preds
-  extend_predicates(cex, conjs); // IC3INN
+
 
   // TODO: sort conjs
   SortLemma(conjs, options_.ic3base_sort_lemma_descending);
+
+
+  auto npred = extend_predicates(cex, conjs); // IC3INN
+  //  conjs.erase(conjs.begin()+1);
+  //  TODO: you may need more than 1 round (if not word-level pred used)
+
+
+  std::cout << "After sorting:\n";
+  unsigned i = 0;
+  for (const auto & e : conjs)
+    std::cout << " " << i++ << ": " << e->to_string() << "\n";
+  std::cout << "------------------\n";
 
   auto cex_expr = smart_not(smart_and(conjs));
   // TODO: you may generate more than 1 clauses
@@ -421,6 +458,14 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
       // from conjs_nxt to conj
     }
     cex_expr = smart_not(smart_and(conjs_list));
+
+    std::cout << "Kept:\n";
+    for (const auto & e : conjs_nxt) {
+      std::cout << conjnxt_to_idx_map.at(e) << " : " << e->to_string() << std::endl;
+      if (conjnxt_to_idx_map.at(e) < npred)
+        std::cout << "Used!\n";
+    }
+    std::cout << "------------------\n";
 
     D(1,"[ig] F{} get lemma size:{}", fidx+1, conjs_list.size());
   } else

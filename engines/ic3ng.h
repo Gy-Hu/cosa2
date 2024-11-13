@@ -140,8 +140,9 @@ namespace pono
       const smt::Term & bad_next_trans_subst_,
       Model * cex_to_block,
       bool get_pre_state );
-
-    void extend_predicates(Model *cex, smt::TermVec & conj_inout);
+    
+    // return value: the predicates added
+    unsigned extend_predicates(Model *cex, smt::TermVec & conj_inout);
     smt::TermVec loaded_predicates_;
     std::unordered_map<Model *, PerCexInfo> model_info_map_;
 

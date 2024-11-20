@@ -7,11 +7,31 @@
 namespace pono {
 
 void IC3ng::set_helper_term_predicates(const smt::TermVec & preds) {
-  loaded_predicates_ = preds;
+
+  solver_->push();
+    for (const auto & p : preds) {
+      if (!(p->get_sort()->get_sort_kind() == smt::SortKind::BOOL ||
+          (p->get_sort()->get_sort_kind() == smt::SortKind::BV && 
+           p->get_sort()->get_width() == 1)))
+           continue;
+      if(solver_->check_sat_assuming({p}).is_unsat())
+        continue;
+      auto neg_p = smart_not(p);
+      if(solver_->check_sat_assuming({neg_p}).is_unsat())
+        continue;
+      // check init/\not(p)  unsat
+      // if (solver_->check_sat_assuming({ts_.init() ,neg_p}).is_unsat())
+        loaded_predicates_.push_back(p);
+
+      // if (solver_->check_sat_assuming({ts_.init() ,p}).is_unsat())
+        loaded_predicates_.push_back(neg_p);
+    }
+  solver_->pop();
+
 }
 
 // if  A is a subset (or equal to ) B, returns true
-bool is_subset(const smt::UnorderedTermSet & A, const smt::UnorderedTermSet & B) {
+bool static is_subset(const smt::UnorderedTermSet & A, const smt::UnorderedTermSet & B) {
   for (const auto & e : A) {
     if (B.find(e) == B.end())
       return false;
@@ -19,21 +39,18 @@ bool is_subset(const smt::UnorderedTermSet & A, const smt::UnorderedTermSet & B)
   return true;
 }
 
-bool has_intersection(const smt::UnorderedTermSet & A, const smt::UnorderedTermSet & B) {
-  for (const auto & e : A) {
-    if (B.find(e) != B.end())
+bool static has_intersection(const smt::UnorderedTermSet & a, const smt::UnorderedTermSet & b) {
+  const auto & smaller = a.size() < b.size() ? a : b;
+  const auto & other = a.size() < b.size() ? b : a;
+  for (const auto & e : smaller)
+    if (other.find(e) != other.end())
       return true;
-  }
-  for (const auto & e : B) {
-    if (A.find(e) != A.end())
-      return true;
-  }
   return false;
 }
 
 // s 00 a 0001 b 0011
 // s ==00 ->  a > b   a == b a>=b 
-void IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
+unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
   //TODO:
   // for each predicate p:
   //   check if  cex_expr /\ p  is unsat            :   use (p)
@@ -71,30 +88,14 @@ void IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
       solver_->assert_formula(cex->to_expr(solver_));
       for (const auto & p : var_info_->preds_w_subset_vars) {
         auto r = solver_->check_sat_assuming({p});
-        if (r.is_unsat()) {
-          predicates_to_use.push_back(p);
-          continue;
-        }
-        auto neg_p = smart_not(p);
-        r = solver_->check_sat_assuming({neg_p});
-        if (r.is_unsat()) {
-          predicates_to_use.push_back(neg_p);
-          continue;
-        }
+        if (r.is_unsat())
+          predicates_to_use.push_back(smart_not(p));
       }
       if (predicates_to_use.empty()) {
         for (const auto & p : var_info_->preds_w_related_vars) {
           auto r = solver_->check_sat_assuming({p});
-          if (r.is_unsat()) {
-            predicates_to_use.push_back(p);
-            continue;
-          }
-          auto neg_p = smart_not(p);
-          r = solver_->check_sat_assuming({neg_p});
-          if (r.is_unsat()) {
-            predicates_to_use.push_back(neg_p);
-            continue;
-          }
+          if (r.is_unsat())
+            predicates_to_use.push_back(smart_not(p));
         }
       } // end of if predicates_to_use.empty()
       solver_->pop();
@@ -105,8 +106,10 @@ void IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
     model_info_pos = res.first;
   }
   auto preds = model_info_pos->second.preds_to_use;
+  auto num_preds = preds.size();
   preds.insert(preds.end(), conj_inout.begin(), conj_inout.end() );
   conj_inout.swap(preds);
+  return num_preds;
 } // end of extend_predicates
 
 } // namespace pono

@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Pono",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/pono",
+            "args": [
+                "-e", "ic3ng-bits",
+                "-k", "1000",
+                "-v", "3",
+                "--external-predicates", "./samples/xp2.helper2.smt2",
+                "--promote-inputvars",
+                "./samples/xp2.btor2"
+            ],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            // "environment": [
+            //     {
+            //         "name": "LD_LIBRARY_PATH",
+            //         "value": "${workspaceFolder}/deps/smt-switch/local/lib:${env:LD_LIBRARY_PATH}"
+            //     }
+            // ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build-debug",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "sourceFileMap": {
+                "${workspaceFolder}": "${workspaceFolder}"
+            }
+        }
+    ]
+}

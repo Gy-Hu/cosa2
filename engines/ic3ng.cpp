@@ -341,11 +341,15 @@ bool IC3ng::recursive_block_all_in_queue() {
 
 
 static size_t TermScore(const smt::Term & t) {
-  unsigned w = 0;
-  for(auto pos = t->begin(); pos != t->end(); ++pos)
-    if ((*pos)->get_sort()->get_sort_kind()==smt::SortKind::BV)
-      w += (*pos)->get_sort()->get_width();
-  return w;
+  auto e = (t->get_op().prim_op == smt::PrimOp::Not ||
+            t->get_op().prim_op == smt::PrimOp::BVNot) ? *(t->begin()): t;
+  unsigned slice = 0;
+  if (e->get_op().prim_op == smt::PrimOp::Extract) {
+    slice = e->get_op().idx0;
+    auto c = *(e->begin());
+    slice += c->get_sort()->get_width();
+  }
+  return slice;
 }
 
 static void SortLemma(smt::TermVec & inout, bool descending) {
@@ -366,12 +370,13 @@ static void SortLemma(smt::TermVec & inout, bool descending) {
   //  1: ((_ extract 2 2) x)
   // ....
   // 10: (bvnot ((_ extract 1 1) x))
-
+#ifdef DEBUG_IC3
   std::cout << "Before sorting:\n";
   unsigned i = 0;
   for (const auto & e : inout)
     std::cout << " " << i++ << ": " << e->to_string() << "\n";
   std::cout << "------------------\n";
+#endif
 
   // sort in descending order (the `first` is compared first), so term-index with 
   // the highest score will rank first
@@ -416,11 +421,13 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   //  TODO: you may need more than 1 round (if not word-level pred used)
 
 
+#ifdef DEBUG_IC3
   std::cout << "After sorting:\n";
   unsigned i = 0;
   for (const auto & e : conjs)
     std::cout << " " << i++ << ": " << e->to_string() << "\n";
   std::cout << "------------------\n";
+#endif
 
   auto cex_expr = smart_not(smart_and(conjs));
   // TODO: you may generate more than 1 clauses
@@ -459,6 +466,7 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
     }
     cex_expr = smart_not(smart_and(conjs_list));
 
+#ifdef DEBUG_IC3
     std::cout << "Kept:\n";
     for (const auto & e : conjs_nxt) {
       std::cout << conjnxt_to_idx_map.at(e) << " : " << e->to_string() << std::endl;
@@ -466,6 +474,7 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
         std::cout << "Used!\n";
     }
     std::cout << "------------------\n";
+#endif
 
     D(1,"[ig] F{} get lemma size:{}", fidx+1, conjs_list.size());
   } else
@@ -602,7 +611,7 @@ ProverResult IC3ng::step(int i)
       return ProverResult::FALSE;
     D(1, "[step] Blocked {} CTI on F{}", nCube, frames.size()-1);
   }
-  D(1,"[step] {}", print_frame_stat());
+  logger.log(1,"[step] {}", print_frame_stat());
   
   append_frame();
   D(1, "[step] Extend to F{}", frames.size()-1);

@@ -32,8 +32,18 @@ current=0
 
 for f in "$BTOR_DIR"/**/*.btor2; do
     ((current++))
-    echo "[${current}/${total_files}] Processing $f..." | tee -a "$LOG_FILE"
     
+    # Get base name without extension
+    base_name="${f%.btor2}"
+    
+    # Check for any .smt2 files with this base name
+    if ls "${base_name}"*.smt2 1> /dev/null 2>&1; then
+        echo "[${current}/${total_files}] Skipping $f (found existing .smt2 file)" | tee -a "$LOG_FILE"
+        echo "----------------------------------------" | tee -a "$LOG_FILE"
+        continue
+    fi
+    
+    echo "[${current}/${total_files}] Processing $f..." | tee -a "$LOG_FILE"
     if python generate_predicates.py "$f" --verbose --validate; then
         echo "✓ Success: $f" | tee -a "$LOG_FILE"
     else

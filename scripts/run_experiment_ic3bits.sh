@@ -2,7 +2,7 @@
 
 # Configuration
 BENCHMARK_DIR="/data/guangyuh/coding_env/HWMCC24_benchmark_official/btor2_bv"
-RESULTS_FILE="/data/guangyuh/coding_env/ic3ng/build/pono_results.csv"
+RESULTS_FILE="/data/guangyuh/coding_env/ic3ng-fork/build/pono_results.csv"
 LOCK_FILE="/tmp/pono_results.lock"
 NUM_JOBS=8
 TIMEOUT=3600
@@ -11,7 +11,7 @@ TIMEOUT=3600
 MEMORY_LIMIT=3500000  # About 3.5GB per process (leaving some memory for system)
 
 # Pono command configuration
-PONO_PATH="/data/guangyuh/coding_env/ic3ng/build/pono"
+PONO_PATH="/data/guangyuh/coding_env/ic3ng-fork/build/pono"
 PONO_CMD="$PONO_PATH -e ic3bits --print-wall-time -k 100000"
 
 # Initialize results file if it doesn't exist

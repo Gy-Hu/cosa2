@@ -2,7 +2,7 @@
 
 # Configuration
 BENCHMARK_DIR="/data/guangyuh/coding_env/HWMCC24_benchmark_official/btor2_bv"
-RESULTS_FILE="/data/guangyuh/coding_env/ic3ng/build/pono_results.csv"
+RESULTS_FILE="/data/guangyuh/coding_env/ic3ng-fork/build/pono_results_ic3ng.csv"
 LOCK_FILE="/tmp/pono_results.lock"
 NUM_JOBS=8
 TIMEOUT=3600
@@ -11,8 +11,8 @@ TIMEOUT=3600
 MEMORY_LIMIT=3500000  # About 3.5GB per process (leaving some memory for system)
 
 # Pono command configuration
-PONO_PATH="/data/guangyuh/coding_env/ic3ng/build/pono"
-PONO_CMD="$PONO_PATH -e ic3bits --print-wall-time -k 100000"
+PONO_PATH="/data/guangyuh/coding_env/ic3ng-fork/build/pono"
+PONO_CMD="$PONO_PATH -e ic3ng-bits --print-wall-time -k 100000 --promote-inputvars"
 
 # Initialize results file if it doesn't exist
 init_results_file() {
@@ -24,6 +24,15 @@ init_results_file() {
 # Process a single benchmark file
 process_file() {
     local file="$1"
+
+    # Construct path to potential .smt2 file
+    local smt2_file="${file%.btor2}.helper.smt2"
+    
+    # Add external predicates flag if .smt2 file exists
+    local full_cmd="$PONO_CMD"
+    if [ -f "$smt2_file" ]; then
+        full_cmd="$PONO_CMD --external-predicates $smt2_file"
+    fi
     
     # Skip if already processed - check at the start to avoid unnecessary work
     local rel_path=$(realpath --relative-to="$BENCHMARK_DIR" "$file")
@@ -40,7 +49,7 @@ process_file() {
     # Run pono with both timeout and memory limit
     # Using ulimit to restrict memory usage
     local output
-    output=$(ulimit -v $MEMORY_LIMIT && timeout "$TIMEOUT" $PONO_CMD "$file" 2>&1)
+    output=$(ulimit -v $MEMORY_LIMIT && timeout "$TIMEOUT" $full_cmd "$file" 2>&1)
     local exit_code=$?
     
     # Parse results including memory limit cases

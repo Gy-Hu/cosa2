@@ -30,9 +30,9 @@ process_file() {
     
     # Add external predicates flag if .smt2 file exists
     local full_cmd="$PONO_CMD"
-    if [ -f "$smt2_file" ]; then
-        full_cmd="$PONO_CMD --external-predicates $smt2_file"
-    fi
+    # if [ -f "$smt2_file" ]; then
+        #full_cmd="$PONO_CMD --external-predicates $smt2_file"
+    # fi
     
     # Skip if already processed - check at the start to avoid unnecessary work
     local rel_path=$(realpath --relative-to="$BENCHMARK_DIR" "$file")

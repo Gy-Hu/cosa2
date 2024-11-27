@@ -1,0 +1,190 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 016f752..581922b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -28,6 +28,10 @@ else()
+   set(SHARED_LIB_EXT "so")
+ endif()
+ 
++if (WITH_BITWUZLA)
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_BITWUZLA")
++endif()
++
+ if (WITH_MSAT)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_MSAT")
+ endif()
+@@ -67,6 +71,8 @@ set(CMAKE_MODULE_PATH ${SMT_SWITCH_DIR}/cmake)
+ find_package(GMP REQUIRED)
+ 
+ # Check that dependencies are there
++list(APPEND CMAKE_PREFIX_PATH "${SMT_SWITCH_DIR}/deps/install")
++
+ if (NOT EXISTS "${SMT_SWITCH_DIR}/local/include/smt-switch/smt.h")
+   message(FATAL_ERROR "Missing smt-switch headers -- try running ./contrib/setup-smt-switch.sh")
+ endif()
+@@ -83,6 +89,14 @@ if (NOT EXISTS "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-cvc5.a")
+   message(FATAL_ERROR "Missing smt-switch cvc5 library -- try running ./contrib/setup-smt-switch.sh --with-cvc5")
+ endif()
+ 
++if (WITH_BITWUZLA)
++  find_package(PkgConfig REQUIRED)
++  pkg_check_modules(BITWUZLA REQUIRED bitwuzla)
++  if (NOT EXISTS "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-bitwuzla.a")
++    message(FATAL_ERROR "Missing smt-switch bitwuzla library -- try running ./contrib/setup-smt-switch.sh --with-bitwuzla")
++  endif()
++endif()
++
+ if (WITH_MSAT)
+   if (NOT EXISTS "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-msat.a")
+     message(FATAL_ERROR "Missing smt-switch mathsat library -- try running ./contrib/setup-smt-switch.sh --with-msat")
+@@ -223,6 +237,11 @@ endif()
+ target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-btor.a")
+ target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-cvc5.a")
+ 
++if (WITH_BITWUZLA)
++  target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-bitwuzla.a")
++  target_link_libraries(pono-lib PUBLIC ${BITWUZLA_LDFLAGS})
++endif()
++
+ if (WITH_MSAT)
+   target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-msat.a")
+ endif()
+diff --git a/configure.sh b/configure.sh
+index 6faed19..3cb00b9 100755
+--- a/configure.sh
++++ b/configure.sh
+@@ -13,6 +13,7 @@ Configures the CMAKE build environment.
+ -h, --help              display this message and exit
+ --prefix=STR            install directory       (default: /usr/local/)
+ --build-dir=STR         custom build directory  (default: build)
++--with-bitwuzla         build with Bitwuzla  (default: off)
+ --with-msat             build with MathSAT which has a custom non-BSD compliant license.  (default : off)
+                         Required for interpolant based model checking
+ --with-msat-ic3ia       build with the open-source IC3IA implementation as a backend. (default: off)
+@@ -36,6 +37,7 @@ die () {
+ build_dir=build
+ install_prefix=default
+ build_type=default
++with_bitwuzla=default
+ with_msat=default
+ with_msat_ic3ia=default
+ with_coreir=default
+@@ -73,6 +75,7 @@ do
+                 *) build_dir=$(pwd)/$build_dir ;; # make absolute path
+             esac
+             ;;
++        --with-bitwuzla) with_bitwuzla=ON;;
+         --with-msat) with_msat=ON;;
+         --with-msat-ic3ia) with_msat_ic3ia=ON;;
+         --with-coreir) with_coreir=ON;;
+@@ -106,6 +109,9 @@ cmake_opts="-DCMAKE_BUILD_TYPE=$buildtype -DPONO_LIB_TYPE=${lib_type} -DPONO_STA
+ [ $install_prefix != default ] \
+     && cmake_opts="$cmake_opts -DCMAKE_INSTALL_PREFIX=$install_prefix"
+ 
++[ $with_bitwuzla != default ] \
++    && cmake_opts="$cmake_opts -DWITH_BITWUZLA=$with_bitwuzla"
++
+ [ $with_msat != default ] \
+     && cmake_opts="$cmake_opts -DWITH_MSAT=$with_msat"
+ 
+diff --git a/contrib/setup-smt-switch.sh b/contrib/setup-smt-switch.sh
+index 5f0d27f..54a57cc 100755
+--- a/contrib/setup-smt-switch.sh
++++ b/contrib/setup-smt-switch.sh
+@@ -13,6 +13,7 @@ Usage: $0 [<option> ...]
+ Sets up the smt-switch API for interfacing with SMT solvers through a C++ API.
+ 
+ -h, --help              display this message and exit
++--with-bitwuzla         include Bitwuzla (default: off)
+ --with-msat             include MathSAT which is under a custom non-BSD compliant license (default: off)
+ --cvc5-home             use an already downloaded version of cvc5
+ --python                build python bindings (default: off)
+@@ -25,6 +26,7 @@ die () {
+     exit 1
+ }
+ 
++WITH_BITWUZLA=default
+ WITH_MSAT=default
+ CONF_OPTS=""
+ WITH_PYTHON=default
+@@ -37,6 +39,9 @@ do
+         --with-msat)
+             WITH_MSAT=ON
+             CONF_OPTS="$CONF_OPTS --msat --msat-home=../mathsat";;
++        --with-bitwuzla)
++            WITH_BITWUZLA=ON
++            CONF_OPTS="$CONF_OPTS --bitwuzla";;
+         --python)
+             WITH_PYTHON=YES
+             CONF_OPTS="$CONF_OPTS --python";;
+@@ -67,6 +72,9 @@ if [ ! -d "$DEPS/smt-switch" ]; then
+     if [ $cvc5_home = default ]; then
+         ./contrib/setup-cvc5.sh
+     fi
++    if [ $WITH_BITWUZLA = ON ]; then
++        ./contrib/setup-bitwuzla.sh
++    fi
+     # pass bison/flex directories from smt-switch perspective
+     ./configure.sh --btor --cvc5 $CONF_OPTS --prefix=local --static --smtlib-reader --bison-dir=../bison/bison-install --flex-dir=../flex/flex-install
+     cd build
+diff --git a/options/options.cpp b/options/options.cpp
+index eac4acf..8ec0fc3 100644
+--- a/options/options.cpp
++++ b/options/options.cpp
+@@ -176,7 +176,7 @@ const option::Descriptor usage[] = {
+     "",
+     "smt-solver",
+     Arg::NonEmpty,
+-    "  --smt-solver \tSMT Solver to use: btor, msat, or cvc5." },
++    "  --smt-solver \tSMT Solver to use: btor, bzla, msat, or cvc5." },
+   { LOGGING_SMT_SOLVER,
+     0,
+     "",
+@@ -672,6 +672,8 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
+         case SMT_SOLVER: {
+           if (opt.arg == std::string("btor")) {
+             smt_solver_ = smt::BTOR;
++          } else if (opt.arg == std::string("bzla")) {
++            smt_solver_ = smt::BZLA;
+           } else if (opt.arg == std::string("cvc5")) {
+             smt_solver_ = smt::CVC5;
+           } else if (opt.arg == std::string("msat")) {
+diff --git a/smt/available_solvers.cpp b/smt/available_solvers.cpp
+index b4e714b..ebe51c3 100644
+--- a/smt/available_solvers.cpp
++++ b/smt/available_solvers.cpp
+@@ -26,6 +26,10 @@
+ #include "smt-switch/boolector_factory.h"
+ #include "smt-switch/cvc5_factory.h"
+ 
++#if WITH_BITWUZLA
++#include "smt-switch/bitwuzla_factory.h"
++#endif
++
+ #if WITH_MSAT
+ #include "smt-switch/msat_factory.h"
+ // these are for setting specific options
+@@ -49,6 +53,10 @@ namespace pono {
+ const std::vector<SolverEnum> solver_enums({
+   BTOR, CVC5,
+ 
++#if WITH_BITWUZLA
++      BZLA,
++#endif
++
+ #if WITH_MSAT
+       MSAT,
+ #endif
+@@ -72,6 +80,12 @@ SmtSolver create_solver_base(SolverEnum se, bool logging)
+       s = Cvc5SolverFactory::create(logging);
+       break;
+     }
++#if WITH_BITWUZLA
++    case BZLA: {
++      s = BitwuzlaSolverFactory::create(logging);
++      break;
++    }
++#endif
+ #if WITH_MSAT
+     case MSAT: {
+       s = MsatSolverFactory::create(logging);

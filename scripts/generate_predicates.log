@@ -77,3 +77,1718 @@ Starting predicate generation at Thu Nov 21 09:27:42 AM CST 2024
 ✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2
 ----------------------------------------
 [2/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 09:45:02 AM CST 2024
+[1/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2
+----------------------------------------
+[2/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2
+----------------------------------------
+[3/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2
+----------------------------------------
+[4/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2
+----------------------------------------
+[5/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2
+----------------------------------------
+[6/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 10:08:10 AM CST 2024
+[1/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2
+----------------------------------------
+[2/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2
+----------------------------------------
+[3/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2
+----------------------------------------
+[4/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2
+----------------------------------------
+[5/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2
+----------------------------------------
+[6/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2
+----------------------------------------
+[7/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2
+----------------------------------------
+[8/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2
+----------------------------------------
+[9/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2
+----------------------------------------
+[10/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2
+----------------------------------------
+[11/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2
+----------------------------------------
+[12/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal41/cal41.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal41/cal41.btor2
+----------------------------------------
+[13/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal75/cal75.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal75/cal75.btor2
+----------------------------------------
+[14/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 10:15:40 AM CST 2024
+[1/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2
+----------------------------------------
+[2/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 10:18:46 AM CST 2024
+[1/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[2/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[3/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[4/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[5/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[6/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2 (found existing .smt2 file)
+----------------------------------------
+[7/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2 (found existing .smt2 file)
+----------------------------------------
+[8/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2
+----------------------------------------
+[9/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2
+----------------------------------------
+[10/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2
+----------------------------------------
+[11/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2
+----------------------------------------
+[12/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal41/cal41.btor2 (found existing .smt2 file)
+----------------------------------------
+[13/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal75/cal75.btor2 (found existing .smt2 file)
+----------------------------------------
+[14/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2
+----------------------------------------
+[15/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen102/gen102.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen102/gen102.btor2
+----------------------------------------
+[16/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen103/gen103.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen103/gen103.btor2
+----------------------------------------
+[17/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2
+----------------------------------------
+[18/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2
+----------------------------------------
+[19/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2
+----------------------------------------
+[20/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2
+----------------------------------------
+[21/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/h_Arbiter/h_Arbiter.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/h_Arbiter/h_Arbiter.btor2
+----------------------------------------
+[22/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_bpbs_p2/vis_arrays_bpbs_p2.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_bpbs_p2/vis_arrays_bpbs_p2.btor2
+----------------------------------------
+[23/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_vsa16a_p6/vis_arrays_vsa16a_p6.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_vsa16a_p6/vis_arrays_vsa16a_p6.btor2
+----------------------------------------
+[24/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n2_w32_d32_e0.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n2_w32_d32_e0.btor2
+----------------------------------------
+[25/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n4_w8_d32_e0.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n4_w8_d32_e0.btor2
+----------------------------------------
+[26/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w128_d128_e0.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w128_d128_e0.btor2
+----------------------------------------
+[27/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w64_d8_e0.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w64_d8_e0.btor2
+----------------------------------------
+[28/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/circular_pointer_top_w64_d8_e0.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/circular_pointer_top_w64_d8_e0.btor2
+----------------------------------------
+[29/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/shift_register_top_w32_d64_e0.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/shift_register_top_w32_d64_e0.btor2
+----------------------------------------
+[30/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/safe/analog_estimation_convergence.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/safe/analog_estimation_convergence.btor2
+----------------------------------------
+[31/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unknown/ridecore.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unknown/ridecore.btor2
+----------------------------------------
+[32/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unsafe/analog_estimation_convergence.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unsafe/analog_estimation_convergence.btor2
+----------------------------------------
+[33/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/picorv32-check-p09.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/picorv32-check-p09.btor2
+----------------------------------------
+[34/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/ponylink-slaveTXlen-sat.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/ponylink-slaveTXlen-sat.btor2
+----------------------------------------
+[35/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/VexRiscv-regch0-20-p1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/VexRiscv-regch0-20-p1.btor2
+----------------------------------------
+[36/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p09.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p09.btor2
+----------------------------------------
+[37/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p10.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p10.btor2
+----------------------------------------
+[38/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p12.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p12.btor2
+----------------------------------------
+[39/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p27.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p27.btor2
+----------------------------------------
+[40/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p49.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p49.btor2
+----------------------------------------
+[41/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p1.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p1.btor2
+----------------------------------------
+[42/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p2.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p2.btor2
+----------------------------------------
+[43/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCY_nomem-p8.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCY_nomem-p8.btor2
+----------------------------------------
+[44/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019B/marlann_compute_cp_fail2-p1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019B/marlann_compute_cp_fail2-p1.btor2
+----------------------------------------
+[45/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p06.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p06.btor2
+----------------------------------------
+[46/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p24.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p24.btor2
+----------------------------------------
+[47/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p020.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p020.btor2
+----------------------------------------
+[48/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p027.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p027.btor2
+----------------------------------------
+[49/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p040.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p040.btor2
+----------------------------------------
+[50/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p063.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p063.btor2
+----------------------------------------
+[51/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p114.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p114.btor2
+----------------------------------------
+[52/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p162.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p162.btor2
+----------------------------------------
+[53/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p050.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p050.btor2
+----------------------------------------
+[54/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p061.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p061.btor2
+----------------------------------------
+[55/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p119.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p119.btor2
+----------------------------------------
+[56/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p127.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p127.btor2
+----------------------------------------
+[57/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p132.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p132.btor2
+----------------------------------------
+[58/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p160.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p160.btor2
+----------------------------------------
+[59/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p025.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p025.btor2
+----------------------------------------
+[60/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p088.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p088.btor2
+----------------------------------------
+[61/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p093.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p093.btor2
+----------------------------------------
+[62/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p112.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p112.btor2
+----------------------------------------
+[63/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p131.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p131.btor2
+----------------------------------------
+[64/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p020.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p020.btor2
+----------------------------------------
+[65/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p040.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p040.btor2
+----------------------------------------
+[66/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p061.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p061.btor2
+----------------------------------------
+[67/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/zipversa_composecrc_prf-p12.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/zipversa_composecrc_prf-p12.btor2
+----------------------------------------
+[68/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/rast-p10.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/rast-p10.btor2
+----------------------------------------
+[69/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/stack-p2.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/stack-p2.btor2
+----------------------------------------
+[70/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/93.c/93.c.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/93.c/93.c.btor2
+----------------------------------------
+[71/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_30/fib_30.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_30/fib_30.btor2
+----------------------------------------
+[72/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_37/fib_37.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_37/fib_37.btor2
+----------------------------------------
+[73/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1761.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1761.btor2
+----------------------------------------
+[74/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1951.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1951.btor2
+----------------------------------------
+[75/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1961.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1961.btor2
+----------------------------------------
+[76/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2045.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2045.btor2
+----------------------------------------
+[77/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2067.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2067.btor2
+----------------------------------------
+[78/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_5541.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_5541.btor2
+----------------------------------------
+[79/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_hl_arr_access_128_bv.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_hl_arr_access_128_bv.btor2
+----------------------------------------
+[80/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_vector_add_cmp_split_8.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_vector_add_cmp_split_8.btor2
+----------------------------------------
+[81/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_AES_START_ENCRYPT_problem.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_AES_START_ENCRYPT_problem.btor2
+----------------------------------------
+[82/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_AND_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_AND_problem.btor2
+----------------------------------------
+[83/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_LB_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_LB_problem.btor2
+----------------------------------------
+[84/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SB_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SB_sanity.btor2
+----------------------------------------
+[85/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLL_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLL_problem.btor2
+----------------------------------------
+[86/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_problem.btor2
+----------------------------------------
+[87/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_sanity.btor2
+----------------------------------------
+[88/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SUB_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SUB_sanity.btor2
+----------------------------------------
+[89/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SW_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SW_problem.btor2
+----------------------------------------
+[90/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_XORI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_XORI_sanity.btor2
+----------------------------------------
+[91/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_ADDI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_ADDI_problem.btor2
+----------------------------------------
+[92/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BEQ_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BEQ_sanity.btor2
+----------------------------------------
+[93/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BGEU_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BGEU_sanity.btor2
+----------------------------------------
+[94/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BLTU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BLTU_problem.btor2
+----------------------------------------
+[95/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_JALR_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_JALR_sanity.btor2
+----------------------------------------
+[96/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_problem.btor2
+----------------------------------------
+[97/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_sanity.btor2
+----------------------------------------
+[98/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LW_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LW_sanity.btor2
+----------------------------------------
+[99/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SRLI_sanity.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 11:12:19 AM CST 2024
+[1/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[2/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[3/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[4/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[5/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[6/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2 (found existing .smt2 file)
+----------------------------------------
+[7/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2 (found existing .smt2 file)
+----------------------------------------
+[8/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2
+----------------------------------------
+[9/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 11:13:30 AM CST 2024
+[1/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[2/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[3/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[4/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[5/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[6/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2 (found existing .smt2 file)
+----------------------------------------
+[7/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2 (found existing .smt2 file)
+----------------------------------------
+[8/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2
+----------------------------------------
+[9/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2
+----------------------------------------
+[10/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2
+----------------------------------------
+[11/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2 (found existing .smt2 file)
+----------------------------------------
+[12/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal41/cal41.btor2 (found existing .smt2 file)
+----------------------------------------
+[13/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal75/cal75.btor2 (found existing .smt2 file)
+----------------------------------------
+[14/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2
+----------------------------------------
+[15/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen102/gen102.btor2 (found existing .smt2 file)
+----------------------------------------
+[16/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen103/gen103.btor2 (found existing .smt2 file)
+----------------------------------------
+[17/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2
+----------------------------------------
+[18/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2
+----------------------------------------
+[19/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2
+----------------------------------------
+[20/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2
+----------------------------------------
+[21/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/h_Arbiter/h_Arbiter.btor2 (found existing .smt2 file)
+----------------------------------------
+[22/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_bpbs_p2/vis_arrays_bpbs_p2.btor2 (found existing .smt2 file)
+----------------------------------------
+[23/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_vsa16a_p6/vis_arrays_vsa16a_p6.btor2 (found existing .smt2 file)
+----------------------------------------
+[24/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n2_w32_d32_e0.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n2_w32_d32_e0.btor2
+----------------------------------------
+[25/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n4_w8_d32_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[26/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w128_d128_e0.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w128_d128_e0.btor2
+----------------------------------------
+[27/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w64_d8_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[28/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/circular_pointer_top_w64_d8_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[29/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/shift_register_top_w32_d64_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[30/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/safe/analog_estimation_convergence.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/safe/analog_estimation_convergence.btor2
+----------------------------------------
+[31/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unknown/ridecore.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unknown/ridecore.btor2
+----------------------------------------
+[32/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unsafe/analog_estimation_convergence.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unsafe/analog_estimation_convergence.btor2
+----------------------------------------
+[33/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/picorv32-check-p09.btor2 (found existing .smt2 file)
+----------------------------------------
+[34/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/ponylink-slaveTXlen-sat.btor2 (found existing .smt2 file)
+----------------------------------------
+[35/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/VexRiscv-regch0-20-p1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/VexRiscv-regch0-20-p1.btor2
+----------------------------------------
+[36/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p09.btor2 (found existing .smt2 file)
+----------------------------------------
+[37/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p10.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p10.btor2
+----------------------------------------
+[38/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p12.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p12.btor2
+----------------------------------------
+[39/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p27.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p27.btor2
+----------------------------------------
+[40/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p49.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p49.btor2
+----------------------------------------
+[41/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p1.btor2 (found existing .smt2 file)
+----------------------------------------
+[42/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p2.btor2 (found existing .smt2 file)
+----------------------------------------
+[43/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCY_nomem-p8.btor2 (found existing .smt2 file)
+----------------------------------------
+[44/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019B/marlann_compute_cp_fail2-p1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019B/marlann_compute_cp_fail2-p1.btor2
+----------------------------------------
+[45/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p06.btor2 (found existing .smt2 file)
+----------------------------------------
+[46/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p24.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p24.btor2
+----------------------------------------
+[47/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p020.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p020.btor2
+----------------------------------------
+[48/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p027.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p027.btor2
+----------------------------------------
+[49/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p040.btor2 (found existing .smt2 file)
+----------------------------------------
+[50/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p063.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p063.btor2
+----------------------------------------
+[51/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p114.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p114.btor2
+----------------------------------------
+[52/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p162.btor2 (found existing .smt2 file)
+----------------------------------------
+[53/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p050.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p050.btor2
+----------------------------------------
+[54/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p061.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p061.btor2
+----------------------------------------
+[55/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p119.btor2 (found existing .smt2 file)
+----------------------------------------
+[56/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p127.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p127.btor2
+----------------------------------------
+[57/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p132.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p132.btor2
+----------------------------------------
+[58/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p160.btor2 (found existing .smt2 file)
+----------------------------------------
+[59/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p025.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p025.btor2
+----------------------------------------
+[60/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p088.btor2 (found existing .smt2 file)
+----------------------------------------
+[61/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p093.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p093.btor2
+----------------------------------------
+[62/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p112.btor2 (found existing .smt2 file)
+----------------------------------------
+[63/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p131.btor2 (found existing .smt2 file)
+----------------------------------------
+[64/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p020.btor2 (found existing .smt2 file)
+----------------------------------------
+[65/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p040.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p040.btor2
+----------------------------------------
+[66/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p061.btor2 (found existing .smt2 file)
+----------------------------------------
+[67/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/zipversa_composecrc_prf-p12.btor2 (found existing .smt2 file)
+----------------------------------------
+[68/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/rast-p10.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/rast-p10.btor2
+----------------------------------------
+[69/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/stack-p2.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/stack-p2.btor2
+----------------------------------------
+[70/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/93.c/93.c.btor2 (found existing .smt2 file)
+----------------------------------------
+[71/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_30/fib_30.btor2 (found existing .smt2 file)
+----------------------------------------
+[72/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_37/fib_37.btor2 (found existing .smt2 file)
+----------------------------------------
+[73/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1761.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1761.btor2
+----------------------------------------
+[74/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1951.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1951.btor2
+----------------------------------------
+[75/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1961.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1961.btor2
+----------------------------------------
+[76/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2045.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2045.btor2
+----------------------------------------
+[77/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2067.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2067.btor2
+----------------------------------------
+[78/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_5541.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_5541.btor2
+----------------------------------------
+[79/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_hl_arr_access_128_bv.btor2 (found existing .smt2 file)
+----------------------------------------
+[80/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_vector_add_cmp_split_8.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_vector_add_cmp_split_8.btor2
+----------------------------------------
+[81/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_AES_START_ENCRYPT_problem.btor2 (found existing .smt2 file)
+----------------------------------------
+[82/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_AND_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_AND_problem.btor2
+----------------------------------------
+[83/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_LB_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_LB_problem.btor2
+----------------------------------------
+[84/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SB_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SB_sanity.btor2
+----------------------------------------
+[85/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLL_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLL_problem.btor2
+----------------------------------------
+[86/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_problem.btor2
+----------------------------------------
+[87/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_sanity.btor2
+----------------------------------------
+[88/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SUB_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SUB_sanity.btor2
+----------------------------------------
+[89/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SW_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SW_problem.btor2
+----------------------------------------
+[90/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_XORI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_XORI_sanity.btor2
+----------------------------------------
+[91/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_ADDI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_ADDI_problem.btor2
+----------------------------------------
+[92/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BEQ_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BEQ_sanity.btor2
+----------------------------------------
+[93/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BGEU_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BGEU_sanity.btor2
+----------------------------------------
+[94/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BLTU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BLTU_problem.btor2
+----------------------------------------
+[95/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_JALR_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_JALR_sanity.btor2
+----------------------------------------
+[96/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_problem.btor2
+----------------------------------------
+[97/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_sanity.btor2
+----------------------------------------
+[98/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LW_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LW_sanity.btor2
+----------------------------------------
+[99/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SRLI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SRLI_sanity.btor2
+----------------------------------------
+[100/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SW_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SW_sanity.btor2
+----------------------------------------
+[101/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_ANDI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_ANDI_sanity.btor2
+----------------------------------------
+[102/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_AND_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_AND_sanity.btor2
+----------------------------------------
+[103/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_LBU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_LBU_problem.btor2
+----------------------------------------
+[104/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SLT_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SLT_sanity.btor2
+----------------------------------------
+[105/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRAI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRAI_sanity.btor2
+----------------------------------------
+[106/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRLI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRLI_problem.btor2
+----------------------------------------
+[107/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SW_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SW_problem.btor2
+----------------------------------------
+[108/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_XOR_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_XOR_sanity.btor2
+----------------------------------------
+[109/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/counter_wrapper_2_4/counter_bit_width_large.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/counter_wrapper_2_4/counter_bit_width_large.btor2
+----------------------------------------
+[110/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/diffeq_1_4/diffeq.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/diffeq_1_4/diffeq.btor2
+----------------------------------------
+[111/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/gcd_1_4/gcd.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/gcd_1_4/gcd.btor2
+----------------------------------------
+[112/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/kalman_wrapper_1_3_2/kalman_bit_width_small.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/kalman_wrapper_1_3_2/kalman_bit_width_small.btor2
+----------------------------------------
+[113/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a03.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a03.btor2
+----------------------------------------
+[114/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a05.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a05.btor2
+----------------------------------------
+[115/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a07-p14.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a07-p14.btor2
+----------------------------------------
+[116/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p04.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p04.btor2
+----------------------------------------
+[117/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p06.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p06.btor2
+----------------------------------------
+[118/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p23.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p23.btor2
+----------------------------------------
+[119/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p30.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p30.btor2
+----------------------------------------
+[120/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p34.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p34.btor2
+----------------------------------------
+[121/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p35.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p35.btor2
+----------------------------------------
+[122/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p41.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p41.btor2
+----------------------------------------
+[123/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p53.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p53.btor2
+----------------------------------------
+[124/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a11.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a11.btor2
+----------------------------------------
+[125/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a13.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a13.btor2
+----------------------------------------
+[126/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p012.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p012.btor2
+----------------------------------------
+[127/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p018.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p018.btor2
+----------------------------------------
+[128/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p041.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p041.btor2
+----------------------------------------
+[129/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p057.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p057.btor2
+----------------------------------------
+[130/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p074.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p074.btor2
+----------------------------------------
+[131/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p085.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p085.btor2
+----------------------------------------
+[132/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p098.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p098.btor2
+----------------------------------------
+[133/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p102.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p102.btor2
+----------------------------------------
+[134/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p113.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p113.btor2
+----------------------------------------
+[135/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p126.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p126.btor2
+----------------------------------------
+[136/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p128.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p128.btor2
+----------------------------------------
+[137/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p139.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p139.btor2
+----------------------------------------
+[138/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p146.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p146.btor2
+----------------------------------------
+[139/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p148.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p148.btor2
+----------------------------------------
+[140/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p152.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p152.btor2
+----------------------------------------
+[141/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p160.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p160.btor2
+----------------------------------------
+[142/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p15.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p15.btor2
+----------------------------------------
+[143/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p16.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p16.btor2
+----------------------------------------
+[144/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/xepic_a17-p02.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/xepic_a17-p02.btor2
+----------------------------------------
+[145/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/bitvector/byte_add_1-1.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/bitvector/byte_add_1-1.btor2
+----------------------------------------
+[146/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_2+newton_3_7.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_2+newton_3_7.btor2
+----------------------------------------
+[147/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_4+newton_3_3.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_4+newton_3_3.btor2
+----------------------------------------
+[148/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.1.ufo.UNBOUNDED.pals+Problem12_label04.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.1.ufo.UNBOUNDED.pals+Problem12_label04.btor2
+----------------------------------------
+[149/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5_overflow.ufo.UNBOUNDED.pals+Problem12_label02.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5_overflow.ufo.UNBOUNDED.pals+Problem12_label02.btor2
+----------------------------------------
+[150/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.ufo.BOUNDED-10.pals+Problem12_label02.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.ufo.BOUNDED-10.pals+Problem12_label02.btor2
+----------------------------------------
+[151/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.6.1.ufo.UNBOUNDED.pals+Problem12_label09.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.6.1.ufo.UNBOUNDED.pals+Problem12_label09.btor2
+----------------------------------------
+[152/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_1.cil-2+token_ring.05.cil-2.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_1.cil-2+token_ring.05.cil-2.btor2
+----------------------------------------
+[153/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_2.cil-1+token_ring.11.cil-2.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_2.cil-1+token_ring.11.cil-2.btor2
+----------------------------------------
+[154/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_2.cil-1+token_ring.13.cil-1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_2.cil-1+token_ring.13.cil-1.btor2
+----------------------------------------
+[155/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_3.cil+token_ring.04.cil-1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_3.cil+token_ring.04.cil-1.btor2
+----------------------------------------
+[156/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_3.cil+token_ring.08.cil-2.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_3.cil+token_ring.08.cil-2.btor2
+----------------------------------------
+[157/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/Problem05_label42+token_ring.08.cil-2.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/Problem05_label42+token_ring.08.cil-2.btor2
+----------------------------------------
+[158/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/Problem05_label46+token_ring.12.cil-1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/Problem05_label46+token_ring.12.cil-1.btor2
+----------------------------------------
+[159/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/eca-programs/Problem101_label01.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/eca-programs/Problem101_label01.btor2
+----------------------------------------
+[160/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/eca-rers2012/Problem02_label10.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/eca-rers2012/Problem02_label10.btor2
+----------------------------------------
+[161/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/eca-rers2012/Problem03_label51.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/eca-rers2012/Problem03_label51.btor2
+----------------------------------------
+[162/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/eca-rers2012/Problem04_label27.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 01:02:45 PM CST 2024
+[1/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[2/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[3/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[4/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[5/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[6/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2 (found existing .smt2 file)
+----------------------------------------
+[7/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2 (found existing .smt2 file)
+----------------------------------------
+[8/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2
+----------------------------------------
+[9/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2
+----------------------------------------
+[10/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2
+----------------------------------------
+[11/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2 (found existing .smt2 file)
+----------------------------------------
+[12/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal41/cal41.btor2 (found existing .smt2 file)
+----------------------------------------
+[13/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal75/cal75.btor2 (found existing .smt2 file)
+----------------------------------------
+[14/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2 (found existing .smt2 file)
+----------------------------------------
+[15/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen102/gen102.btor2 (found existing .smt2 file)
+----------------------------------------
+[16/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen103/gen103.btor2 (found existing .smt2 file)
+----------------------------------------
+[17/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2
+----------------------------------------
+[18/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2
+----------------------------------------
+[19/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 01:03:46 PM CST 2024
+[1/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[2/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[3/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[4/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[5/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[6/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2 (found existing .smt2 file)
+----------------------------------------
+[7/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2 (found existing .smt2 file)
+----------------------------------------
+[8/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2
+----------------------------------------
+[9/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2
+----------------------------------------
+[10/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2
+----------------------------------------
+[11/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2 (found existing .smt2 file)
+----------------------------------------
+[12/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal41/cal41.btor2 (found existing .smt2 file)
+----------------------------------------
+[13/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal75/cal75.btor2 (found existing .smt2 file)
+----------------------------------------
+[14/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2 (found existing .smt2 file)
+----------------------------------------
+[15/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen102/gen102.btor2 (found existing .smt2 file)
+----------------------------------------
+[16/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen103/gen103.btor2 (found existing .smt2 file)
+----------------------------------------
+[17/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2
+----------------------------------------
+[18/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2
+----------------------------------------
+[19/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2
+----------------------------------------
+[20/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2
+----------------------------------------
+[21/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/h_Arbiter/h_Arbiter.btor2 (found existing .smt2 file)
+----------------------------------------
+[22/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_bpbs_p2/vis_arrays_bpbs_p2.btor2 (found existing .smt2 file)
+----------------------------------------
+[23/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_vsa16a_p6/vis_arrays_vsa16a_p6.btor2 (found existing .smt2 file)
+----------------------------------------
+[24/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n2_w32_d32_e0.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 01:17:58 PM CST 2024
+[1/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[2/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[3/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[4/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[5/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[6/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2 (found existing .smt2 file)
+----------------------------------------
+[7/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2 (found existing .smt2 file)
+----------------------------------------
+[8/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2
+----------------------------------------
+[9/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2
+----------------------------------------
+[10/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2
+----------------------------------------
+[11/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2 (found existing .smt2 file)
+----------------------------------------
+[12/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal41/cal41.btor2 (found existing .smt2 file)
+----------------------------------------
+[13/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal75/cal75.btor2 (found existing .smt2 file)
+----------------------------------------
+[14/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2 (found existing .smt2 file)
+----------------------------------------
+[15/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen102/gen102.btor2 (found existing .smt2 file)
+----------------------------------------
+[16/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen103/gen103.btor2 (found existing .smt2 file)
+----------------------------------------
+[17/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2 (found existing .smt2 file)
+----------------------------------------
+[18/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2
+----------------------------------------
+[19/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2
+----------------------------------------
+[20/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2
+----------------------------------------
+[21/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/h_Arbiter/h_Arbiter.btor2 (found existing .smt2 file)
+----------------------------------------
+[22/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_bpbs_p2/vis_arrays_bpbs_p2.btor2 (found existing .smt2 file)
+----------------------------------------
+[23/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_vsa16a_p6/vis_arrays_vsa16a_p6.btor2 (found existing .smt2 file)
+----------------------------------------
+[24/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n2_w32_d32_e0.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n2_w32_d32_e0.btor2
+----------------------------------------
+[25/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n4_w8_d32_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[26/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w128_d128_e0.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w128_d128_e0.btor2
+----------------------------------------
+[27/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w64_d8_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[28/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/circular_pointer_top_w64_d8_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[29/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/shift_register_top_w32_d64_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[30/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/safe/analog_estimation_convergence.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/safe/analog_estimation_convergence.btor2
+----------------------------------------
+[31/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unknown/ridecore.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unknown/ridecore.btor2
+----------------------------------------
+[32/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unsafe/analog_estimation_convergence.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unsafe/analog_estimation_convergence.btor2
+----------------------------------------
+[33/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/picorv32-check-p09.btor2 (found existing .smt2 file)
+----------------------------------------
+[34/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/ponylink-slaveTXlen-sat.btor2 (found existing .smt2 file)
+----------------------------------------
+[35/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/VexRiscv-regch0-20-p1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/VexRiscv-regch0-20-p1.btor2
+----------------------------------------
+[36/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p09.btor2 (found existing .smt2 file)
+----------------------------------------
+[37/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p10.btor2 (found existing .smt2 file)
+----------------------------------------
+[38/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p12.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p12.btor2
+----------------------------------------
+[39/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p27.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p27.btor2
+----------------------------------------
+[40/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p49.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p49.btor2
+----------------------------------------
+[41/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p1.btor2 (found existing .smt2 file)
+----------------------------------------
+[42/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p2.btor2 (found existing .smt2 file)
+----------------------------------------
+[43/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCY_nomem-p8.btor2 (found existing .smt2 file)
+----------------------------------------
+[44/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019B/marlann_compute_cp_fail2-p1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019B/marlann_compute_cp_fail2-p1.btor2
+----------------------------------------
+[45/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p06.btor2 (found existing .smt2 file)
+----------------------------------------
+[46/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p24.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p24.btor2
+----------------------------------------
+[47/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p020.btor2 (found existing .smt2 file)
+----------------------------------------
+[48/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p027.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p027.btor2
+----------------------------------------
+[49/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p040.btor2 (found existing .smt2 file)
+----------------------------------------
+[50/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p063.btor2 (found existing .smt2 file)
+----------------------------------------
+[51/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p114.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p114.btor2
+----------------------------------------
+[52/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p162.btor2 (found existing .smt2 file)
+----------------------------------------
+[53/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p050.btor2 (found existing .smt2 file)
+----------------------------------------
+[54/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p061.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p061.btor2
+----------------------------------------
+[55/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p119.btor2 (found existing .smt2 file)
+----------------------------------------
+[56/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p127.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p127.btor2
+----------------------------------------
+[57/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p132.btor2 (found existing .smt2 file)
+----------------------------------------
+[58/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p160.btor2 (found existing .smt2 file)
+----------------------------------------
+[59/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p025.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p025.btor2
+----------------------------------------
+[60/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p088.btor2 (found existing .smt2 file)
+----------------------------------------
+[61/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p093.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p093.btor2
+----------------------------------------
+[62/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p112.btor2 (found existing .smt2 file)
+----------------------------------------
+[63/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p131.btor2 (found existing .smt2 file)
+----------------------------------------
+[64/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p020.btor2 (found existing .smt2 file)
+----------------------------------------
+[65/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p040.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p040.btor2
+----------------------------------------
+[66/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p061.btor2 (found existing .smt2 file)
+----------------------------------------
+[67/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/zipversa_composecrc_prf-p12.btor2 (found existing .smt2 file)
+----------------------------------------
+[68/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/rast-p10.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/rast-p10.btor2
+----------------------------------------
+[69/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/stack-p2.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/stack-p2.btor2
+----------------------------------------
+[70/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/93.c/93.c.btor2 (found existing .smt2 file)
+----------------------------------------
+[71/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_30/fib_30.btor2 (found existing .smt2 file)
+----------------------------------------
+[72/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_37/fib_37.btor2 (found existing .smt2 file)
+----------------------------------------
+[73/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1761.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1761.btor2
+----------------------------------------
+[74/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1951.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1951.btor2
+----------------------------------------
+[75/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1961.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1961.btor2
+----------------------------------------
+[76/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2045.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2045.btor2
+----------------------------------------
+[77/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2067.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2067.btor2
+----------------------------------------
+[78/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_5541.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_5541.btor2
+----------------------------------------
+[79/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_hl_arr_access_128_bv.btor2 (found existing .smt2 file)
+----------------------------------------
+[80/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_vector_add_cmp_split_8.btor2 (found existing .smt2 file)
+----------------------------------------
+[81/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_AES_START_ENCRYPT_problem.btor2 (found existing .smt2 file)
+----------------------------------------
+[82/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_AND_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_AND_problem.btor2
+----------------------------------------
+[83/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_LB_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_LB_problem.btor2
+----------------------------------------
+[84/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SB_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SB_sanity.btor2
+----------------------------------------
+[85/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLL_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLL_problem.btor2
+----------------------------------------
+[86/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_problem.btor2
+----------------------------------------
+[87/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_sanity.btor2
+----------------------------------------
+[88/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SUB_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SUB_sanity.btor2
+----------------------------------------
+[89/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SW_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SW_problem.btor2
+----------------------------------------
+[90/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_XORI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_XORI_sanity.btor2
+----------------------------------------
+[91/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_ADDI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_ADDI_problem.btor2
+----------------------------------------
+[92/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BEQ_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BEQ_sanity.btor2
+----------------------------------------
+[93/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BGEU_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BGEU_sanity.btor2
+----------------------------------------
+[94/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BLTU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BLTU_problem.btor2
+----------------------------------------
+[95/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_JALR_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_JALR_sanity.btor2
+----------------------------------------
+[96/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_problem.btor2
+----------------------------------------
+[97/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_sanity.btor2
+----------------------------------------
+[98/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LW_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LW_sanity.btor2
+----------------------------------------
+[99/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SRLI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SRLI_sanity.btor2
+----------------------------------------
+[100/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SW_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SW_sanity.btor2
+----------------------------------------
+[101/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_ANDI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_ANDI_sanity.btor2
+----------------------------------------
+[102/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_AND_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_AND_sanity.btor2
+----------------------------------------
+[103/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_LBU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_LBU_problem.btor2
+----------------------------------------
+[104/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SLT_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SLT_sanity.btor2
+----------------------------------------
+[105/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRAI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRAI_sanity.btor2
+----------------------------------------
+[106/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRLI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRLI_problem.btor2
+----------------------------------------
+[107/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SW_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SW_problem.btor2
+----------------------------------------
+[108/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_XOR_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_XOR_sanity.btor2
+----------------------------------------
+[109/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/counter_wrapper_2_4/counter_bit_width_large.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/counter_wrapper_2_4/counter_bit_width_large.btor2
+----------------------------------------
+[110/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/diffeq_1_4/diffeq.btor2 (found existing .smt2 file)
+----------------------------------------
+[111/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/gcd_1_4/gcd.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/gcd_1_4/gcd.btor2
+----------------------------------------
+[112/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/kalman_wrapper_1_3_2/kalman_bit_width_small.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/kalman_wrapper_1_3_2/kalman_bit_width_small.btor2
+----------------------------------------
+[113/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a03.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a03.btor2
+----------------------------------------
+[114/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a05.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a05.btor2
+----------------------------------------
+[115/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a07-p14.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a07-p14.btor2
+----------------------------------------
+[116/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p04.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p04.btor2
+----------------------------------------
+[117/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p06.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p06.btor2
+----------------------------------------
+[118/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p23.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p23.btor2
+----------------------------------------
+[119/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p30.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p30.btor2
+----------------------------------------
+[120/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p34.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p34.btor2
+----------------------------------------
+[121/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p35.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p35.btor2
+----------------------------------------
+[122/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p41.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p41.btor2
+----------------------------------------
+[123/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p53.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p53.btor2
+----------------------------------------
+[124/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a11.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a11.btor2
+----------------------------------------
+[125/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a13.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a13.btor2
+----------------------------------------
+[126/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p012.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p012.btor2
+----------------------------------------
+[127/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p018.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p018.btor2
+----------------------------------------
+[128/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p041.btor2 (found existing .smt2 file)
+----------------------------------------
+[129/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p057.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p057.btor2
+----------------------------------------
+[130/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p074.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p074.btor2
+----------------------------------------
+[131/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p085.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p085.btor2
+----------------------------------------
+[132/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p098.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p098.btor2
+----------------------------------------
+[133/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p102.btor2 (found existing .smt2 file)
+----------------------------------------
+[134/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p113.btor2 (found existing .smt2 file)
+----------------------------------------
+[135/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p126.btor2 (found existing .smt2 file)
+----------------------------------------
+[136/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p128.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p128.btor2
+----------------------------------------
+[137/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p139.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p139.btor2
+----------------------------------------
+[138/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p146.btor2 (found existing .smt2 file)
+----------------------------------------
+[139/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p148.btor2 (found existing .smt2 file)
+----------------------------------------
+[140/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p152.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p152.btor2
+----------------------------------------
+[141/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p160.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p160.btor2
+----------------------------------------
+[142/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p15.btor2 (found existing .smt2 file)
+----------------------------------------
+[143/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p16.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p16.btor2
+----------------------------------------
+[144/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/xepic_a17-p02.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/xepic_a17-p02.btor2
+----------------------------------------
+[145/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/bitvector/byte_add_1-1.btor2 (found existing .smt2 file)
+----------------------------------------
+[146/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_2+newton_3_7.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_2+newton_3_7.btor2
+----------------------------------------
+[147/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_4+newton_3_3.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_4+newton_3_3.btor2
+----------------------------------------
+[148/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.1.ufo.UNBOUNDED.pals+Problem12_label04.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.1.ufo.UNBOUNDED.pals+Problem12_label04.btor2
+----------------------------------------
+[149/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5_overflow.ufo.UNBOUNDED.pals+Problem12_label02.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5_overflow.ufo.UNBOUNDED.pals+Problem12_label02.btor2
+----------------------------------------
+[150/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.ufo.BOUNDED-10.pals+Problem12_label02.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.ufo.BOUNDED-10.pals+Problem12_label02.btor2
+----------------------------------------
+[151/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.6.1.ufo.UNBOUNDED.pals+Problem12_label09.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.6.1.ufo.UNBOUNDED.pals+Problem12_label09.btor2
+----------------------------------------
+[152/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_1.cil-2+token_ring.05.cil-2.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_1.cil-2+token_ring.05.cil-2.btor2
+----------------------------------------
+[153/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_2.cil-1+token_ring.11.cil-2.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_2.cil-1+token_ring.11.cil-2.btor2
+----------------------------------------
+[154/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_2.cil-1+token_ring.13.cil-1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_2.cil-1+token_ring.13.cil-1.btor2
+----------------------------------------
+[155/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_3.cil+token_ring.04.cil-1.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_3.cil+token_ring.04.cil-1.btor2
+----------------------------------------
+[156/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_3.cil+token_ring.08.cil-2.btor2...
+✓ Success: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pc_sfifo_3.cil+token_ring.08.cil-2.btor2
+----------------------------------------
+[157/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/Problem05_label42+token_ring.08.cil-2.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/Problem05_label42+token_ring.08.cil-2.btor2
+----------------------------------------
+[158/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/Problem05_label46+token_ring.12.cil-1.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/Problem05_label46+token_ring.12.cil-1.btor2
+----------------------------------------
+[159/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/eca-programs/Problem101_label01.btor2...
+Initializing conda environment...
+Using Python: /data/guangyuh/miniconda3/bin/python
+Python version: Python 3.9.7
+Starting predicate generation at Thu Nov 21 02:51:12 PM CST 2024
+[1/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/anderson.3.prop1-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[2/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/brp2.3.prop2-func-interl.btor2 (found existing .smt2 file)
+----------------------------------------
+[3/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/elevator.3.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[4/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/lamport_nonatomic.5.prop1-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[5/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/beem/pgm_protocol.7.prop2-back-serstep.btor2 (found existing .smt2 file)
+----------------------------------------
+[6/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/crafted/sw_ball2004_2/sw_ball2004_2.btor2 (found existing .smt2 file)
+----------------------------------------
+[7/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal178/cal178.btor2 (found existing .smt2 file)
+----------------------------------------
+[8/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal182/cal182.btor2
+----------------------------------------
+[9/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal205/cal205.btor2
+----------------------------------------
+[10/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal235/cal235.btor2
+----------------------------------------
+[11/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal27/cal27.btor2 (found existing .smt2 file)
+----------------------------------------
+[12/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal41/cal41.btor2 (found existing .smt2 file)
+----------------------------------------
+[13/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal75/cal75.btor2 (found existing .smt2 file)
+----------------------------------------
+[14/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/cal97/cal97.btor2 (found existing .smt2 file)
+----------------------------------------
+[15/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen102/gen102.btor2 (found existing .smt2 file)
+----------------------------------------
+[16/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen103/gen103.btor2 (found existing .smt2 file)
+----------------------------------------
+[17/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen112/gen112.btor2 (found existing .smt2 file)
+----------------------------------------
+[18/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen45/gen45.btor2 (found existing .smt2 file)
+----------------------------------------
+[19/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/gen53/gen53.btor2 (found existing .smt2 file)
+----------------------------------------
+[20/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/industry/mul9/mul9.btor2 (found existing .smt2 file)
+----------------------------------------
+[21/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/h_Arbiter/h_Arbiter.btor2 (found existing .smt2 file)
+----------------------------------------
+[22/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_bpbs_p2/vis_arrays_bpbs_p2.btor2 (found existing .smt2 file)
+----------------------------------------
+[23/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/goel/opensource/vis_arrays_vsa16a_p6/vis_arrays_vsa16a_p6.btor2 (found existing .smt2 file)
+----------------------------------------
+[24/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n2_w32_d32_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[25/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n4_w8_d32_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[26/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w128_d128_e0.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w128_d128_e0.btor2
+----------------------------------------
+[27/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/arbitrated_top_n5_w64_d8_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[28/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/circular_pointer_top_w64_d8_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[29/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/data-integrity/unsafe/shift_register_top_w32_d64_e0.btor2 (found existing .smt2 file)
+----------------------------------------
+[30/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/safe/analog_estimation_convergence.btor2 (found existing .smt2 file)
+----------------------------------------
+[31/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unknown/ridecore.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unknown/ridecore.btor2
+----------------------------------------
+[32/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/mann/unsafe/analog_estimation_convergence.btor2 (found existing .smt2 file)
+----------------------------------------
+[33/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/picorv32-check-p09.btor2 (found existing .smt2 file)
+----------------------------------------
+[34/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/ponylink-slaveTXlen-sat.btor2 (found existing .smt2 file)
+----------------------------------------
+[35/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/VexRiscv-regch0-20-p1.btor2 (found existing .smt2 file)
+----------------------------------------
+[36/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p09.btor2 (found existing .smt2 file)
+----------------------------------------
+[37/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-busdelay-p10.btor2 (found existing .smt2 file)
+----------------------------------------
+[38/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p12.btor2 (found existing .smt2 file)
+----------------------------------------
+[39/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p27.btor2 (found existing .smt2 file)
+----------------------------------------
+[40/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2018D/zipcpu-zipmmu-p49.btor2 (found existing .smt2 file)
+----------------------------------------
+[41/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p1.btor2 (found existing .smt2 file)
+----------------------------------------
+[42/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCX_nomem-p2.btor2 (found existing .smt2 file)
+----------------------------------------
+[43/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019A/picorv32_mutCY_nomem-p8.btor2 (found existing .smt2 file)
+----------------------------------------
+[44/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019B/marlann_compute_cp_fail2-p1.btor2 (found existing .smt2 file)
+----------------------------------------
+[45/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p06.btor2 (found existing .smt2 file)
+----------------------------------------
+[46/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/dspfilters_fastfir_second-p24.btor2 (found existing .smt2 file)
+----------------------------------------
+[47/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p020.btor2 (found existing .smt2 file)
+----------------------------------------
+[48/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p027.btor2 (found existing .smt2 file)
+----------------------------------------
+[49/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p040.btor2 (found existing .smt2 file)
+----------------------------------------
+[50/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p063.btor2 (found existing .smt2 file)
+----------------------------------------
+[51/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p114.btor2 (found existing .smt2 file)
+----------------------------------------
+[52/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divfive-p162.btor2 (found existing .smt2 file)
+----------------------------------------
+[53/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p050.btor2 (found existing .smt2 file)
+----------------------------------------
+[54/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p061.btor2 (found existing .smt2 file)
+----------------------------------------
+[55/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p119.btor2 (found existing .smt2 file)
+----------------------------------------
+[56/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p127.btor2 (found existing .smt2 file)
+----------------------------------------
+[57/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p132.btor2 (found existing .smt2 file)
+----------------------------------------
+[58/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_dualflexpress_divthree-p160.btor2 (found existing .smt2 file)
+----------------------------------------
+[59/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p025.btor2 (found existing .smt2 file)
+----------------------------------------
+[60/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p088.btor2 (found existing .smt2 file)
+----------------------------------------
+[61/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p093.btor2 (found existing .smt2 file)
+----------------------------------------
+[62/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p112.btor2 (found existing .smt2 file)
+----------------------------------------
+[63/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/qspiflash_qflexpress_divfive-p131.btor2 (found existing .smt2 file)
+----------------------------------------
+[64/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p020.btor2 (found existing .smt2 file)
+----------------------------------------
+[65/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p040.btor2 (found existing .smt2 file)
+----------------------------------------
+[66/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/vgasim_imgfifo-p061.btor2 (found existing .smt2 file)
+----------------------------------------
+[67/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2019/wolf/2019C/zipversa_composecrc_prf-p12.btor2 (found existing .smt2 file)
+----------------------------------------
+[68/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/rast-p10.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/rast-p10.btor2
+----------------------------------------
+[69/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2020/mann/stack-p2.btor2 (found existing .smt2 file)
+----------------------------------------
+[70/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/93.c/93.c.btor2 (found existing .smt2 file)
+----------------------------------------
+[71/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_30/fib_30.btor2 (found existing .smt2 file)
+----------------------------------------
+[72/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/arithmetic_circuits/fib_37/fib_37.btor2 (found existing .smt2 file)
+----------------------------------------
+[73/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1761.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1761.btor2
+----------------------------------------
+[74/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1951.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1951.btor2
+----------------------------------------
+[75/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1961.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_1961.btor2
+----------------------------------------
+[76/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2045.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2045.btor2
+----------------------------------------
+[77/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2067.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_2067.btor2
+----------------------------------------
+[78/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_5541.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/branch_coverage/bv/rocket_5541.btor2
+----------------------------------------
+[79/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_hl_arr_access_128_bv.btor2 (found existing .smt2 file)
+----------------------------------------
+[80/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/bv/safe/processed_vector_add_cmp_split_8.btor2 (found existing .smt2 file)
+----------------------------------------
+[81/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_AES_START_ENCRYPT_problem.btor2 (found existing .smt2 file)
+----------------------------------------
+[82/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_AND_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_AND_problem.btor2
+----------------------------------------
+[83/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_LB_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_LB_problem.btor2
+----------------------------------------
+[84/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SB_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SB_sanity.btor2
+----------------------------------------
+[85/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLL_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLL_problem.btor2
+----------------------------------------
+[86/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_problem.btor2
+----------------------------------------
+[87/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SLTI_sanity.btor2
+----------------------------------------
+[88/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SUB_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SUB_sanity.btor2
+----------------------------------------
+[89/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SW_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_SW_problem.btor2
+----------------------------------------
+[90/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_XORI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Flute_XORI_sanity.btor2
+----------------------------------------
+[91/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_ADDI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_ADDI_problem.btor2
+----------------------------------------
+[92/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BEQ_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BEQ_sanity.btor2
+----------------------------------------
+[93/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BGEU_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BGEU_sanity.btor2
+----------------------------------------
+[94/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BLTU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_BLTU_problem.btor2
+----------------------------------------
+[95/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_JALR_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_JALR_sanity.btor2
+----------------------------------------
+[96/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_problem.btor2
+----------------------------------------
+[97/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LHU_sanity.btor2
+----------------------------------------
+[98/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LW_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_LW_sanity.btor2
+----------------------------------------
+[99/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SRLI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SRLI_sanity.btor2
+----------------------------------------
+[100/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SW_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Piccolo_SW_sanity.btor2
+----------------------------------------
+[101/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_ANDI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_ANDI_sanity.btor2
+----------------------------------------
+[102/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_AND_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_AND_sanity.btor2
+----------------------------------------
+[103/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_LBU_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_LBU_problem.btor2
+----------------------------------------
+[104/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SLT_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SLT_sanity.btor2
+----------------------------------------
+[105/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRAI_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRAI_sanity.btor2
+----------------------------------------
+[106/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRLI_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SRLI_problem.btor2
+----------------------------------------
+[107/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SW_problem.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_SW_problem.btor2
+----------------------------------------
+[108/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_XOR_sanity.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/refinement_checking/bv/ILA_Ridecore_XOR_sanity.btor2
+----------------------------------------
+[109/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/counter_wrapper_2_4/counter_bit_width_large.btor2 (found existing .smt2 file)
+----------------------------------------
+[110/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/diffeq_1_4/diffeq.btor2 (found existing .smt2 file)
+----------------------------------------
+[111/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/gcd_1_4/gcd.btor2 (found existing .smt2 file)
+----------------------------------------
+[112/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/seq/kalman_wrapper_1_3_2/kalman_bit_width_small.btor2 (found existing .smt2 file)
+----------------------------------------
+[113/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a03.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a03.btor2
+----------------------------------------
+[114/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a05.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a05.btor2
+----------------------------------------
+[115/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a07-p14.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a07-p14.btor2
+----------------------------------------
+[116/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p04.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p04.btor2
+----------------------------------------
+[117/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p06.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p06.btor2
+----------------------------------------
+[118/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p23.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p23.btor2
+----------------------------------------
+[119/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p30.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p30.btor2
+----------------------------------------
+[120/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p34.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p34.btor2
+----------------------------------------
+[121/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p35.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p35.btor2
+----------------------------------------
+[122/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p41.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p41.btor2
+----------------------------------------
+[123/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p53.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a10-p53.btor2
+----------------------------------------
+[124/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a11.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a11.btor2
+----------------------------------------
+[125/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a13.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a13.btor2
+----------------------------------------
+[126/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p012.btor2 (found existing .smt2 file)
+----------------------------------------
+[127/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p018.btor2 (found existing .smt2 file)
+----------------------------------------
+[128/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p041.btor2 (found existing .smt2 file)
+----------------------------------------
+[129/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p057.btor2 (found existing .smt2 file)
+----------------------------------------
+[130/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p074.btor2 (found existing .smt2 file)
+----------------------------------------
+[131/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p085.btor2 (found existing .smt2 file)
+----------------------------------------
+[132/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p098.btor2 (found existing .smt2 file)
+----------------------------------------
+[133/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p102.btor2 (found existing .smt2 file)
+----------------------------------------
+[134/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p113.btor2 (found existing .smt2 file)
+----------------------------------------
+[135/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p126.btor2 (found existing .smt2 file)
+----------------------------------------
+[136/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p128.btor2 (found existing .smt2 file)
+----------------------------------------
+[137/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p139.btor2 (found existing .smt2 file)
+----------------------------------------
+[138/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p146.btor2 (found existing .smt2 file)
+----------------------------------------
+[139/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p148.btor2 (found existing .smt2 file)
+----------------------------------------
+[140/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p152.btor2 (found existing .smt2 file)
+----------------------------------------
+[141/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a16-p160.btor2 (found existing .smt2 file)
+----------------------------------------
+[142/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p15.btor2 (found existing .smt2 file)
+----------------------------------------
+[143/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/a19-p16.btor2 (found existing .smt2 file)
+----------------------------------------
+[144/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/hku/x-epic/xepic_a17-p02.btor2 (found existing .smt2 file)
+----------------------------------------
+[145/319] Skipping /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/bitvector/byte_add_1-1.btor2 (found existing .smt2 file)
+----------------------------------------
+[146/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_2+newton_3_7.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_2+newton_3_7.btor2
+----------------------------------------
+[147/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_4+newton_3_3.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/gcd_4+newton_3_3.btor2
+----------------------------------------
+[148/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.1.ufo.UNBOUNDED.pals+Problem12_label04.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.1.ufo.UNBOUNDED.pals+Problem12_label04.btor2
+----------------------------------------
+[149/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5_overflow.ufo.UNBOUNDED.pals+Problem12_label02.btor2...
+✗ Failed: /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5_overflow.ufo.UNBOUNDED.pals+Problem12_label02.btor2
+----------------------------------------
+[150/319] Processing /data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/combinations/pals_lcr.5.ufo.BOUNDED-10.pals+Problem12_label02.btor2...

@@ -2,7 +2,7 @@
 
 # Configuration
 BENCHMARK_DIR="/data/guangyuh/coding_env/HWMCC24_benchmark_official/btor2_bv"
-RESULTS_FILE="/data/guangyuh/coding_env/ic3ng-fork/build/pono_results.csv"
+RESULTS_FILE="/data/guangyuh/coding_env/ic3ng-fork/build/pono_results_ic3bits.csv"
 LOCK_FILE="/tmp/pono_results.lock"
 NUM_JOBS=8
 TIMEOUT=3600

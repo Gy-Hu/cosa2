@@ -13,6 +13,7 @@ Sets up the smt-switch API for interfacing with SMT solvers through a C++ API.
 
 -h, --help              display this message and exit
 --with-msat             include MathSAT which is under a custom non-BSD compliant license (default: off)
+--with-bitwuzla         build with Bitwuzla  (default: off)
 --cvc5-home             use an already downloaded version of cvc5
 --python                build python bindings (default: off)
 EOF
@@ -28,6 +29,7 @@ WITH_MSAT=default
 CONF_OPTS=""
 WITH_PYTHON=default
 cvc5_home=default
+WITH_BITWUZLA=default
 
 while [ $# -gt 0 ]
 do
@@ -40,6 +42,9 @@ do
             WITH_PYTHON=YES
             CONF_OPTS="$CONF_OPTS --python";;
         --cvc5-home) die "missing argument to $1 (see -h)" ;;
+        --with-bitwuzla)
+            WITH_BITWUZLA=ON
+            CONF_OPTS="$CONF_OPTS --bitwuzla";;
         --cvc5-home=*)
             cvc5_home=${1##*=}
             # Check if cvc5_home is an absolute path and if not, make it
@@ -63,7 +68,9 @@ if [ ! -d "$DEPS/smt-switch" ]; then
     cd smt-switch
     git checkout -f $SMT_SWITCH_VERSION
     ./contrib/setup-btor.sh
-    ./contrib/setup-bitwuzla.sh
+    if [ $WITH_BITWUZLA = ON ]; then
+        ./contrib/setup-bitwuzla.sh
+    fi
     if [ $cvc5_home = default ]; then
         ./contrib/setup-cvc5.sh
     fi

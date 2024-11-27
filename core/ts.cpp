@@ -284,7 +284,7 @@ Term TransitionSystem::make_statevar(const string name, const Sort & sort)
   deterministic_ = false;
 
   Term state = solver_->make_symbol(name, sort);
-  Term next_state = solver_->make_symbol(name + ".next", sort);
+  Term next_state = solver_->make_symbol(name + ".next_state", sort);
   add_statevar(state, next_state);
   return state;
 }

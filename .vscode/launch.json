@@ -10,9 +10,11 @@
                 "-e", "ic3ng-bits",
                 "-k", "1000",
                 "-v", "3",
-                "--external-predicates", "./samples/xp2.helper2.smt2",
+                "--smt-solver", "bzla",
+                // "--external-predicates", "/data/guangyuh/coding_env/ic3ng-fork/samples/hwmcc_btor2_bv/2024/sosylab/nla-digbench-scaling/freire1_valuebound1.helper.smt2",
+                // "--external-predicates", "/data/guangyuh/coding_env/ic3ng-fork/samples/xp2.helper.smt2",
                 "--promote-inputvars",
-                "./samples/xp2.btor2"
+                "/data/guangyuh/coding_env/ic3ng-fork/samples/xp2.btor2"
             ],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",

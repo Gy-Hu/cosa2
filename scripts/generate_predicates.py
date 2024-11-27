@@ -19,9 +19,6 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def validate_smt2(content):
     """Validate SMT2 content using z3"""
-    if not HAVE_Z3:
-        print("Z3 is not installed, skipping validation", file=sys.stderr)
-        return True
     try:
         parse_smt2_string(content)
         return True

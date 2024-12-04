@@ -36,3 +36,4 @@ deps
 __pycache__
 samples/hwmcc_btor2_bv/
 output_ic3ng.md
+additional_materials/

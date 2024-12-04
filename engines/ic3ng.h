@@ -64,6 +64,7 @@ namespace pono
     void print_time_stat(std::ostream & os) const;
 
     void virtual set_helper_term_predicates(const smt::TermVec & ) override;
+    void dump_invariants(std::ostream & os) const;
 
   protected:
     std::ofstream debug_fout;

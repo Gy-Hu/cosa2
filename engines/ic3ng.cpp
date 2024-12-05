@@ -527,12 +527,21 @@ void remove_and_move_to_next_backward(smt::TermList & pred_set_prev, smt::TermLi
   pred_pos_new--;
   pred_pos_new_prev--;
 
+  logger.log(1, "Entering remove_and_move_to_next_backward");
+  logger.log(1, "pred_set size: {}", pred_set.size());
+  logger.log(1, "pred_set_prev size: {}", pred_set_prev.size());
+  logger.log(1, "unsatcore size: {}", unsatcore.size());
+  logger.log(1, "pred_iter position: {}", std::distance(pred_set.begin(), pred_iter));
+  logger.log(1, "pred_iter_prev position: {}", std::distance(pred_set_prev.begin(), pred_iter_prev));
+
   bool reached = false;
   bool next_pos_found = false;
 
   while( pred_iter != pred_set.begin() ) {
     pred_iter--;
     pred_iter_prev--;
+    logger.log(1, "Current pred_iter: {}", (*pred_iter)->to_string());
+    logger.log(1, "Current pred_iter_prev: {}", (*pred_iter_prev)->to_string());
     
     if (!reached && pred_iter == pred_pos) {
       reached = true;
@@ -555,6 +564,7 @@ void remove_and_move_to_next_backward(smt::TermList & pred_set_prev, smt::TermLi
     }
   } // end of while
 
+  logger.log(1, "Reached status before assertion: {}", reached);
   assert(reached);
   if (! next_pos_found) {
     assert (pred_iter == pred_set.begin());
@@ -622,6 +632,23 @@ ProverResult IC3ng::step(int i)
   }
 
   if (reached_k_ < 1) {
+    // Print initial frame contents
+    logger.log(1, "Initial frames before checking init:");
+    for (size_t fidx = 0; fidx < frames.size(); ++fidx) {
+      logger.log(1, "F[{}] contains {} lemmas:", fidx, frames[fidx].size());
+      for (const auto & lemma : frames[fidx]) {
+        // 0 = MUST_BLOCK
+        // 1 = MAY_BLOCK
+        // 2 = ORIGIN_FROM_INIT
+        // 3 = PROPERTY
+        // 4 = CONSTRAINT
+        // 5 = SIDE_LOAD
+        logger.log(1, "  - Origin type: {}, Expr: {}", 
+                  static_cast<int>(lemma->origin().get_type()), 
+                  lemma->expr()->to_string());
+      }
+    }
+
     if(check_init_failed())
       return ProverResult::FALSE;
     D(1, "[Checking property] init passed");

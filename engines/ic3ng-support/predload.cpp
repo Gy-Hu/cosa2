@@ -3,6 +3,8 @@
 #include <fstream>
 
 #include "smt-switch/smtlib_reader.h"
+#include "utils/logger.h"
+#include "smt-switch/logging_solver.h"
 
 namespace pono {
 
@@ -30,6 +32,72 @@ void IC3ng::set_helper_term_predicates(const smt::TermVec & preds) {
 
 }
 
+void IC3ng::set_helper_term_clauses(const smt::TermList & clauses) {
+  // Store validated clauses
+  solver_->push();
+  
+  logger.log(1, "Starting to validate {} external clauses", clauses.size());
+  
+  for (const auto & clause : clauses) {
+    // check type
+    if (!(clause->get_sort()->get_sort_kind() == smt::SortKind::BOOL)) {
+      logger.log(2, "Clause {} is not boolean type, skipping", clause);
+      continue;
+    }
+
+    // check init ->  !s? 
+    solver_->push();
+    solver_->assert_formula(ts_.init());
+    solver_->assert_formula(clause);
+    if (solver_->check_sat().is_unsat()) {
+      logger.log(2, "Clause {} conflicts with initial states, skipping", clause);
+      solver_->pop();
+      continue;
+    }
+    solver_->pop();
+
+    // check inductive  init & !clause & T -> !clause'
+    solver_->push();
+    solver_->assert_formula(ts_.init());
+    solver_->assert_formula(solver_->make_term(smt::Not, clause));
+    solver_->assert_formula(ts_.trans());
+    smt::Term next_clause = ts_.next(clause);
+    solver_->assert_formula(next_clause);
+
+    if (solver_->check_sat().is_unsat()) {
+      // clause is inductive
+      loaded_clauses_.push_back(clause);
+      logger.log(2, "Added valid clause: {}", clause);
+
+      // if frames is not empty, add clause to F₀
+      if (!frames.empty()) {
+        // Create new lemma, marked as FromSideLoad source
+        auto lemma = new_lemma(clause, 
+                              nullptr,  // External clauses have no counterexamples
+                              LCexOrigin::FromSideLoad());
+        
+        logger.log(1, "Adding clause to initial frame: {}", clause->to_string());
+        // add to F₀
+        add_lemma_to_frame(lemma, 0);
+        
+        // assert it as a valid invariant to solver
+        solver_->assert_formula(clause);
+      } else {
+        logger.log(1, "Frames not initialized yet, clause will be stored in loaded_clauses_");
+      }
+    } else {
+      logger.log(2, "Clause {} is not inductive, skipping", clause);
+    }
+    solver_->pop();
+  }
+
+  solver_->pop();
+  
+  logger.log(1, 
+             "Loaded {} valid clauses out of {} total clauses",
+             loaded_clauses_.size(),
+             clauses.size());
+}
 // if  A is a subset (or equal to ) B, returns true
 bool static is_subset(const smt::UnorderedTermSet & A, const smt::UnorderedTermSet & B) {
   for (const auto & e : A) {

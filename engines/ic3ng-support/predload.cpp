@@ -40,7 +40,7 @@ void IC3ng::set_helper_term_clauses(const smt::TermVec & clauses) {
   
   for (const auto & clause : clauses) {
     // check type
-    // HZ: some SMT solvers (e.g. Boolector), does not distinguish 
+    // HZ: some SMT solvers (e.g. Boolector), does not distinguish
     // Bool vs. BV of width 1
     if ( (clause->get_sort()->get_sort_kind() != smt::SortKind::BOOL) &&
          !(clause->get_sort()->get_sort_kind() == smt::SortKind::BV &&
@@ -49,7 +49,7 @@ void IC3ng::set_helper_term_clauses(const smt::TermVec & clauses) {
       continue;
     }
 
-    // check init =>  c? 
+    // check init =>  c?
     // HZ: the clause we load should contain a "NOT" itself
     solver_->push();
     disable_all_labels();
@@ -88,14 +88,14 @@ void IC3ng::set_helper_term_clauses(const smt::TermVec & clauses) {
         
         logger.log(1, "Adding clause to initial frame: {}", clause->to_string());
         // add to F1 // 0 is for init, it should be on F1
-        add_lemma_to_frame(lemma, 1); 
-        
+        add_lemma_to_frame(lemma, 1);
+
         // HZ: I don't see the reason for doing this. So I remove it.
         // assert it as a valid invariant to solver
         // solver_->assert_formula(clause);
       } else {
         // HZ: I think you may want to throw an exception
-        // because normally this should not happen 
+        // because normally this should not happen
         throw PonoException("Frames not initialized yet, clause will be stored in loaded_clauses_");
       }
     } else {

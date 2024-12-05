@@ -391,6 +391,23 @@ ProverResult IC3ng::step(int i)
   }
 
   if (reached_k_ < 1) {
+    // Print initial frame contents
+    logger.log(1, "Initial frames before checking init:");
+    for (size_t fidx = 0; fidx < frames.size(); ++fidx) {
+      logger.log(1, "F[{}] contains {} lemmas:", fidx, frames[fidx].size());
+      for (const auto & lemma : frames[fidx]) {
+        // 0 = MUST_BLOCK
+        // 1 = MAY_BLOCK
+        // 2 = ORIGIN_FROM_INIT
+        // 3 = PROPERTY
+        // 4 = CONSTRAINT
+        // 5 = SIDE_LOAD
+        logger.log(1, "  - Origin type: {}, Expr: {}", 
+                  static_cast<int>(lemma->origin().get_type()), 
+                  lemma->expr()->to_string());
+      }
+    }
+
     if(check_init_failed())
       return ProverResult::FALSE;
     D(1, "[Checking property] init passed");

@@ -40,14 +40,20 @@ class ExternalTermInterface : public smt::SmtLibReader
   const smt::TermVec & GetExternalPredicates() const { return predicates_; }
   const smt::TermVec & GetAugmentingAssertions() const { return assertions_; }
   const smt::TermVec & GetF1LemmaCandidates() const { return clauses_; }
+  const smt::TermVec & GetExternalClauses() const { return clauses_; }
 
  protected:
   // overloaded function, used when arg list of function is parsed
   // NOTE: | |  pipe quotes are removed.
-  virtual smt::Term register_arg(const std::string & name, const smt::Sort & sort) override;
+  smt::Term register_arg(const std::string & name, const smt::Sort & sort) override;
+  
+  // Override process_define_fun to handle clause.X terms
+  void process_define_fun(const std::string & name, 
+                         const smt::TermVec & params,
+                         const smt::Sort & sort,
+                         const smt::Term & term);
 
   std::string filename_;
-
   TransitionSystem & ts_;
 
   smt::TermVec predicates_;

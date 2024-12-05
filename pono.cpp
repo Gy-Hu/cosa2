@@ -16,23 +16,24 @@
 
 #include <csignal>
 #include <iostream>
+
 #include "assert.h"
 
 #ifdef WITH_PROFILING
 #include <gperftools/profiler.h>
 #endif
 
-#include "smt-switch/boolector_factory.h"
 #include "smt-switch/bitwuzla_factory.h"
+#include "smt-switch/boolector_factory.h"
 #ifdef WITH_MSAT
 #include "smt-switch/msat_factory.h"
 #endif
 
 #include "core/fts.h"
 #include "frontends/btor2_encoder.h"
+#include "frontends/external_term.h"
 #include "frontends/smv_encoder.h"
 #include "frontends/vmt_encoder.h"
-#include "frontends/external_term.h"
 #include "modifiers/control_signals.h"
 #include "modifiers/mod_ts_prop.h"
 #include "modifiers/prop_monitor.h"
@@ -43,8 +44,8 @@
 #include "smt-switch/logging_solver.h"
 #include "smt/available_solvers.h"
 #include "utils/logger.h"
-#include "utils/timestamp.h"
 #include "utils/make_provers.h"
+#include "utils/timestamp.h"
 #include "utils/ts_analysis.h"
 
 using namespace pono;
@@ -58,7 +59,8 @@ ProverResult check_prop(PonoOptions pono_options,
                         std::vector<UnorderedTermMap> & cex,
                         const TermVec & external_preds,
                         const TermVec & augmenting_assertions,
-                        const TermVec & f1_lemma_candidates)                        
+                        const TermVec & f1_lemma_candidates,
+                        const TermVec & external_clauses)
 {
   // get property name before it is rewritten
   const string prop_name = ts.get_name(prop);
@@ -89,7 +91,6 @@ ProverResult check_prop(PonoOptions pono_options,
     // guard the property with reset_done
     prop = ts.solver()->make_term(Implies, reset_done, prop);
   }
-
 
   if (pono_options.static_coi_) {
     /* Compute the set of state/input variables related to the
@@ -123,8 +124,6 @@ ProverResult check_prop(PonoOptions pono_options,
 
   Property p(s, prop, prop_name);
 
-  // end modification of the transition system and property
-
   Engine eng = pono_options.engine_;
 
   std::shared_ptr<Prover> prover;
@@ -140,7 +139,12 @@ ProverResult check_prop(PonoOptions pono_options,
   assert(prover);
 
   prover->set_helper_term_predicates(external_preds);
-  prover->set_helper_term_clauses(f1_lemma_candidates);  // Use validated clauses
+  // Use f1_lemma_candidates from the predicates file, or external_clauses from the clauses file
+  if (!f1_lemma_candidates.empty()) {
+    prover->set_helper_term_clauses(f1_lemma_candidates);
+  } else if (!external_clauses.empty()) {
+    prover->set_helper_term_clauses(external_clauses);
+  }
   if (!augmenting_assertions.empty())
     throw PonoException("Augmented assertion not implemented. Future work.");
 
@@ -149,13 +153,10 @@ ProverResult check_prop(PonoOptions pono_options,
   //       model checker runs prove unbounded) or possibly, have a command line
   //       flag to pick between the two
   ProverResult r;
-  if (pono_options.engine_ == MSAT_IC3IA)
-  {
+  if (pono_options.engine_ == MSAT_IC3IA) {
     // HACK MSAT_IC3IA does not support check_until
     r = prover->prove();
-  }
-  else
-  {
+  } else {
     r = prover->check_until(pono_options.bound_);
   }
 
@@ -308,7 +309,8 @@ int main(int argc, char ** argv)
       // ----------------------Load external predicates------------------------------
       TermVec external_predicates, augmenting_assertions, f1_lemma_candidates;
       if (!pono_options.external_predicates_file_.empty()) {
-        ExternalTermInterface term_if(pono_options.external_predicates_file_, fts);
+        ExternalTermInterface term_if(pono_options.external_predicates_file_,
+                                      fts);
         external_predicates = term_if.GetExternalPredicates();
         augmenting_assertions = term_if.GetAugmentingAssertions();
         f1_lemma_candidates = term_if.GetF1LemmaCandidates();
@@ -320,14 +322,26 @@ int main(int argc, char ** argv)
 
         unsigned i=0;
         for (const auto & p : external_predicates)
-          std::cout << i++ <<" : " << p->to_string() << std::endl;
+          std::cout << i++ << " : " << p->to_string() << std::endl;
+      }
+
+      // -----------------------Load external clauses-------------------------------
+      TermVec external_clauses;
+      if (!pono_options.external_clauses_file_.empty()) {
+        ExternalTermInterface term_if(pono_options.external_clauses_file_, fts);
+        external_clauses = term_if.GetExternalClauses();
+        logger.log(1,
+                   "Found {} clauses in {}",
+                   external_clauses.size(),
+                   pono_options.external_clauses_file_);
       }
 
       Term prop = propvec[pono_options.prop_idx_];
 
       vector<UnorderedTermMap> cex;
-      res = check_prop(pono_options, prop, fts, s, cex, 
-              external_predicates, augmenting_assertions, f1_lemma_candidates);
+      res = check_prop(pono_options, prop, fts, s, cex,
+              external_predicates, augmenting_assertions, f1_lemma_candidates,
+              external_clauses);
       // we assume that a prover never returns 'ERROR'
       assert(res != ERROR);
 
@@ -376,7 +390,7 @@ int main(int argc, char ** argv)
       // get property name before it is rewritten
 
       std::vector<UnorderedTermMap> cex;
-      res = check_prop(pono_options, prop, rts, s, cex, {}, {}, {});
+      res = check_prop(pono_options, prop, rts, s, cex, {}, {}, {}, {});
       // we assume that a prover never returns 'ERROR'
       assert(res != ERROR);
 

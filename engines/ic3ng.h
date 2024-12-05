@@ -68,7 +68,7 @@ namespace pono
     // give the clauses that will appear in F1
     // will run the check: init -> c    and   init /\ T -> c'
     void virtual set_helper_term_clauses(const smt::TermVec & clauses) override;
-    
+
     void dump_invariants(std::ostream & os) const;
 
   protected:

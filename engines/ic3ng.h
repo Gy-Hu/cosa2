@@ -183,7 +183,7 @@ namespace pono
       }
       return term;
     }
-
+    
   }; // end of class IC3ng
 
 } // namespace pono

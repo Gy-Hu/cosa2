@@ -506,114 +506,113 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   add_lemma_to_frame(lemma,fidx+1);
 }
 
-
-
-// a helper function : the rev version
-// it goes from the end to the beginning
-void remove_and_move_to_next_backward(smt::TermList & pred_set_prev, smt::TermList::iterator & pred_pos_rev,
-  smt::TermList & pred_set, smt::TermList::iterator & pred_pos,
-  const smt::UnorderedTermSet & unsatcore) {
-
-  assert(pred_set.size() == pred_set_prev.size());
-  assert(pred_pos != pred_set.end());
-  assert(pred_pos_rev != pred_set_prev.end());
-
-  auto pred_iter = pred_set.end(); // pred_pos;
-  auto pred_pos_new = pred_set.end();
-
-  auto pred_iter_prev = pred_set_prev.end();
-  auto pred_pos_new_prev = pred_set_prev.end();
-
-  pred_pos_new--;
-  pred_pos_new_prev--;
-
-  bool reached = false;
-  bool next_pos_found = false;
-
-  while( pred_iter != pred_set.begin() ) {
-    pred_iter--;
-    pred_iter_prev--;
-    
-    if (!reached && pred_iter == pred_pos) {
-      reached = true;
-    }
-    
-    if (unsatcore.find(*pred_iter) == unsatcore.end()) {
-      assert (reached);
-      pred_iter = pred_set.erase(pred_iter);
-      pred_iter_prev = pred_set_prev.erase(pred_iter_prev);
-    } else {
-      if (reached && ! next_pos_found) {
-        pred_pos_new = pred_iter;
-        pred_pos_new ++;
-
-        pred_pos_new_prev = pred_iter_prev;
-        pred_pos_new_prev++;
-
-        next_pos_found = true;
-      }
-    }
-  } // end of while
-
-  assert(reached);
-  if (! next_pos_found) {
-    assert (pred_iter == pred_set.begin());
-    assert (pred_iter_prev == pred_set_prev.begin());
-
-    pred_pos_new = pred_iter;
-    pred_pos_new_prev = pred_iter_prev;
-  }
-  pred_pos = pred_pos_new;
-  pred_pos_rev = pred_pos_new_prev;
-} // remove_and_move_to_next
-
 // 1. check if init /\ (conjs-removed)  is unsat
 // 2. if so, check ( ( not(conjs-removed) /\ F /\ T ) /\ ( conjs-removed )' is unsat?
-void IC3ng::reduce_unsat_core_linear_backwards(const smt::Term & F_and_T,
-  smt::TermList &conjs, smt::TermList & conjs_nxt) {
-  
-  auto to_remove_pos_prev = conjs.end();
-  auto to_remove_pos_next = conjs_nxt.end();
+void IC3ng::reduce_unsat_core_linear_backwards(
+    const smt::Term & F_and_T,
+    smt::TermList & conjs,
+    smt::TermList & conjs_nxt)
+{
+  if (conjs.size() <= 1) {
+    return;
+  }
 
-  assert(conjs.size() == conjs_nxt.size());
+  D(3, "Starting core reduction with {} terms", conjs.size());
+  // store this original size
+  size_t original_size = conjs.size();
+  // print out the original conjs and conjs_nxt
+  std::cout << "Original conjs: \n";
+  for (const auto & conj : conjs) {
+    std::cout << "  " << conj->to_string() << "\n";
+  }
+  std::cout << "------------------\n";
+  std::cout << "Original conjs_nxt: \n";
+  for (const auto & conj_nxt : conjs_nxt) {
+    std::cout << "  " << conj_nxt->to_string() << "\n";
+  }
+  std::cout << "------------------\n";
 
-  while(to_remove_pos_prev != conjs.begin()) {
-    to_remove_pos_prev--; // firstly, point to the last one
-    to_remove_pos_next--;
+  // Keep track of minimum required terms
+  smt::TermList min_conjs = conjs;
+  smt::TermList min_conjs_nxt = conjs_nxt;
+  bool found_smaller = false;
 
-    if (conjs.size() == 1)
-      continue;
+  auto curr = --conjs.end();
+  auto curr_nxt = --conjs_nxt.end();
 
-    smt::Term term_to_remove = *to_remove_pos_prev;
-    smt::Term term_to_remove_next = *to_remove_pos_next;
+  while (curr != conjs.begin()) {
+    smt::Term term = *curr;
+    smt::Term term_nxt = *curr_nxt;
 
-    auto pos_after_conj = conjs.erase(to_remove_pos_prev);
-    auto pos_after_conj_nxt = conjs_nxt.erase(to_remove_pos_next);
+    curr = conjs.erase(curr);
+    curr_nxt = conjs_nxt.erase(curr_nxt);
 
-
-    auto cex_expr = smart_not(smart_and(conjs));
-    auto base = smart_or<smt::TermVec>(
-        { smart_and<smt::TermVec>(  {cex_expr, F_and_T} ) , init_prime_ } );
+    auto remaining = smart_not(smart_and(conjs));
+    auto query = smart_or<smt::TermVec>({
+      smart_and<smt::TermVec>({remaining, F_and_T}),
+      init_prime_
+    });
 
     solver_->push();
-    solver_->assert_formula(base);
-    smt::Result r = solver_->check_sat_assuming_list(conjs_nxt);
+    solver_->assert_formula(query);
+    auto res = solver_->check_sat_assuming_list(conjs_nxt);
 
-    to_remove_pos_prev = conjs.insert(pos_after_conj, term_to_remove);
-    to_remove_pos_next = conjs_nxt.insert(pos_after_conj_nxt, term_to_remove_next);
-    if (r.is_sat()) {
+    if (res.is_sat()) {
+      curr = conjs.insert(curr, term);
+      curr_nxt = conjs_nxt.insert(curr_nxt, term_nxt);
       solver_->pop();
+      --curr;
+      --curr_nxt;
       continue;
-    } // else { // if unsat, we can remove
+    }
+
+    // Get minimal unsat core
     smt::UnorderedTermSet core_set;
     solver_->get_unsat_assumptions(core_set);
-    // below function will update assumption_list and to_remove_pos
-    remove_and_move_to_next_backward(conjs, to_remove_pos_prev, conjs_nxt, to_remove_pos_next, core_set);
     solver_->pop();
-  } // end of while
+
+    // Only update if core is non-empty
+    if (!core_set.empty()) {
+      std::cout << "Core set contents: \n";
+      for (const auto & term : core_set) {
+        std::cout << "  " << term->to_string() << "\n";
+      }
+      smt::TermList new_conjs, new_conjs_nxt;
+      auto conj_it = conjs.begin();
+      auto conj_nxt_it = conjs_nxt.begin();
+
+      // Use next state terms for comparison with core_set
+      while (conj_nxt_it != conjs_nxt.end()) {
+        if (core_set.find(*conj_nxt_it) != core_set.end()) {
+          new_conjs.push_back(*conj_it);
+          new_conjs_nxt.push_back(*conj_nxt_it);
+        }
+        ++conj_it;
+        ++conj_nxt_it;
+      }
+
+      // Update to smaller core if found
+      if (!new_conjs.empty() && new_conjs.size() < min_conjs.size()) {
+        min_conjs = new_conjs;
+        min_conjs_nxt = new_conjs_nxt;
+        found_smaller = true;
+      }
+    }
+
+    // Restore the term since we're still iterating
+    curr = conjs.insert(curr, term);
+    curr_nxt = conjs_nxt.insert(curr_nxt, term_nxt);
+    --curr;
+    --curr_nxt;
+  }
+
+  // Update to smallest valid core found, if any
+  if (found_smaller) {
+    conjs = std::move(min_conjs);
+    conjs_nxt = std::move(min_conjs_nxt);
+    D(3, "Core reduction complete - reduced from {} to {} terms", original_size, conjs.size());
+  }
 }
-
-
 
 ProverResult IC3ng::step(int i)
 {

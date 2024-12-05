@@ -107,7 +107,17 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
   }
   auto preds = model_info_pos->second.preds_to_use;
   auto num_preds = preds.size();
+
+  // Check if preds is empty
+  if (num_preds == 0) {
+    // Handle the case where no predicates are available
+    // For example, we might keep conj_inout unchanged or provide default predicates
+    return 0; // Early return or provide default handling
+  }
+
   preds.insert(preds.end(), conj_inout.begin(), conj_inout.end() );
+  // careful: when external predicates is null -> cause `predicates_to_use` vector is empty
+  // so, leads to an empty `conj_inout` after `swap`
   conj_inout.swap(preds);
   return num_preds;
 } // end of extend_predicates

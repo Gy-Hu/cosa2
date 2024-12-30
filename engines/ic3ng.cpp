@@ -452,7 +452,7 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 
   // Multiple iterations to find high-quality lemmas
   bool found_new_lemma = true;
-  int max_iterations = 3; // Limit iterations to prevent infinite loops
+  int max_iterations = 5; // Limit iterations to prevent infinite loops
   int iteration = 0;
 
   while (found_new_lemma && iteration < max_iterations) {

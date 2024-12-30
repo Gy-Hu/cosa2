@@ -430,9 +430,13 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   // Sort lemmas initially
   SortLemma(conjs, options_.ic3base_sort_lemma_descending);
 
+  // length of conjs before extension
+  size_t npred_before_extension = conjs.size();
+
   // Track original predicates before extension
   smt::TermVec original_conjs = conjs;
   auto npred = extend_predicates(cex, conjs);
+  size_t npred_after_extension = conjs.size();
 
 #ifdef DEBUG_IC3
   std::cout << "Initial predicates after sorting:\n";
@@ -454,6 +458,12 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   while (found_new_lemma && iteration < max_iterations) {
     found_new_lemma = false;
     iteration++;
+
+    // Check if we've used all available predicates
+    if (used_predicates.size() >= (npred_after_extension - npred_before_extension)) {
+      D(2, "[ig] All loaded predicates have been used");
+      break;
+    }
 
     // Filter out already used predicates
     smt::TermVec current_conjs;
@@ -550,62 +560,70 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 
 // a helper function : the rev version
 // it goes from the end to the beginning
-void remove_and_move_to_next_backward(smt::TermList & pred_set_prev, smt::TermList::iterator & pred_pos_rev,
-  smt::TermList & pred_set, smt::TermList::iterator & pred_pos,
+void remove_and_move_to_next_backward(smt::TermList & pred_set_prev, 
+  smt::TermList::iterator & pred_pos_rev,
+  smt::TermList & pred_set, 
+  smt::TermList::iterator & pred_pos,
   const smt::UnorderedTermSet & unsatcore) {
 
   assert(pred_set.size() == pred_set_prev.size());
   assert(pred_pos != pred_set.end());
   assert(pred_pos_rev != pred_set_prev.end());
 
-  auto pred_iter = pred_set.end(); // pred_pos;
-  auto pred_pos_new = pred_set.end();
-
+  // Store the target term value
+  auto target_term = *pred_pos;
+  
+  auto pred_iter = pred_set.end();
   auto pred_iter_prev = pred_set_prev.end();
-  auto pred_pos_new_prev = pred_set_prev.end();
-
-  pred_pos_new--;
-  pred_pos_new_prev--;
 
   bool reached = false;
   bool next_pos_found = false;
+  smt::TermList::iterator next_pos, next_pos_prev;
 
-  while( pred_iter != pred_set.begin() ) {
-    pred_iter--;
-    pred_iter_prev--;
+  while(pred_iter != pred_set.begin()) {
+    --pred_iter;
+    --pred_iter_prev;
     
-    if (!reached && pred_iter == pred_pos) {
+    // Compare values instead of iterators
+    if (!reached && *pred_iter == target_term) {
       reached = true;
     }
     
     if (unsatcore.find(*pred_iter) == unsatcore.end()) {
-      assert (reached);
       pred_iter = pred_set.erase(pred_iter);
       pred_iter_prev = pred_set_prev.erase(pred_iter_prev);
     } else {
-      if (reached && ! next_pos_found) {
-        pred_pos_new = pred_iter;
-        pred_pos_new ++;
-
-        pred_pos_new_prev = pred_iter_prev;
-        pred_pos_new_prev++;
-
+      if (reached && !next_pos_found) {
+        next_pos = pred_iter;
+        next_pos_prev = pred_iter_prev;
         next_pos_found = true;
       }
     }
-  } // end of while
-
-  assert(reached);
-  if (! next_pos_found) {
-    assert (pred_iter == pred_set.begin());
-    assert (pred_iter_prev == pred_set_prev.begin());
-
-    pred_pos_new = pred_iter;
-    pred_pos_new_prev = pred_iter_prev;
   }
-  pred_pos = pred_pos_new;
-  pred_pos_rev = pred_pos_new_prev;
-} // remove_and_move_to_next
+
+  // Handle the first element if needed
+  if (!reached && *pred_iter == target_term) {
+    reached = true;
+  }
+
+  if (!next_pos_found && reached) {
+    if (unsatcore.find(*pred_iter) != unsatcore.end()) {
+      next_pos = pred_iter;
+      next_pos_prev = pred_iter_prev;
+      next_pos_found = true;
+    }
+  }
+
+  assert(reached); // This should now be safe
+
+  if (next_pos_found) {
+    pred_pos = ++next_pos;
+    pred_pos_rev = ++next_pos_prev;
+  } else {
+    pred_pos = pred_set.begin();
+    pred_pos_rev = pred_set_prev.begin();
+  }
+}
 
 // 1. check if init /\ (conjs-removed)  is unsat
 // 2. if so, check ( ( not(conjs-removed) /\ F /\ T ) /\ ( conjs-removed )' is unsat?

@@ -256,9 +256,11 @@ IC3Formula IC3Base::ic3formula_negate(const IC3Formula & u) const
 
 static size_t TermScore(const smt::Term & t) {
   unsigned w = 0;
-  for(auto pos = t->begin(); pos != t->end(); ++pos)
-    if ((*pos)->get_sort()->get_sort_kind()==smt::SortKind::BV)
+  for(auto pos = t->begin(); pos != t->end(); ++pos){
+    if ((*pos)->get_sort()->get_sort_kind()==smt::SortKind::BV){
       w += (*pos)->get_sort()->get_width();
+    } // test, if has bvadd, give higher score
+  }
   return w;
 }
 

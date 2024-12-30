@@ -420,199 +420,233 @@ static void SortLemma(smt::TermVec & inout, bool descending) {
 // ( ( not(S) /\ F /\ T ) \/ init_prime ) /\ ( cube' )
 //   cube (v[0]=1 /\ v[1]=0 /\ ...)
 void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origin) {
-
   auto F = get_frame_formula(fidx);
-  auto T = get_trans_for_vars(cex->get_varset_noslice()); // find the update F for vars in set...
+  auto T = get_trans_for_vars(cex->get_varset_noslice());
   auto F_and_T = smart_and<smt::TermVec>({F,T});
-
 
   smt::TermVec conjs;
   cex->to_expr_conj(solver_, conjs);
-  // HZ: TODO a better way is to check, if the vars are appearing too often
-  // if so, we extend the predicates
-  // otherwise, we will not use word-level preds
 
-
-  // TODO: sort conjs
+  // Sort lemmas initially
   SortLemma(conjs, options_.ic3base_sort_lemma_descending);
 
-
-  auto npred = extend_predicates(cex, conjs); // IC3INN
-  //  conjs.erase(conjs.begin()+1);
-  //  TODO: you may need more than 1 round (if not word-level pred used)
-
-
 #ifdef DEBUG_IC3
-  std::cout << "After sorting:\n";
+  std::cout << "Initial predicates after sorting:\n";
   unsigned i = 0;
   for (const auto & e : conjs)
     std::cout << " " << i++ << ": " << e->to_string() << "\n";
   std::cout << "------------------\n";
 #endif
 
-  auto cex_expr = smart_not(smart_and(conjs));
-  // TODO: you may generate more than 1 clauses
+  auto npred = extend_predicates(cex, conjs);
 
+  // Track all found lemmas
+  std::vector<smt::Term> all_lemmas;
+  std::unordered_set<smt::Term> used_predicates;
 
-  if (conjs.size() > 1) {
+  // Multiple iterations to find high-quality lemmas
+  bool found_new_lemma = true;
+  int max_iterations = 3; // Limit iterations to prevent infinite loops
+  int iteration = 0;
 
-    smt::TermList conjs_nxt;
-    std::unordered_map<smt::Term, size_t> conjnxt_to_idx_map;
-    size_t old_size = conjs.size();
-    for (size_t idx = 0; idx < old_size; ++idx) {
-      conjs_nxt.push_back(ts_.next(conjs.at(idx)));
-      conjnxt_to_idx_map.emplace(conjs_nxt.back(), idx);
+  while (found_new_lemma && iteration < max_iterations) {
+    found_new_lemma = false;
+    iteration++;
+
+    // Filter out already used predicates
+    smt::TermVec current_conjs;
+    for (const auto & conj : conjs) {
+      if (used_predicates.find(conj) == used_predicates.end()) {
+        current_conjs.push_back(conj);
+      }
     }
 
-    smt::Term base = 
-      smart_or<smt::TermVec>(
-        {smart_and<smt::TermVec>(  {cex_expr, F_and_T} ) , init_prime_ } );
-  
-    solver_->push();
-    syntax_analysis::reduce_unsat_core_to_fixedpoint(base, conjs_nxt, solver_);
-    solver_->pop();
-    D(2, "[ig] core size: {} => {}", old_size, conjs_nxt.size());
-
-    smt::TermList conjs_list;
-    for (const auto & c : conjs_nxt)
-      conjs_list.push_back(conjs.at(conjnxt_to_idx_map.at(c)));
-
-
-    if (conjs_nxt.size() > 1) {
-      solver_->push();
-      // syntax_analysis::reduce_unsat_core_linear_rev(base, conjs_nxt, solver_);
-      reduce_unsat_core_linear_backwards(F_and_T, conjs_list, conjs_nxt);
-      solver_->pop();
-      // from conjs_nxt to conj
+    if (current_conjs.empty()) {
+      D(2, "[ig] Iteration {} - No more unused predicates", iteration);
+      break;
     }
-    cex_expr = smart_not(smart_and(conjs_list));
 
 #ifdef DEBUG_IC3
-    std::cout << "Kept:\n";
-    for (const auto & e : conjs_nxt) {
-      std::cout << conjnxt_to_idx_map.at(e) << " : " << e->to_string() << std::endl;
-      if (conjnxt_to_idx_map.at(e) < npred)
-        std::cout << "Used!\n";
-    }
+    std::cout << "Iteration " << iteration << " available predicates:\n";
+    i = 0;
+    for (const auto & e : current_conjs)
+      std::cout << " " << i++ << ": " << e->to_string() << "\n";
     std::cout << "------------------\n";
 #endif
 
-    D(1,"[ig] F{} get lemma size:{}", fidx+1, conjs_list.size());
-  } else
-    D(1,"[ig] F{} get lemma size:{}", fidx+1, 1);
+    D(2, "[ig] Iteration {} with {} predicates", iteration, current_conjs.size());
 
-  D(3,"[ig] F{} get lemma:{}", fidx+1, cex_expr->to_string());
-  auto lemma = new_lemma(cex_expr, cex, origin);
-  add_lemma_to_frame(lemma,fidx+1);
+    auto cex_expr = smart_not(smart_and(current_conjs));
+
+    if (current_conjs.size() > 1) {
+      smt::TermList conjs_nxt;
+      std::unordered_map<smt::Term, size_t> conjnxt_to_idx_map;
+      size_t old_size = current_conjs.size();
+      
+      for (size_t idx = 0; idx < old_size; ++idx) {
+        conjs_nxt.push_back(ts_.next(current_conjs.at(idx)));
+        conjnxt_to_idx_map.emplace(conjs_nxt.back(), idx);
+      }
+
+      smt::Term base = smart_or<smt::TermVec>(
+        {smart_and<smt::TermVec>({cex_expr, F_and_T}), init_prime_});
+
+      solver_->push();
+      syntax_analysis::reduce_unsat_core_to_fixedpoint(base, conjs_nxt, solver_);
+      solver_->pop();
+      D(2, "[ig] core size: {} => {}", old_size, conjs_nxt.size());
+
+      smt::TermList conjs_list;
+      for (const auto & c : conjs_nxt) {
+        auto orig_conj = current_conjs.at(conjnxt_to_idx_map.at(c));
+        conjs_list.push_back(orig_conj);
+        used_predicates.insert(orig_conj);
+      }
+
+      if (conjs_nxt.size() > 1) {
+        solver_->push();
+        reduce_unsat_core_linear_backwards(F_and_T, conjs_list, conjs_nxt);
+        solver_->pop();
+      }
+
+#ifdef DEBUG_IC3
+      std::cout << "Iteration " << iteration << " kept predicates:\n";
+      for (const auto & e : conjs_list) {
+        std::cout << "  " << e->to_string() << "\n";
+      }
+      std::cout << "------------------\n";
+#endif
+
+      if (!conjs_list.empty()) {
+        auto new_lemma = smart_not(smart_and(conjs_list));
+        all_lemmas.push_back(new_lemma);
+        found_new_lemma = true;
+        D(3, "[ig] Found new lemma in iteration {}: {}", iteration, new_lemma->to_string());
+      }
+    }
+  }
+
+  D(1, "[ig] F{} found {} lemmas in {} iterations", fidx+1, all_lemmas.size(), iteration);
+
+  // Add all found lemmas to the frame
+  for (const auto & lemma : all_lemmas) {
+    D(3, "[ig] F{} adding lemma: {}", fidx+1, lemma->to_string());
+    add_lemma_to_frame(new_lemma(lemma, cex, origin), fidx+1);
+  }
+
+  // If no lemmas found, add the original one
+  if (all_lemmas.empty()) {
+    auto cex_expr = smart_not(smart_and(conjs));
+    D(3, "[ig] F{} adding fallback lemma: {}", fidx+1, cex_expr->to_string());
+    add_lemma_to_frame(new_lemma(cex_expr, cex, origin), fidx+1);
+  }
 }
+
+// a helper function : the rev version
+// it goes from the end to the beginning
+void remove_and_move_to_next_backward(smt::TermList & pred_set_prev, smt::TermList::iterator & pred_pos_rev,
+  smt::TermList & pred_set, smt::TermList::iterator & pred_pos,
+  const smt::UnorderedTermSet & unsatcore) {
+
+  assert(pred_set.size() == pred_set_prev.size());
+  assert(pred_pos != pred_set.end());
+  assert(pred_pos_rev != pred_set_prev.end());
+
+  auto pred_iter = pred_set.end(); // pred_pos;
+  auto pred_pos_new = pred_set.end();
+
+  auto pred_iter_prev = pred_set_prev.end();
+  auto pred_pos_new_prev = pred_set_prev.end();
+
+  pred_pos_new--;
+  pred_pos_new_prev--;
+
+  bool reached = false;
+  bool next_pos_found = false;
+
+  while( pred_iter != pred_set.begin() ) {
+    pred_iter--;
+    pred_iter_prev--;
+    
+    if (!reached && pred_iter == pred_pos) {
+      reached = true;
+    }
+    
+    if (unsatcore.find(*pred_iter) == unsatcore.end()) {
+      assert (reached);
+      pred_iter = pred_set.erase(pred_iter);
+      pred_iter_prev = pred_set_prev.erase(pred_iter_prev);
+    } else {
+      if (reached && ! next_pos_found) {
+        pred_pos_new = pred_iter;
+        pred_pos_new ++;
+
+        pred_pos_new_prev = pred_iter_prev;
+        pred_pos_new_prev++;
+
+        next_pos_found = true;
+      }
+    }
+  } // end of while
+
+  assert(reached);
+  if (! next_pos_found) {
+    assert (pred_iter == pred_set.begin());
+    assert (pred_iter_prev == pred_set_prev.begin());
+
+    pred_pos_new = pred_iter;
+    pred_pos_new_prev = pred_iter_prev;
+  }
+  pred_pos = pred_pos_new;
+  pred_pos_rev = pred_pos_new_prev;
+} // remove_and_move_to_next
 
 // 1. check if init /\ (conjs-removed)  is unsat
 // 2. if so, check ( ( not(conjs-removed) /\ F /\ T ) /\ ( conjs-removed )' is unsat?
-void IC3ng::reduce_unsat_core_linear_backwards(
-    const smt::Term & F_and_T,
-    smt::TermList & conjs,
-    smt::TermList & conjs_nxt)
-{
-  if (conjs.size() <= 1) {
-    return;
-  }
+void IC3ng::reduce_unsat_core_linear_backwards(const smt::Term & F_and_T,
+  smt::TermList &conjs, smt::TermList & conjs_nxt) {
+  
+  auto to_remove_pos_prev = conjs.end();
+  auto to_remove_pos_next = conjs_nxt.end();
 
-  D(3, "Starting core reduction with {} terms", conjs.size());
-  // store this original size
-  size_t original_size = conjs.size();
-  // print out the original conjs and conjs_nxt
-  std::cout << "Original conjs: \n";
-  for (const auto & conj : conjs) {
-    std::cout << "  " << conj->to_string() << "\n";
-  }
-  std::cout << "------------------\n";
-  std::cout << "Original conjs_nxt: \n";
-  for (const auto & conj_nxt : conjs_nxt) {
-    std::cout << "  " << conj_nxt->to_string() << "\n";
-  }
-  std::cout << "------------------\n";
+  assert(conjs.size() == conjs_nxt.size());
 
-  // Keep track of minimum required terms
-  smt::TermList min_conjs = conjs;
-  smt::TermList min_conjs_nxt = conjs_nxt;
-  bool found_smaller = false;
+  while(to_remove_pos_prev != conjs.begin()) {
+    to_remove_pos_prev--; // firstly, point to the last one
+    to_remove_pos_next--;
 
-  auto curr = --conjs.end();
-  auto curr_nxt = --conjs_nxt.end();
+    if (conjs.size() == 1)
+      continue;
 
-  while (curr != conjs.begin()) {
-    smt::Term term = *curr;
-    smt::Term term_nxt = *curr_nxt;
+    smt::Term term_to_remove = *to_remove_pos_prev;
+    smt::Term term_to_remove_next = *to_remove_pos_next;
 
-    curr = conjs.erase(curr);
-    curr_nxt = conjs_nxt.erase(curr_nxt);
+    auto pos_after_conj = conjs.erase(to_remove_pos_prev);
+    auto pos_after_conj_nxt = conjs_nxt.erase(to_remove_pos_next);
 
-    auto remaining = smart_not(smart_and(conjs));
-    auto query = smart_or<smt::TermVec>({
-      smart_and<smt::TermVec>({remaining, F_and_T}),
-      init_prime_
-    });
+
+    auto cex_expr = smart_not(smart_and(conjs));
+    auto base = smart_or<smt::TermVec>(
+        { smart_and<smt::TermVec>(  {cex_expr, F_and_T} ) , init_prime_ } );
 
     solver_->push();
-    solver_->assert_formula(query);
-    auto res = solver_->check_sat_assuming_list(conjs_nxt);
+    solver_->assert_formula(base);
+    smt::Result r = solver_->check_sat_assuming_list(conjs_nxt);
 
-    if (res.is_sat()) {
-      curr = conjs.insert(curr, term);
-      curr_nxt = conjs_nxt.insert(curr_nxt, term_nxt);
+    to_remove_pos_prev = conjs.insert(pos_after_conj, term_to_remove);
+    to_remove_pos_next = conjs_nxt.insert(pos_after_conj_nxt, term_to_remove_next);
+    if (r.is_sat()) {
       solver_->pop();
-      --curr;
-      --curr_nxt;
       continue;
-    }
-
-    // Get minimal unsat core
+    } // else { // if unsat, we can remove
     smt::UnorderedTermSet core_set;
     solver_->get_unsat_assumptions(core_set);
+    // below function will update assumption_list and to_remove_pos
+    remove_and_move_to_next_backward(conjs, to_remove_pos_prev, conjs_nxt, to_remove_pos_next, core_set);
     solver_->pop();
-
-    // Only update if core is non-empty
-    if (!core_set.empty()) {
-      std::cout << "Core set contents: \n";
-      for (const auto & term : core_set) {
-        std::cout << "  " << term->to_string() << "\n";
-      }
-      smt::TermList new_conjs, new_conjs_nxt;
-      auto conj_it = conjs.begin();
-      auto conj_nxt_it = conjs_nxt.begin();
-
-      // Use next state terms for comparison with core_set
-      while (conj_nxt_it != conjs_nxt.end()) {
-        if (core_set.find(*conj_nxt_it) != core_set.end()) {
-          new_conjs.push_back(*conj_it);
-          new_conjs_nxt.push_back(*conj_nxt_it);
-        }
-        ++conj_it;
-        ++conj_nxt_it;
-      }
-
-      // Update to smaller core if found
-      if (!new_conjs.empty() && new_conjs.size() < min_conjs.size()) {
-        min_conjs = new_conjs;
-        min_conjs_nxt = new_conjs_nxt;
-        found_smaller = true;
-      }
-    }
-
-    // Restore the term since we're still iterating
-    curr = conjs.insert(curr, term);
-    curr_nxt = conjs_nxt.insert(curr_nxt, term_nxt);
-    --curr;
-    --curr_nxt;
-  }
-
-  // Update to smallest valid core found, if any
-  if (found_smaller) {
-    conjs = std::move(min_conjs);
-    conjs_nxt = std::move(min_conjs_nxt);
-    D(3, "Core reduction complete - reduced from {} to {} terms", original_size, conjs.size());
-  }
+  } // end of while
 }
+
 
 ProverResult IC3ng::step(int i)
 {

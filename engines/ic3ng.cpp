@@ -430,6 +430,10 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   // Sort lemmas initially
   SortLemma(conjs, options_.ic3base_sort_lemma_descending);
 
+  // Track original predicates before extension
+  smt::TermVec original_conjs = conjs;
+  auto npred = extend_predicates(cex, conjs);
+
 #ifdef DEBUG_IC3
   std::cout << "Initial predicates after sorting:\n";
   unsigned i = 0;
@@ -437,8 +441,6 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
     std::cout << " " << i++ << ": " << e->to_string() << "\n";
   std::cout << "------------------\n";
 #endif
-
-  auto npred = extend_predicates(cex, conjs);
 
   // Track all found lemmas
   std::vector<smt::Term> all_lemmas;
@@ -500,7 +502,11 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
       for (const auto & c : conjs_nxt) {
         auto orig_conj = current_conjs.at(conjnxt_to_idx_map.at(c));
         conjs_list.push_back(orig_conj);
-        used_predicates.insert(orig_conj);
+        // Only add to used_predicates if it was from loaded predicates
+        if (std::find(loaded_predicates_.begin(), loaded_predicates_.end(), orig_conj) != loaded_predicates_.end()) {
+          used_predicates.insert(orig_conj);
+          std::cout << "Used predicate: " << orig_conj->to_string() << std::endl;
+        }
       }
 
       if (conjs_nxt.size() > 1) {

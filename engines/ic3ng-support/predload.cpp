@@ -51,10 +51,22 @@ bool static has_intersection(const smt::UnorderedTermSet & a, const smt::Unorder
 // s 00 a 0001 b 0011
 // s ==00 ->  a > b   a == b a>=b 
 unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
+  //TODO:
+  // for each predicate p:
+  //   check if  cex_expr /\ p  is unsat            :   use (p)
+  //         or  cex_expr /\ not(p)  is unsat       :   use (not p)
+  //   you may only check the case when (cex_expr) and p have shared variables
+  //   you don't need to check every time, you can cache this...
+  //   you can also cache the result of which p to consider for a given variable set
+  
+  // make sure newly added preds are put in the beginning of conj_inout
+
   auto model_info_pos = model_info_map_.find(cex);
   PerVarInfo * var_info = cex->get_per_var_info();  
 
   if (model_info_pos == model_info_map_.end()) {
+     // TODO: setup related info
+    // based on structural varset check
     if (!var_info->related_info_populated) {
       const smt::UnorderedTermSet & vars_in_cex =
         cex->get_per_var_info()->vars_noslice_in_cex;
@@ -183,6 +195,8 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
       solver_->pop();
     }
 
+    // TODO: from preds_w_subset_vars -> PerCexInfo::preds_to_use
+    //  solve sat?
     auto res = model_info_map_.emplace(cex, PerCexInfo(std::move(predicates_to_use)));
     model_info_pos = res.first;
   }
@@ -190,11 +204,16 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
   auto preds = model_info_pos->second.preds_to_use;
   auto num_preds = preds.size();
 
+   // Check if preds is empty
   if (num_preds == 0) {
-    return 0;
+    // Handle the case where no predicates are available
+    // For example, we might keep conj_inout unchanged or provide default predicates
+    return 0; // Early return or provide default handling
   }
 
   preds.insert(preds.end(), conj_inout.begin(), conj_inout.end());
+  // careful: when external predicates is null -> cause `predicates_to_use` vector is empty
+  // so, leads to an empty `conj_inout` after `swap`
   conj_inout.swap(preds);
 
   // print all the predicates

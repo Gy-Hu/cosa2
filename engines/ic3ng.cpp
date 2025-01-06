@@ -425,9 +425,13 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   auto F_and_T = smart_and<smt::TermVec>({F,T});
 
   smt::TermVec conjs;
+  // OPTIMIZE: a better way is to check, if the vars are appearing too often
+  // if so, we extend the predicates
+  // otherwise, we will not use word-level preds
   cex->to_expr_conj(solver_, conjs);
 
   // Sort lemmas initially
+  // TODO: Sort conjs
   SortLemma(conjs, options_.ic3base_sort_lemma_descending);
 
   // length of conjs before extension
@@ -435,7 +439,9 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 
   // Track original predicates before extension
   smt::TermVec original_conjs = conjs;
-  auto npred = extend_predicates(cex, conjs);
+  auto npred = extend_predicates(cex, conjs); // IC3INN
+  //  conjs.erase(conjs.begin()+1);
+  //  TODO: you may need more than 1 round (if not word-level pred used)
   size_t npred_after_extension = conjs.size();
 
 #ifdef DEBUG_IC3

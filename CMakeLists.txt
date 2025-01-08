@@ -225,18 +225,21 @@ if (WITH_MSAT_IC3IA)
   set(SOURCES "${SOURCES}" "${PROJECT_SOURCE_DIR}/engines/msat_ic3ia.cpp")
 endif()
 
+# Add nlohmann/json
+include(FetchContent)
+FetchContent_Declare(json
+  URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+  URL_HASH SHA256=d6c65aca6b1ed68e7a182f4757257b107ae403032760ed6ef121c9d55e81757d
+)
+
+FetchContent_MakeAvailable(json)
+
 add_library(pono-lib "${PONO_LIB_TYPE}" ${SOURCES})
 set_target_properties(pono-lib PROPERTIES OUTPUT_NAME pono)
 
 target_include_directories(pono-lib PUBLIC ${INCLUDE_DIRS})
 
-# Should we build python bindings
-option (BUILD_PYTHON_BINDINGS
-   "Build Python bindings")
-
-if (BUILD_PYTHON_BINDINGS)
-  add_subdirectory(python)
-endif()
+target_link_libraries(pono-lib PUBLIC nlohmann_json::nlohmann_json)
 
 target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-btor.a")
 target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-cvc5.a")

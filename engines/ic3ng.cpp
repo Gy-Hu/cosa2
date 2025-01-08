@@ -22,6 +22,10 @@
 
 #include "smt-switch/printing_solver.h"
 
+#include <nlohmann/json.hpp>
+#include <fstream>
+#include <filesystem>
+
 namespace pono
 {
     
@@ -32,9 +36,13 @@ IC3ng::IC3ng(const Property & p, const TransitionSystem & ts,
 #ifdef DEBUG_IC3
   // debug_fout("debug.smt2"),
 #endif
-  partial_model_getter(s)
+  partial_model_getter(s),
+  log_file_path_("logs/ic3ng_log.json"),
+  ig_call_count_(0)
   // bitwuzla can accept non-literal to reduce anyway
   {     
+    // Create logs directory if it doesn't exist
+    std::filesystem::create_directories("logs");
     initialize();
   }
 
@@ -362,7 +370,7 @@ void IC3ng::dump_invariants(std::ostream & os) const {
     
     const auto & last_frame = frames.back();
     os << "Dumping invariants from the last frame:\n";
-    for (const Lemma * lemma : last_frame) {
+    for (const auto & lemma : last_frame) {
         // os << "Clause: " << lemma->to_string() << "\n";
         // if (lemma->cex()) {
         //     os << "Model: " << lemma->cex()->to_string() << "\n";
@@ -430,6 +438,17 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   // otherwise, we will not use word-level preds
   cex->to_expr_conj(solver_, conjs);
 
+  // Store original predicates for logging
+  smt::TermVec original_conjs;
+  smt::TermVec existing_lemmas;
+
+  // Get all lemmas from frames
+  for (const auto & frame : frames) {
+    for (const auto & lemma : frame) {
+      existing_lemmas.push_back(lemma->expr());
+    }
+  }
+
   // Sort lemmas initially
   // TODO: Sort conjs
   SortLemma(conjs, options_.ic3base_sort_lemma_descending);
@@ -438,8 +457,12 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   size_t npred_before_extension = conjs.size();
 
   // Track original predicates before extension
-  smt::TermVec original_conjs = conjs;
+  original_conjs = conjs;
   auto npred = extend_predicates(cex, conjs); // IC3INN
+
+  // Clear previous iteration info
+  clear_current_iterations();
+
   //  conjs.erase(conjs.begin()+1);
   //  TODO: you may need more than 1 round (if not word-level pred used)
   size_t npred_after_extension = conjs.size();
@@ -453,7 +476,7 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 #endif
 
   // Track all found lemmas
-  std::vector<smt::Term> all_lemmas;
+  smt::TermVec found_lemmas;
   std::unordered_set<smt::Term> used_predicates;
 
   // Multiple iterations to find high-quality lemmas
@@ -484,6 +507,13 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
       break;
     }
 
+    // Create iteration info
+    IterationInfo iter_info;
+    for (const auto & pred : current_conjs) {
+      iter_info.available_predicates.push_back(pred->to_string());
+    }
+    iter_info.core_size_before = current_conjs.size();
+
 #ifdef DEBUG_IC3
     std::cout << "Iteration " << iteration << " available predicates:\n";
     i = 0;
@@ -507,21 +537,25 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
       }
 
       smt::Term base = smart_or<smt::TermVec>(
-        {smart_and<smt::TermVec>({cex_expr, F_and_T}), init_prime_});
+        {smart_and<smt::TermVec>(  {cex_expr, F_and_T} ) , init_prime_} );
 
       solver_->push();
       syntax_analysis::reduce_unsat_core_to_fixedpoint(base, conjs_nxt, solver_);
       solver_->pop();
       D(2, "[ig] core size: {} => {}", old_size, conjs_nxt.size());
 
+      iter_info.core_size_after = conjs_nxt.size();
+
       smt::TermList conjs_list;
       for (const auto & c : conjs_nxt) {
         auto orig_conj = current_conjs.at(conjnxt_to_idx_map.at(c));
         conjs_list.push_back(orig_conj);
+        iter_info.core_predicates.push_back(orig_conj->to_string());
         // Only add to used_predicates if it was from loaded predicates
         if (std::find(loaded_predicates_.begin(), loaded_predicates_.end(), orig_conj) != loaded_predicates_.end()) {
           used_predicates.insert(orig_conj);
-          std::cout << "Used predicate: " << orig_conj->to_string() << std::endl;
+          iter_info.used_predicates.push_back(orig_conj->to_string());
+          D(3, "Used predicate: {}", orig_conj->to_string());
         }
       }
 
@@ -541,27 +575,38 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 
       if (!conjs_list.empty()) {
         auto new_lemma = smart_not(smart_and(conjs_list));
-        all_lemmas.push_back(new_lemma);
+        found_lemmas.push_back(new_lemma);
         found_new_lemma = true;
         D(3, "[ig] Found new lemma in iteration {}: {}", iteration, new_lemma->to_string());
+        
+        // Record kept predicates for this iteration
+        for (const auto & pred : conjs_list) {
+          iter_info.kept_predicates.push_back(pred->to_string());
+        }
       }
     }
+
+    // Add iteration info to the list
+    add_iteration_info(iter_info);
   }
 
-  D(1, "[ig] F{} found {} lemmas in {} iterations", fidx+1, all_lemmas.size(), iteration);
+  D(1, "[ig] F{} found {} lemmas in {} iterations", fidx+1, found_lemmas.size(), iteration);
 
   // Add all found lemmas to the frame
-  for (const auto & lemma : all_lemmas) {
+  for (const auto & lemma : found_lemmas) {
     D(3, "[ig] F{} adding lemma: {}", fidx+1, lemma->to_string());
     add_lemma_to_frame(new_lemma(lemma, cex, origin), fidx+1);
   }
 
   // If no lemmas found, add the original one
-  if (all_lemmas.empty()) {
+  if (found_lemmas.empty()) {
     auto cex_expr = smart_not(smart_and(conjs));
     D(3, "[ig] F{} adding fallback lemma: {}", fidx+1, cex_expr->to_string());
     add_lemma_to_frame(new_lemma(cex_expr, cex, origin), fidx+1);
   }
+
+  // Log inductive generalization data
+  log_ig_data(fidx, original_conjs, loaded_predicates_, existing_lemmas);
 }
 
 // a helper function : the rev version
@@ -657,7 +702,7 @@ void IC3ng::reduce_unsat_core_linear_backwards(const smt::Term & F_and_T,
 
     auto cex_expr = smart_not(smart_and(conjs));
     auto base = smart_or<smt::TermVec>(
-        { smart_and<smt::TermVec>(  {cex_expr, F_and_T} ) , init_prime_ } );
+        { smart_and<smt::TermVec>(  {cex_expr, F_and_T} ) , init_prime_} );
 
     solver_->push();
     solver_->assert_formula(base);
@@ -775,5 +820,82 @@ bool IC3ng::last_frame_reaches_bad() {
   return true;
 }
 
+
+void IC3ng::log_ig_data(unsigned fidx,
+                        const smt::TermVec & kept_predicates,
+                        const smt::TermVec & all_external_predicates,
+                        const smt::TermVec & all_clauses) {
+    // Check if log file size exceeds limit
+    if (std::filesystem::exists(log_file_path_) && 
+        std::filesystem::file_size(log_file_path_) > MAX_LOG_FILE_SIZE) {
+        return;
+    }
+
+    nlohmann::json entry;
+    entry["ig_call"] = ig_call_count_++;
+    entry["frame"] = fidx;
+    entry["timestamp"] = std::chrono::system_clock::now().time_since_epoch().count();
+
+    // Record loaded external predicates
+    std::vector<std::string> external_pred_strs;
+    for (const auto & pred : all_external_predicates) {
+        external_pred_strs.push_back(pred->to_string());
+    }
+    entry["loaded_external_predicates"] = external_pred_strs;
+
+    // Record iterations information
+    std::vector<nlohmann::json> iterations;
+    for (const auto & iter : current_ig_iterations_) {
+        nlohmann::json iter_info;
+        iter_info["available_predicates"] = iter.available_predicates;
+        iter_info["core_predicates"] = iter.core_predicates;
+        iter_info["kept_predicates"] = iter.kept_predicates;
+        iter_info["core_size_before"] = iter.core_size_before;
+        iter_info["core_size_after"] = iter.core_size_after;
+        iter_info["used_predicates"] = iter.used_predicates;
+        iterations.push_back(iter_info);
+    }
+    entry["iterations"] = iterations;
+
+    // Record final kept predicates
+    std::vector<std::string> kept_pred_strs;
+    for (const auto & pred : kept_predicates) {
+        kept_pred_strs.push_back(pred->to_string());
+    }
+    entry["final_kept_predicates"] = kept_pred_strs;
+
+    // Calculate and record ratios
+    double external_pred_ratio = all_external_predicates.empty() ? 0.0 :
+        static_cast<double>(kept_predicates.size()) / all_external_predicates.size();
+    entry["external_pred_ratio"] = external_pred_ratio;
+
+    double clauses_ratio = all_clauses.empty() ? 0.0 :
+        static_cast<double>(kept_predicates.size()) / all_clauses.size();
+    entry["clauses_ratio"] = clauses_ratio;
+
+    // Additional metrics
+    entry["total_external_predicates"] = all_external_predicates.size();
+    entry["total_clauses"] = all_clauses.size();
+    entry["kept_predicates_count"] = kept_predicates.size();
+    entry["total_iterations"] = current_ig_iterations_.size();
+
+    log_data_.push_back(entry);
+    save_log_data();
+}
+
+void IC3ng::save_log_data() {
+    try {
+        std::ofstream log_file(log_file_path_);
+        if (log_file.is_open()) {
+            log_file << std::setw(2) << log_data_ << std::endl;
+            log_file.close();
+            D(3, "[log] Successfully saved log data to {}", log_file_path_);
+        } else {
+            D(1, "[log] Failed to open log file: {}", log_file_path_);
+        }
+    } catch (const std::exception& e) {
+        D(1, "[log] Error saving log data: {}", e.what());
+    }
+}
 
 } // namespace pono

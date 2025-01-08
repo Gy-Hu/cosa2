@@ -30,6 +30,8 @@
 #include <algorithm>
 #include <queue>
 #include <fstream>
+#include <nlohmann/json.hpp>
+#include <filesystem>
 
 #include "engines/prover.h"
 #include "smt-switch/utils.h"
@@ -147,6 +149,32 @@ namespace pono
     smt::TermVec loaded_predicates_;
     std::unordered_map<Model *, PerCexInfo> model_info_map_;
 
+    // JSON logging related
+    std::string log_file_path_;
+    nlohmann::json log_data_;
+    size_t ig_call_count_;
+    static constexpr size_t MAX_LOG_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+    // Structure to store iteration information
+    struct IterationInfo {
+        std::vector<std::string> available_predicates;
+        std::vector<std::string> core_predicates;
+        std::vector<std::string> kept_predicates;
+        size_t core_size_before;
+        size_t core_size_after;
+        std::vector<std::string> used_predicates;
+    };
+    std::vector<IterationInfo> current_ig_iterations_;
+
+    void set_log_file_path(const std::string & path) { log_file_path_ = path; }
+    void log_ig_data(unsigned fidx, 
+                    const smt::TermVec & kept_predicates,
+                    const smt::TermVec & all_external_predicates,
+                    const smt::TermVec & all_clauses);
+    void save_log_data();
+    void clear_current_iterations() { current_ig_iterations_.clear(); }
+    void add_iteration_info(const IterationInfo & info) { current_ig_iterations_.push_back(info); }
+
     /**
      * misc functions, supportive functions
     */
@@ -187,4 +215,3 @@ namespace pono
   }; // end of class IC3ng
 
 } // namespace pono
-

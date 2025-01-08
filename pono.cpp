@@ -213,8 +213,7 @@ void profiling_sig_handler(int sig)
   raise(sig);
 }
 
-int main(int argc, char ** argv)
-{
+int main(int argc, char ** argv){
   auto begin_time_stamp = timestamp();
 
   PonoOptions pono_options;

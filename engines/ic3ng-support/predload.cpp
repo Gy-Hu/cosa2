@@ -7,9 +7,10 @@
 namespace pono {
 
 void IC3ng::set_helper_term_predicates(const smt::TermVec & preds) {
-
+  // make a unordered set to track the added predicates
+  std::unordered_set<smt::Term> added_predicateds_set;
   solver_->push();
-    for (const auto & p : preds) {
+  for (const auto & p : preds) {
       if (!(p->get_sort()->get_sort_kind() == smt::SortKind::BOOL ||
           (p->get_sort()->get_sort_kind() == smt::SortKind::BV && 
            p->get_sort()->get_width() == 1)))
@@ -19,12 +20,25 @@ void IC3ng::set_helper_term_predicates(const smt::TermVec & preds) {
       auto neg_p = smart_not(p);
       if(solver_->check_sat_assuming({neg_p}).is_unsat())
         continue;
+      
       // check init/\not(p)  unsat
       // if (solver_->check_sat_assuming({ts_.init() ,neg_p}).is_unsat())
+        // loaded_predicates_.push_back(p);
+
+      // check the predicate is not already in the set
+      if (added_predicateds_set.find(p) == added_predicateds_set.end()){
         loaded_predicates_.push_back(p);
+        added_predicateds_set.insert(p);
+      }
 
       // if (solver_->check_sat_assuming({ts_.init() ,p}).is_unsat())
+        // loaded_predicates_.push_back(neg_p);
+      
+      // check the predicate is not already in the set
+      if (added_predicateds_set.find(neg_p) == added_predicateds_set.end()){
         loaded_predicates_.push_back(neg_p);
+        added_predicateds_set.insert(neg_p);
+      }
     }
   solver_->pop();
 
@@ -91,6 +105,7 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
 
     // Calculate predicates to use
     smt::TermVec predicates_to_use;
+    std::unordered_set<smt::Term> added_predicates_set;
     {
       solver_->push();
       auto cex_formula = cex->to_expr(solver_);
@@ -103,7 +118,11 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
         assumptions.push_back(p);
         auto r1 = solver_->check_sat_assuming(assumptions);
         if (r1.is_unsat()) {
-          predicates_to_use.push_back(smart_not(p));
+          auto not_p = smart_not(p);
+          if (added_predicates_set.find(not_p) == added_predicates_set.end()) {
+            predicates_to_use.push_back(not_p);
+            added_predicates_set.insert(not_p);
+          }
           continue;
         }
         // check not(p)
@@ -111,7 +130,10 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
         assumptions.push_back(smart_not(p));
         auto r2 = solver_->check_sat_assuming(assumptions);
         if (r2.is_unsat()) {
-          predicates_to_use.push_back(p);
+          if (added_predicates_set.find(p) == added_predicates_set.end()) {
+            predicates_to_use.push_back(p);
+            added_predicates_set.insert(p);
+          }
         }
       }
 

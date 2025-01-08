@@ -428,11 +428,13 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   // OPTIMIZE: a better way is to check, if the vars are appearing too often
   // if so, we extend the predicates
   // otherwise, we will not use word-level preds
-  cex->to_expr_conj(solver_, conjs);
+  cex->to_expr_conj(solver_, conjs); // get intial predicates from counterexample
 
   // Sort lemmas initially
   // TODO: Sort conjs
   SortLemma(conjs, options_.ic3base_sort_lemma_descending);
+
+  //TODO: Add a assert function to assert extract xxx op at the end
 
   // length of conjs before extension
   size_t npred_before_extension = conjs.size();
@@ -454,6 +456,8 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
 
   // Track all found lemmas
   std::vector<smt::Term> all_lemmas;
+
+  // track the used predicates list
   std::unordered_set<smt::Term> used_predicates;
 
   // Multiple iterations to find high-quality lemmas
@@ -500,12 +504,18 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
       smt::TermList conjs_nxt;
       std::unordered_map<smt::Term, size_t> conjnxt_to_idx_map;
       size_t old_size = current_conjs.size();
-      
+
+      // (optional)
+      // Sort the current predicates
+      SortLemma(current_conjs, options_.ic3base_sort_lemma_descending);
+
+      // generate the next time predicates mapping
       for (size_t idx = 0; idx < old_size; ++idx) {
         conjs_nxt.push_back(ts_.next(current_conjs.at(idx)));
         conjnxt_to_idx_map.emplace(conjs_nxt.back(), idx);
       }
 
+      // form the fundemantal forumal
       smt::Term base = smart_or<smt::TermVec>(
         {smart_and<smt::TermVec>({cex_expr, F_and_T}), init_prime_});
 

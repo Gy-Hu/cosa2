@@ -151,7 +151,7 @@ namespace pono
 
     // JSON logging related
     std::string log_file_path_;
-    nlohmann::json log_data_;
+    nlohmann::ordered_json log_data_;
     size_t ig_call_count_;
     static constexpr size_t MAX_LOG_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 

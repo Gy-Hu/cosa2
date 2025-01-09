@@ -132,8 +132,7 @@ class PonoOptions
         sygus_initial_term_width_(default_sygus_initial_term_width_),
         sygus_initial_term_inc_(default_sygus_initial_term_inc_),
         sygus_accumulated_term_bound_(default_sygus_accumulated_term_bound_),
-        sygus_use_operator_abstraction_(
-            default_sygus_use_operator_abstraction_),
+        sygus_use_operator_abstraction_(default_sygus_use_operator_abstraction_),
         ic3sa_initial_terms_lvl_(default_ic3sa_initial_terms_lvl_),
         ic3sa_interp_(default_ic3sa_interp_),
         print_wall_time_(default_print_wall_time_),
@@ -154,7 +153,8 @@ class PonoOptions
         kind_no_ind_check_(default_kind_no_ind_check_),
         kind_no_ind_check_property_(default_kind_no_ind_check_property_),
         kind_one_time_base_check_(default_kind_one_time_base_check_),
-        kind_bound_step_(default_kind_bound_step_)
+        kind_bound_step_(default_kind_bound_step_),
+        dump_ig_data_(default_dump_ig_data_)
   {
   }
 
@@ -299,6 +299,7 @@ class PonoOptions
   bool kind_one_time_base_check_;
   // K-induction: amount of steps by which transition relation is unrolled
   unsigned kind_bound_step_;
+  bool dump_ig_data_;  ///< option to control whether to dump inductive generalization data
 
 private:
   // Default options
@@ -370,6 +371,7 @@ private:
   static const bool default_kind_no_ind_check_property_ = false;
   static const bool default_kind_one_time_base_check_ = false;
   static const unsigned default_kind_bound_step_ = 1;
+  static const bool default_dump_ig_data_ = false;
 };
 
 // Useful functions for printing etc...

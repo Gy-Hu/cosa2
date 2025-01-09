@@ -83,9 +83,9 @@ enum optionIndex
   BMC_EXPONENTIAL_STEP,
   BMC_SINGLE_BAD_STATE,
   BMC_NEG_BAD_STEP,
+  BMC_NEG_BAD_STEP_ALL,
   BMC_MIN_CEX_LIN_SEARCH,
   BMC_MIN_CEX_LESS_INC_BIN_SEARCH,
-  BMC_NEG_BAD_STEP_ALL,
   BMC_ALLOW_NON_MINIMAL_CEX,
   KIND_NO_SIMPLE_PATH_CHECK,
   KIND_EAGER_SIMPLE_PATH_CHECK,
@@ -94,7 +94,8 @@ enum optionIndex
   KIND_NO_IND_CHECK,
   KIND_NO_IND_CHECK_PROPERTY,
   KIND_ONE_TIME_BASE_CHECK,
-  KIND_BOUND_STEP
+  KIND_BOUND_STEP,
+  DUMP_IG_DATA,
 };
 
 struct Arg : public option::Arg
@@ -616,6 +617,13 @@ const option::Descriptor usage[] = {
     "  --kind-bound-step \tAmount by which bound (unrolling depth) "
     "is increased in k-induction (default: 1)"
     },
+  { DUMP_IG_DATA,
+    0,
+    "",
+    "dump-ig-data",
+    Arg::None,
+    "  --dump-ig-data \tdump inductive generalization data to JSON file"
+  },
   { 0, 0, 0, 0, 0, 0 }
 };
 /*********************************** end Option Handling setup
@@ -812,6 +820,7 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
 	  if (kind_bound_step_ == 0)
 	    throw PonoException("--kind-bound-step must be greater than 0");
 	  break;
+        case DUMP_IG_DATA: dump_ig_data_ = true; break;
         case UNKNOWN_OPTION:
           // not possible because Arg::Unknown returns ARG_ILLEGAL
           // which aborts the parse with an error

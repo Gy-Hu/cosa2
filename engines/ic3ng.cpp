@@ -608,7 +608,9 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   }
 
   // Log inductive generalization data
-  log_ig_data(fidx, original_conjs, loaded_predicates_, existing_lemmas);
+  if (options_.dump_ig_data_) {
+    log_ig_data(fidx, original_conjs, loaded_predicates_, existing_lemmas);
+  }
 }
 
 // a helper function : the rev version
@@ -827,6 +829,11 @@ void IC3ng::log_ig_data(unsigned fidx,
                         const smt::TermVec & kept_predicates,
                         const smt::TermVec & all_external_predicates,
                         const smt::TermVec & all_clauses) {
+    // Only log if the option is enabled
+    if (!options_.dump_ig_data_) {
+        return;
+    }
+
     // Check if log file size exceeds limit
     if (std::filesystem::exists(log_file_path_) && 
         std::filesystem::file_size(log_file_path_) > MAX_LOG_FILE_SIZE) {

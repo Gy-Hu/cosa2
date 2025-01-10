@@ -107,6 +107,7 @@ class PonoOptions
         ic3base_sort_lemma(default_ic3base_sort_lemma),
         ic3base_sort_lemma_descending(default_ic3base_sort_lemma_descending),
         ic3_gen_max_iter_(default_ic3_gen_max_iter_),
+        ic3_gen_max_iter_per_check_(default_ic3_gen_max_iter_per_check_),
         mbic3_indgen_mode(default_mbic3_indgen_mode),
         ic3_functional_preimage_(default_ic3_functional_preimage_),
         ic3_unsatcore_gen_(default_ic3_unsatcore_gen_),
@@ -154,7 +155,10 @@ class PonoOptions
         kind_no_ind_check_property_(default_kind_no_ind_check_property_),
         kind_one_time_base_check_(default_kind_one_time_base_check_),
         kind_bound_step_(default_kind_bound_step_),
-        dump_ig_data_(default_dump_ig_data_)
+        dump_ig_data_(default_dump_ig_data_),
+        ig_data_compress_(default_ig_data_compress_),
+        ig_data_chunk_size_(default_ig_data_chunk_size_),
+        ig_data_detail_level_(default_ig_data_detail_level_)
   {
   }
 
@@ -203,6 +207,8 @@ class PonoOptions
   bool ic3base_sort_lemma;  ///< sort lemma based on their width or not
   bool ic3base_sort_lemma_descending; ///< sort lemma from widest to narrowest (will throw away wide first)
   unsigned int ic3_gen_max_iter_; ///< max iterations in ic3 generalization. 0
+                                  ///means unbounded
+  unsigned int ic3_gen_max_iter_per_check_; ///< max iterations in ic3 generalization per check. 0
                                   ///means unbounded
   unsigned int mbic3_indgen_mode;  ///< inductive generalization mode [0,2]
   bool ic3_functional_preimage_; ///< functional preimage in IC3
@@ -299,7 +305,11 @@ class PonoOptions
   bool kind_one_time_base_check_;
   // K-induction: amount of steps by which transition relation is unrolled
   unsigned kind_bound_step_;
+  // Inductive Generalization Data Logging Options
   bool dump_ig_data_;  ///< option to control whether to dump inductive generalization data
+  bool ig_data_compress_;  ///< whether to compress the log data
+  unsigned ig_data_chunk_size_;  ///< chunk size in MB for log data
+  unsigned ig_data_detail_level_;  ///< level of detail in logs (1-3)
 
 private:
   // Default options
@@ -323,6 +333,7 @@ private:
   static const bool default_ic3base_sort_lemma = true;
   static const bool default_ic3base_sort_lemma_descending = true;
   static const unsigned int default_ic3_gen_max_iter_ = 2;
+  static const unsigned default_ic3_gen_max_iter_per_check_ = 1000;
   static const unsigned int default_mbic3_indgen_mode = 0;
   static const bool default_ic3_functional_preimage_ = false;
   static const bool default_ic3_unsatcore_gen_ = true;
@@ -371,7 +382,10 @@ private:
   static const bool default_kind_no_ind_check_property_ = false;
   static const bool default_kind_one_time_base_check_ = false;
   static const unsigned default_kind_bound_step_ = 1;
-  static const bool default_dump_ig_data_ = false;
+  static constexpr bool default_dump_ig_data_ = false;
+  static constexpr bool default_ig_data_compress_ = false;
+  static constexpr unsigned default_ig_data_chunk_size_ = 10;
+  static constexpr unsigned default_ig_data_detail_level_ = 3;
 };
 
 // Useful functions for printing etc...

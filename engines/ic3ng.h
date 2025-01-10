@@ -38,6 +38,7 @@
 #include "ic3ng-support/lemma.h"
 #include "ic3ng-support/priority_queue.h"
 #include "utils/partial_model.h"
+#include "utils/ig_log_manager.h"
 
 
 namespace pono
@@ -212,6 +213,8 @@ namespace pono
       return term;
     }
     
+    std::unique_ptr<IGLogManager> log_manager_;
+
   }; // end of class IC3ng
 
 } // namespace pono

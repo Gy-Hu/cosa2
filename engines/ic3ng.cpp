@@ -31,20 +31,18 @@ namespace pono
     
 IC3ng::IC3ng(const Property & p, const TransitionSystem & ts,
             const smt::SmtSolver & s,
-            PonoOptions opt) :
-  Prover(p, ts, s, opt), 
-#ifdef DEBUG_IC3
-  // debug_fout("debug.smt2"),
-#endif
-  partial_model_getter(s),
-  log_file_path_("logs/ic3ng_log.json"),
-  ig_call_count_(0)
-  // bitwuzla can accept non-literal to reduce anyway
-  {     
+            PonoOptions opt)
+  : Prover(p, ts, s, opt),
+    ModelLemmaManager(),
+    has_assumptions(false),
+    partial_model_getter(solver_),
+    lowest_frame_touched_(0),
+    log_manager_(opt.dump_ig_data_ ? std::make_unique<IGLogManager>(opt) : nullptr)
+{
     // Create logs directory if it doesn't exist
     std::filesystem::create_directories("logs");
     initialize();
-  }
+}
 
 IC3ng::~IC3ng() { }
 
@@ -829,129 +827,55 @@ void IC3ng::log_ig_data(unsigned fidx,
                         const smt::TermVec & kept_predicates,
                         const smt::TermVec & all_external_predicates,
                         const smt::TermVec & all_clauses) {
-    // Only log if the option is enabled
-    if (!options_.dump_ig_data_) {
+    // Only log if the option is enabled and manager exists
+    if (!options_.dump_ig_data_ || !log_manager_) {
         return;
     }
 
-    // Check if log file size exceeds limit
-    if (std::filesystem::exists(log_file_path_) && 
-        std::filesystem::file_size(log_file_path_) > MAX_LOG_FILE_SIZE) {
-        return;
-    }
-
-    // Initialize the JSON structure if it's empty
-    if (log_data_.empty()) {
-        // Create global structure with ordered fields
-        nlohmann::ordered_json ordered_data;
-        
-        // First field: loaded_external_predicates
-        std::vector<std::string> external_pred_strs;
-        for (const auto & pred : all_external_predicates) {
-            external_pred_strs.push_back(pred->to_string());
-        }
-        ordered_data["loaded_external_predicates"] = external_pred_strs;
-        ordered_data["total_external_predicates"] = external_pred_strs.size();
-        
-        // Second field: inductive_generalization_info
-        ordered_data["inductive_generalization_info"] = nlohmann::json::array();
-        
-        // Third field: inductive_invariants
-        if (!frames.empty()) {
-            const auto & last_frame = frames.back();
-            std::vector<std::string> invariants;
-            int total_preds = 0;
-            int external_preds = 0;
-            
-            for (const auto & lemma : last_frame) {
-                std::string lemma_str = lemma->expr()->to_string();
-                invariants.push_back(lemma_str);
-                
-                // For each external predicate, check if it or its negation appears in the lemma
-                for (const auto & ext_pred : all_external_predicates) {
-                    std::string ext_pred_str = ext_pred->to_string();
-                    // Remove "not" and parentheses for comparison
-                    std::string clean_ext_pred = ext_pred_str;
-                    if (clean_ext_pred.substr(0, 4) == "(not") {
-                        clean_ext_pred = clean_ext_pred.substr(5, clean_ext_pred.length() - 6);
-                    }
-                    
-                    // If the lemma contains this external predicate (either positive or negative form)
-                    if (lemma_str.find(clean_ext_pred) != std::string::npos) {
-                        external_preds++;
-                        total_preds++;
-                        break;  // Count each predicate only once per lemma
-                    }
-                }
-            }
-            ordered_data["inductive_invariants"] = invariants;
-            ordered_data["inductive_invariants_stats"] = {
-                {"total_predicates", total_preds},
-                {"external_predicates", external_preds},
-                {"external_predicates_ratio", total_preds > 0 ? (double)external_preds/total_preds : 0.0}
-            };
-        } else {
-            ordered_data["inductive_invariants"] = nlohmann::json::array();
-            ordered_data["inductive_invariants_stats"] = {
-                {"total_predicates", 0},
-                {"external_predicates", 0},
-                {"external_predicates_ratio", 0.0}
-            };
-        }
-        
-        // Convert to regular json
-        log_data_ = ordered_data;
-    }
-
-    // Create entry for this inductive generalization with ordered fields
-    nlohmann::ordered_json ig_entry;
+    // Create ordered JSON arrays for each section
+    nlohmann::ordered_json data;
     
-    // Basic information for this IG (in order)
+    // 1. External predicates info
+    std::vector<std::string> external_pred_strs;
+    for (const auto & pred : all_external_predicates) {
+        external_pred_strs.push_back(pred->to_string());
+    }
+    data["loaded_external_predicates"] = external_pred_strs;
+    data["total_external_predicates"] = external_pred_strs.size();
+    
+    // 2. Inductive generalization info
+    nlohmann::ordered_json ig_entry;
     ig_entry["frame"] = fidx;
     ig_entry["ig_call"] = ig_call_count_++;
     
-    // Record counter example predicates
+    // Counter example predicates
     std::vector<std::string> counter_cex_strs;
-    int total_preds_all = 0;
-    int external_preds_all = 0;
-    
+    int external_preds_cex = 0;
     for (const auto & pred : kept_predicates) {
         std::string pred_str = pred->to_string();
         counter_cex_strs.push_back(pred_str);
         
-        // Check if this predicate matches any external predicate
+        // Check if it's an external predicate
         for (const auto & ext_pred : all_external_predicates) {
-            std::string ext_pred_str = ext_pred->to_string();
-            // Remove "not" and parentheses for comparison
-            std::string clean_ext_pred = ext_pred_str;
-            if (clean_ext_pred.substr(0, 4) == "(not") {
-                clean_ext_pred = clean_ext_pred.substr(5, clean_ext_pred.length() - 6);
-            }
-            std::string clean_pred = pred_str;
-            if (clean_pred.substr(0, 4) == "(not") {
-                clean_pred = clean_pred.substr(5, clean_pred.length() - 6);
-            }
-            
-            if (clean_pred == clean_ext_pred) {
-                external_preds_all++;
+            if (pred_str == ext_pred->to_string()) {
+                external_preds_cex++;
                 break;
             }
         }
-        total_preds_all++;
     }
     ig_entry["counter_cex"] = counter_cex_strs;
     ig_entry["counter_cex_stats"] = {
-        {"total_predicates", total_preds_all},
-        {"external_predicates", external_preds_all},
-        {"external_predicates_ratio", total_preds_all > 0 ? (double)external_preds_all/total_preds_all : 0.0}
+        {"total_predicates", kept_predicates.size()},
+        {"external_predicates", external_preds_cex},
+        {"external_predicates_ratio", 
+         kept_predicates.empty() ? 0.0 : 
+         (double)external_preds_cex/kept_predicates.size()}
     };
-
+    
     // Record iterations information
     std::vector<nlohmann::ordered_json> iterations;
     for (const auto & iter : current_ig_iterations_) {
         nlohmann::ordered_json iter_info;
-        
-        // Add fields in desired order
         iter_info["core_size_before"] = iter.core_size_before;
         
         // Record valid external predicates for this iteration
@@ -964,17 +888,7 @@ void IC3ng::log_ig_data(unsigned fidx,
             // Check if this predicate matches any external predicate
             for (const auto & ext_pred : all_external_predicates) {
                 std::string ext_pred_str = ext_pred->to_string();
-                // Remove "not" and parentheses for comparison
-                std::string clean_ext_pred = ext_pred_str;
-                if (clean_ext_pred.substr(0, 4) == "(not") {
-                    clean_ext_pred = clean_ext_pred.substr(5, clean_ext_pred.length() - 6);
-                }
-                std::string clean_pred = pred_str;
-                if (clean_pred.substr(0, 4) == "(not") {
-                    clean_pred = clean_pred.substr(5, clean_pred.length() - 6);
-                }
-                
-                if (clean_pred == clean_ext_pred) {
+                if (pred_str == ext_pred_str) {
                     external_preds++;
                     valid_external_preds.push_back(pred_str);
                     break;
@@ -989,19 +903,19 @@ void IC3ng::log_ig_data(unsigned fidx,
         iter_info["iteration_stats"] = {
             {"total_predicates", total_preds},
             {"external_predicates", external_preds},
-            {"external_predicates_ratio", total_preds > 0 ? (double)external_preds/total_preds : 0.0}
+            {"external_predicates_ratio", 
+             total_preds > 0 ? (double)external_preds/total_preds : 0.0}
         };
         
         iterations.push_back(iter_info);
     }
-
     ig_entry["iterations"] = iterations;
     ig_entry["total_iterations"] = current_ig_iterations_.size();
-
+    
     // Add this IG entry to the array
-    log_data_["inductive_generalization_info"].push_back(ig_entry);
-
-    // Update inductive invariants if we have new frames
+    data["inductive_generalization_info"] = {ig_entry};
+    
+    // 3. Add inductive invariants
     if (!frames.empty()) {
         const auto & last_frame = frames.back();
         std::vector<std::string> invariants;
@@ -1012,32 +926,34 @@ void IC3ng::log_ig_data(unsigned fidx,
             std::string lemma_str = lemma->expr()->to_string();
             invariants.push_back(lemma_str);
             
-            // For each external predicate, check if it or its negation appears in the lemma
+            // For each external predicate, check if it appears in the lemma
             for (const auto & ext_pred : all_external_predicates) {
                 std::string ext_pred_str = ext_pred->to_string();
-                // Remove "not" and parentheses for comparison
-                std::string clean_ext_pred = ext_pred_str;
-                if (clean_ext_pred.substr(0, 4) == "(not") {
-                    clean_ext_pred = clean_ext_pred.substr(5, clean_ext_pred.length() - 6);
-                }
-                
-                // If the lemma contains this external predicate (either positive or negative form)
-                if (lemma_str.find(clean_ext_pred) != std::string::npos) {
+                if (lemma_str.find(ext_pred_str) != std::string::npos) {
                     external_preds++;
                     total_preds++;
                     break;  // Count each predicate only once per lemma
                 }
             }
         }
-        log_data_["inductive_invariants"] = invariants;
-        log_data_["inductive_invariants_stats"] = {
+        data["inductive_invariants"] = invariants;
+        data["inductive_invariants_stats"] = {
             {"total_predicates", total_preds},
             {"external_predicates", external_preds},
-            {"external_predicates_ratio", total_preds > 0 ? (double)external_preds/total_preds : 0.0}
+            {"external_predicates_ratio", 
+             total_preds > 0 ? (double)external_preds/total_preds : 0.0}
+        };
+    } else {
+        data["inductive_invariants"] = nlohmann::json::array();
+        data["inductive_invariants_stats"] = {
+            {"total_predicates", 0},
+            {"external_predicates", 0},
+            {"external_predicates_ratio", 0.0}
         };
     }
-
-    save_log_data();
+    
+    // Log the data
+    log_manager_->log_data(data);
 }
 
 void IC3ng::save_log_data() {

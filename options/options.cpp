@@ -37,6 +37,8 @@ enum optionIndex
   VERBOSITY,
   RANDOM_SEED,
   VCDNAME,
+  SMT_SOLVER,
+  LOGGING_SMT_SOLVER,
   WITNESS,
   STATICCOI,
   SHOW_INVAR,
@@ -44,8 +46,6 @@ enum optionIndex
   RESET,
   RESET_BND,
   CLK,
-  SMT_SOLVER,
-  LOGGING_SMT_SOLVER,
   NO_IC3_PREGEN,
   NO_IC3_INDGEN,
   NO_IC3BITS_COI_PREGEN,
@@ -96,6 +96,11 @@ enum optionIndex
   KIND_ONE_TIME_BASE_CHECK,
   KIND_BOUND_STEP,
   DUMP_IG_DATA,
+  IG_DATA_COMPRESS,
+  IG_DATA_CHUNK_SIZE,
+  IG_DATA_DETAIL_LEVEL,
+  IC3_PREGEN,
+  IC3_GEN_MAX_ITER_PER_CHECK,
 };
 
 struct Arg : public option::Arg
@@ -622,7 +627,42 @@ const option::Descriptor usage[] = {
     "",
     "dump-ig-data",
     Arg::None,
-    "  --dump-ig-data \tdump inductive generalization data to JSON file"
+    "  --dump-ig-data \tEnable logging of inductive generalization data "
+    "(default: off)" },
+  { IG_DATA_COMPRESS,
+    0,
+    "",
+    "ig-data-compress",
+    Arg::None,
+    "  --ig-data-compress \tEnable compression of log data "
+    "(default: off)" },
+  { IG_DATA_CHUNK_SIZE,
+    0,
+    "",
+    "ig-data-chunk-size",
+    Arg::Optional,
+    "  --ig-data-chunk-size=<size> \tSet chunk size in MB for log data "
+    "(default: 10)" },
+  { IG_DATA_DETAIL_LEVEL,
+    0,
+    "",
+    "ig-data-detail-level",
+    Arg::Optional,
+    "  --ig-data-detail-level=<level> \tSet detail level for logging (1-3) "
+    "(default: 3)" },
+  { IC3_PREGEN,
+    0,
+    "",
+    "ic3-pregen",
+    Arg::None,
+    "  --ic3-pregen \tuse preimage generator for IC3 (experimental)"
+  },
+  { IC3_GEN_MAX_ITER_PER_CHECK,
+    0,
+    "",
+    "ic3-gen-max-iter-per-check",
+    Arg::Numeric,
+    "  --ic3-gen-max-iter-per-check \tmaximum number of iterations per check for IC3 generalization"
   },
   { 0, 0, 0, 0, 0, 0 }
 };
@@ -820,7 +860,36 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
 	  if (kind_bound_step_ == 0)
 	    throw PonoException("--kind-bound-step must be greater than 0");
 	  break;
-        case DUMP_IG_DATA: dump_ig_data_ = true; break;
+        case DUMP_IG_DATA: 
+          dump_ig_data_ = true; 
+          // Make sure we set the default values when enabling dump_ig_data
+          ig_data_compress_ = default_ig_data_compress_;
+          ig_data_chunk_size_ = default_ig_data_chunk_size_;
+          ig_data_detail_level_ = default_ig_data_detail_level_;
+          break;
+        case IG_DATA_COMPRESS: ig_data_compress_ = true; break;
+        case IG_DATA_CHUNK_SIZE: {
+          const char * chunk_size_str = options[IG_DATA_CHUNK_SIZE].arg;
+          if (chunk_size_str) {
+            ig_data_chunk_size_ = std::stoul(chunk_size_str);
+            if (ig_data_chunk_size_ == 0) {
+              throw PonoException("Chunk size must be greater than 0");
+            }
+          }
+          break;
+        }
+        case IG_DATA_DETAIL_LEVEL: {
+          const char * detail_level_str = options[IG_DATA_DETAIL_LEVEL].arg;
+          if (detail_level_str) {
+            ig_data_detail_level_ = std::stoul(detail_level_str);
+            if (ig_data_detail_level_ < 1 || ig_data_detail_level_ > 3) {
+              throw PonoException("Detail level must be between 1 and 3");
+            }
+          }
+          break;
+        }
+        case IC3_PREGEN: ic3_pregen_ = true; break;
+        case IC3_GEN_MAX_ITER_PER_CHECK: ic3_gen_max_iter_per_check_ = atoi(opt.arg); break;
         case UNKNOWN_OPTION:
           // not possible because Arg::Unknown returns ARG_ILLEGAL
           // which aborts the parse with an error

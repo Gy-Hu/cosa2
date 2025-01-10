@@ -50,6 +50,8 @@ endif()
 find_package(BISON 3.4.2 REQUIRED)
 find_package(FLEX 2.6.4 REQUIRED)
 
+find_package(ZLIB REQUIRED)
+
 if (BISON_FOUND)
   get_filename_component(BISON_PARENT_DIR "${BISON_EXECUTABLE}" DIRECTORY)
   message("-- Adding bison lib: ${BISON_PARENT_DIR}/../lib")
@@ -202,6 +204,7 @@ set(SOURCES
   "${PROJECT_SOURCE_DIR}/utils/syntax_analysis_common.cpp"
   "${PROJECT_SOURCE_DIR}/utils/syntax_analysis_walker.cpp"
   "${PROJECT_SOURCE_DIR}/utils/syntax_analysis.cpp"
+  "${PROJECT_SOURCE_DIR}/utils/ig_log_manager.cpp"
   "${PROJECT_SOURCE_DIR}/options/options.cpp"
   "${BISON_SMVParser_OUTPUTS}"
   "${FLEX_SMVScanner_OUTPUTS}"
@@ -287,6 +290,7 @@ target_link_libraries(pono-lib PUBLIC "${PROJECT_SOURCE_DIR}/deps/btor2tools/bui
 target_link_libraries(pono-lib PUBLIC "${GMPXX_LIBRARIES}")
 target_link_libraries(pono-lib PUBLIC "${GMP_LIBRARIES}")
 target_link_libraries(pono-lib PUBLIC pthread)
+target_link_libraries(pono-lib PUBLIC ZLIB::ZLIB)
 
 if (GOOGLE_PERF)
   target_link_libraries(pono-lib PUBLIC ${GOOGLE_PERF})

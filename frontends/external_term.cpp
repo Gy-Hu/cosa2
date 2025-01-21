@@ -41,9 +41,16 @@ ExternalTermInterface::ExternalTermInterface(const std::string & filename, Trans
 
 
 smt::Term ExternalTermInterface::register_arg(const std::string & name, const smt::Sort & sort) {
-  auto tmpvar = ts_.lookup(name);
-  arg_param_map_.add_mapping(name, tmpvar);
-  return tmpvar; // we expect to get the term in the transition system.
+  auto pos = ts_.named_terms().find(name);
+  if (pos == ts_.named_terms().end()) {
+    pos = ts_.named_terms().find("|"+name+"|");
+  }
+  if (pos == ts_.named_terms().end()) {
+    throw PonoException("Cannot find term named: " + name);
+  }
+  
+  arg_param_map_.add_mapping(name, pos->second);
+  return pos->second; // we expect to get the term in the transition system.
 }
 
 smt::Term ExternalTermInterface::AddAssertions(const smt::Term &in) const{

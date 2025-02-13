@@ -488,18 +488,38 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
     auto result = solver_->check_sat_assuming_list(conjs_nxt);
 
     if(result.is_unsat()) {
-      // Optimize lemma
-      reduce_unsat_core_linear_backwards(F_and_T, conjs_list, conjs_nxt);
+      // first：reduce_unsat_core_to_fixedpoint
+      solver_->push();
+      syntax_analysis::reduce_unsat_core_to_fixedpoint(base, conjs_nxt, solver_);
+      solver_->pop();
+      D(3, "[ig] After fixedpoint optimization: {} => {}", conjs_list.size(), conjs_nxt.size());
+      
+      // update conjs_list
+      smt::TermList fixed_conjs;
+      auto list_it = conjs_list.begin();
+      auto nxt_it = conjs_nxt.begin();
+      while (nxt_it != conjs_nxt.end() && list_it != conjs_list.end()) {
+        fixed_conjs.push_back(*list_it);
+        ++list_it;
+        ++nxt_it;
+      }
+      conjs_list = fixed_conjs;
+
+      // second：reduce_unsat_core_linear_backwards
+      if(conjs_list.size() > 1) {
+        reduce_unsat_core_linear_backwards(F_and_T, conjs_list, conjs_nxt);
+        D(3, "[ig] After linear backwards optimization: {}", conjs_list.size());
+      }
       
       if(!conjs_list.empty()) {
         auto lemma = smart_not(smart_and(conjs_list));
-        if(unique_lemmas.insert(lemma).second) {  // only add the new unique lemma
+        if(unique_lemmas.insert(lemma).second) {  // Only add unique lemma
           all_lemmas.push_back(lemma);
           total_found_lemmas++;
           D(2, "[ig] Found new unique lemma from combination {}: {}", i, lemma->to_string());
           valid_combinations++;
         } else {
-          // D(3, "[ig] Skipping duplicate lemma from combination {}", i);
+          D(3, "[ig] Skipping duplicate lemma from combination {}", i);
         }
       }
     }

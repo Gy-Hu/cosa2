@@ -427,134 +427,133 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
   smt::TermVec conjs;
   cex->to_expr_conj(solver_, conjs);
 
-  // Sort lemmas initially
-  SortLemma(conjs, options_.ic3base_sort_lemma_descending);
+  // Original predicates (p1, p2, p3, p4)
+  smt::TermVec original_preds = conjs;
+  
+  // Total number of predicates
+  size_t total_preds = original_preds.size() + loaded_predicates_.size();
+  size_t total_combs = (1 << total_preds);
+  size_t loaded_offset = original_preds.size();
 
-  // length of conjs before extension
-  size_t npred_before_extension = conjs.size();
-
-  // Track original predicates before extension
-  smt::TermVec original_conjs = conjs;
-  auto npred = extend_predicates(cex, conjs);
-  size_t npred_after_extension = conjs.size();
-
-#ifdef DEBUG_IC3
-  std::cout << "Initial predicates after sorting:\n";
-  unsigned i = 0;
-  for (const auto & e : conjs)
-    std::cout << " " << i++ << ": " << e->to_string() << "\n";
-  std::cout << "------------------\n";
-#endif
-
-  // Track all found lemmas
+  // Track statistics
   std::vector<smt::Term> all_lemmas;
-  std::unordered_set<smt::Term> used_predicates;
+  std::unordered_set<smt::Term> unique_lemmas;
+  size_t total_checked_combs = 0;
+  size_t total_found_lemmas = 0;
+  bool early_stopped = false;
 
-  // Multiple iterations to find high-quality lemmas
-  bool found_new_lemma = true;
-  int max_iterations = 3; // Limit iterations to prevent infinite loops
-  int iteration = 0;
+  D(1, "[ig] Starting combination generation with {} total predicates ({} original + {} loaded)",
+     total_preds, original_preds.size(), loaded_predicates_.size());
 
-  while (found_new_lemma && iteration < max_iterations) {
-    found_new_lemma = false;
-    iteration++;
-
-    // Check if we've used all available predicates
-    if (used_predicates.size() >= (npred_after_extension - npred_before_extension)) {
-      D(2, "[ig] All loaded predicates have been used");
-      break;
-    }
-
-    // Filter out already used predicates
-    smt::TermVec current_conjs;
-    for (const auto & conj : conjs) {
-      if (used_predicates.find(conj) == used_predicates.end()) {
-        current_conjs.push_back(conj);
-      }
-    }
-
-    if (current_conjs.empty()) {
-      D(2, "[ig] Iteration {} - No more unused predicates", iteration);
-      break;
-    }
-
-#ifdef DEBUG_IC3
-    std::cout << "Iteration " << iteration << " available predicates:\n";
-    i = 0;
-    for (const auto & e : current_conjs)
-      std::cout << " " << i++ << ": " << e->to_string() << "\n";
-    std::cout << "------------------\n";
-#endif
-
-    D(2, "[ig] Iteration {} with {} predicates", iteration, current_conjs.size());
-
-    auto cex_expr = smart_not(smart_and(current_conjs));
-
-    if (current_conjs.size() > 1) {
-      smt::TermList conjs_nxt;
-      std::unordered_map<smt::Term, size_t> conjnxt_to_idx_map;
-      size_t old_size = current_conjs.size();
-      
-      for (size_t idx = 0; idx < old_size; ++idx) {
-        conjs_nxt.push_back(ts_.next(current_conjs.at(idx)));
-        conjnxt_to_idx_map.emplace(conjs_nxt.back(), idx);
-      }
-
-      smt::Term base = smart_or<smt::TermVec>(
-        {smart_and<smt::TermVec>({cex_expr, F_and_T}), init_prime_});
-
-      solver_->push();
-      syntax_analysis::reduce_unsat_core_to_fixedpoint(base, conjs_nxt, solver_);
-      solver_->pop();
-      D(2, "[ig] core size: {} => {}", old_size, conjs_nxt.size());
-
-      smt::TermList conjs_list;
-      for (const auto & c : conjs_nxt) {
-        auto orig_conj = current_conjs.at(conjnxt_to_idx_map.at(c));
-        conjs_list.push_back(orig_conj);
-        // Only add to used_predicates if it was from loaded predicates
-        if (std::find(loaded_predicates_.begin(), loaded_predicates_.end(), orig_conj) != loaded_predicates_.end()) {
-          used_predicates.insert(orig_conj);
-          std::cout << "Used predicate: " << orig_conj->to_string() << std::endl;
+  // Try all possible combinations until we find 10 valid ones
+  size_t valid_combinations = 0;
+  for(size_t i = 0; i < total_combs && valid_combinations < 10; i++, total_checked_combs++) {
+    smt::TermVec current_comb;
+    bool has_loaded = false;
+    
+    // Build current combination
+    for(size_t j = 0; j < total_preds; j++) {
+      if(i & (1 << j)) {
+        if(j < loaded_offset) {
+          current_comb.push_back(original_preds[j]);
+        } else {
+          current_comb.push_back(loaded_predicates_[j - loaded_offset]);
+          has_loaded = true;
         }
       }
+    }
 
-      if (conjs_nxt.size() > 1) {
-        solver_->push();
-        reduce_unsat_core_linear_backwards(F_and_T, conjs_list, conjs_nxt);
-        solver_->pop();
-      }
+    // Skip if combination doesn't include any loaded predicate
+    if(!has_loaded || current_comb.empty()) {
+      continue;
+    }
+    //valid_combinations++
 
-#ifdef DEBUG_IC3
-      std::cout << "Iteration " << iteration << " kept predicates:\n";
-      for (const auto & e : conjs_list) {
-        std::cout << "  " << e->to_string() << "\n";
-      }
-      std::cout << "------------------\n";
-#endif
+    // D(3, "[ig] Testing combination {} with {} predicates", i, current_comb.size());
+    smt::TermList conjs_list(current_comb.begin(), current_comb.end());
+    smt::TermList conjs_nxt;
 
-      if (!conjs_list.empty()) {
-        auto new_lemma = smart_not(smart_and(conjs_list));
-        all_lemmas.push_back(new_lemma);
-        found_new_lemma = true;
-        D(3, "[ig] Found new lemma in iteration {}: {}", iteration, new_lemma->to_string());
+    // Build next state version
+    for(const auto& conj : conjs_list) {
+      conjs_nxt.push_back(ts_.next(conj));
+    }
+
+    solver_->push();
+    auto base = smart_or<smt::TermVec>({
+      smart_and<smt::TermVec>({smart_not(smart_and(conjs_list)), F_and_T}),
+      init_prime_
+    });
+
+    solver_->assert_formula(base);
+    auto result = solver_->check_sat_assuming_list(conjs_nxt);
+
+    if(result.is_unsat()) {
+      // Optimize lemma
+      reduce_unsat_core_linear_backwards(F_and_T, conjs_list, conjs_nxt);
+      
+      if(!conjs_list.empty()) {
+        auto lemma = smart_not(smart_and(conjs_list));
+        if(unique_lemmas.insert(lemma).second) {  // only add the new unique lemma
+          all_lemmas.push_back(lemma);
+          total_found_lemmas++;
+          D(2, "[ig] Found new unique lemma from combination {}: {}", i, lemma->to_string());
+          valid_combinations++;
+        } else {
+          // D(3, "[ig] Skipping duplicate lemma from combination {}", i);
+        }
       }
     }
+    solver_->pop();
   }
 
-  D(1, "[ig] F{} found {} lemmas in {} iterations", fidx+1, all_lemmas.size(), iteration);
+  early_stopped = (valid_combinations >= 10);
+  D(1, "[ig] F{} found {} lemmas (checked {}/{} combs, early_stop={})",
+     fidx+1, all_lemmas.size(), total_checked_combs, total_combs, early_stopped);
 
   // Add all found lemmas to the frame
-  for (const auto & lemma : all_lemmas) {
+  for(const auto& lemma : all_lemmas) {
     D(3, "[ig] F{} adding lemma: {}", fidx+1, lemma->to_string());
     add_lemma_to_frame(new_lemma(lemma, cex, origin), fidx+1);
   }
 
-  // If no lemmas found, add the original one
-  if (all_lemmas.empty()) {
+  // If no lemmas found through enumeration, fall back to original MIC+DOWN process
+  if(all_lemmas.empty()) {
+    D(2, "[ig] No lemmas found through enumeration, falling back to MIC+DOWN");
+    
+    smt::TermList conjs_nxt;
+    std::unordered_map<smt::Term, size_t> conjnxt_to_idx_map;
+    size_t old_size = conjs.size();
+    for (size_t idx = 0; idx < old_size; ++idx) {
+      conjs_nxt.push_back(ts_.next(conjs.at(idx)));
+      conjnxt_to_idx_map.emplace(conjs_nxt.back(), idx);
+    }
+
     auto cex_expr = smart_not(smart_and(conjs));
-    D(3, "[ig] F{} adding fallback lemma: {}", fidx+1, cex_expr->to_string());
-    add_lemma_to_frame(new_lemma(cex_expr, cex, origin), fidx+1);
+    smt::Term base = smart_or<smt::TermVec>(
+      {smart_and<smt::TermVec>({cex_expr, F_and_T}), init_prime_});
+
+    // First optimization: reduce_unsat_core_to_fixedpoint
+    solver_->push();
+    syntax_analysis::reduce_unsat_core_to_fixedpoint(base, conjs_nxt, solver_);
+    solver_->pop();
+    D(2, "[ig] core size: {} => {}", old_size, conjs_nxt.size());
+
+    smt::TermList conjs_list;
+    for (const auto & c : conjs_nxt) {
+      conjs_list.push_back(conjs.at(conjnxt_to_idx_map.at(c)));
+    }
+
+    // Second optimization: reduce_unsat_core_linear_backwards
+    if (conjs_nxt.size() > 1) {
+      solver_->push();
+      reduce_unsat_core_linear_backwards(F_and_T, conjs_list, conjs_nxt);
+      solver_->pop();
+    }
+
+    // Generate final lemma
+    auto lemma = smart_not(smart_and(conjs_list));
+    D(2, "[ig] F{} generated fallback lemma through MIC+DOWN: {}", fidx+1, lemma->to_string());
+    add_lemma_to_frame(new_lemma(lemma, cex, origin), fidx+1);
   }
 }
 

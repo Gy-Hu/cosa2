@@ -488,24 +488,34 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
     auto result = solver_->check_sat_assuming_list(conjs_nxt);
 
     if(result.is_unsat()) {
-      // first：reduce_unsat_core_to_fixedpoint
+      // Build mapping from next state terms to original indices
+      std::unordered_map<smt::Term, size_t> conjnxt_to_idx_map;
+      size_t idx = 0;
+      for (const auto& term : conjs_nxt) {
+        conjnxt_to_idx_map.emplace(term, idx++);
+      }
+      
+      // First optimization: reduce_unsat_core_to_fixedpoint
       solver_->push();
       syntax_analysis::reduce_unsat_core_to_fixedpoint(base, conjs_nxt, solver_);
       solver_->pop();
       D(3, "[ig] After fixedpoint optimization: {} => {}", conjs_list.size(), conjs_nxt.size());
       
-      // update conjs_list
-      smt::TermList fixed_conjs;
-      auto list_it = conjs_list.begin();
-      auto nxt_it = conjs_nxt.begin();
-      while (nxt_it != conjs_nxt.end() && list_it != conjs_list.end()) {
-        fixed_conjs.push_back(*list_it);
-        ++list_it;
-        ++nxt_it;
+      // Update conjs_list using mapping
+      smt::TermList new_conjs_list;
+      for (const auto & c : conjs_nxt) {
+        auto orig_idx = conjnxt_to_idx_map.at(c);
+        // Safe access to list elements
+        if (orig_idx < conjs_list.size()) {
+          auto list_it = std::next(conjs_list.begin(), orig_idx);
+          if (list_it != conjs_list.end()) {
+            new_conjs_list.push_back(*list_it);
+          }
+        }
       }
-      conjs_list = fixed_conjs;
+      conjs_list = new_conjs_list;
 
-      // second：reduce_unsat_core_linear_backwards
+      // Second optimization: reduce_unsat_core_linear_backwards
       if(conjs_list.size() > 1) {
         reduce_unsat_core_linear_backwards(F_and_T, conjs_list, conjs_nxt);
         D(3, "[ig] After linear backwards optimization: {}", conjs_list.size());
@@ -519,7 +529,7 @@ void IC3ng::inductive_generalization(unsigned fidx, Model *cex, LCexOrigin origi
           D(2, "[ig] Found new unique lemma from combination {}: {}", i, lemma->to_string());
           valid_combinations++;
         } else {
-          D(3, "[ig] Skipping duplicate lemma from combination {}", i);
+          // D(3, "[ig] Skipping duplicate lemma from combination {}", i);
         }
       }
     }
@@ -680,6 +690,7 @@ void IC3ng::reduce_unsat_core_linear_backwards(const smt::Term & F_and_T,
     to_remove_pos_next = conjs_nxt.insert(pos_after_conj_nxt, term_to_remove_next);
     if (r.is_sat()) {
       solver_->pop();
+      // TODO: maybe we can use
       continue;
     } // else { // if unsat, we can remove
     smt::UnorderedTermSet core_set;

@@ -689,8 +689,57 @@ void IC3ng::reduce_unsat_core_linear_backwards(const smt::Term & F_and_T,
     to_remove_pos_prev = conjs.insert(pos_after_conj, term_to_remove);
     to_remove_pos_next = conjs_nxt.insert(pos_after_conj_nxt, term_to_remove_next);
     if (r.is_sat()) {
+      // Get the predecessor state that satisfies Fi ∧ ¬qj
+      std::unordered_map<smt::Term,std::vector<std::pair<int,int>>> varlist_slice;
+      std::unordered_map<smt::Term,std::vector<std::pair<int,int>>> input_asts_slices;
+      
+      // Get variables from the current cube
+      smt::UnorderedTermSet var_set_;
+      for (const auto& lit : conjs) {
+        get_free_symbolic_consts(lit, var_set_);
+      }
+      
+      // Add the cube to input_asts_slices
+      smt::Term cube = smart_and(conjs);
+      input_asts_slices.emplace(cube, std::vector<std::pair<int,int>>({ {0,0} }));
+      
+      // Get partial model
+      partial_model_getter.GetVarListForAsts_in_bitlevel(input_asts_slices, varlist_slice);
+      cut_vars_curr(varlist_slice, !has_assumptions);
+      Model* pred_state = new_model(varlist_slice);
+      
+      // Extract common literals
+      smt::TermList new_conjs;
+      smt::TermList new_conjs_nxt;
+      
+      for (const auto& lit : conjs) {
+        solver_->push();
+        solver_->assert_formula(pred_state->to_expr(solver_));
+        solver_->assert_formula(lit);
+        if (solver_->check_sat().is_sat()) {
+          new_conjs.push_back(lit);
+          // Find corresponding next state literal
+          for (const auto& lit_nxt : conjs_nxt) {
+            if (ts_.next(lit) == lit_nxt) {
+              new_conjs_nxt.push_back(lit_nxt);
+              break;
+            }
+          }
+        }
+        solver_->pop();
+      }
+      
+      // Update the cubes if we found a smaller one
+      if (new_conjs.size() < conjs.size()) {
+        conjs = new_conjs;
+        conjs_nxt = new_conjs_nxt;
+        // Reset iterators since we modified the lists
+        to_remove_pos_prev = conjs.end();
+        to_remove_pos_next = conjs_nxt.end();
+      }
+      
+      delete pred_state;
       solver_->pop();
-      // TODO: maybe we can use
       continue;
     } // else { // if unsat, we can remove
     smt::UnorderedTermSet core_set;

@@ -235,18 +235,18 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
     smt::UnorderedTermSet vars_in_pred;
     smt::get_free_symbolic_consts(p, vars_in_pred);
     
-    std::cout << "  Pred: " << p->to_string() << "\n";
-    std::cout << "    All vars: ";
+    // std::cout << "  Pred: " << p->to_string() << "\n";
+    // std::cout << "    All vars: ";
     for (const auto & v : vars_in_pred) {
-      std::cout << v->to_string() << " ";
+      // std::cout << v->to_string() << " ";
     }
-    std::cout << "\n    External vars: ";
+    // std::cout << "\n    External vars: ";
     for (const auto & v : vars_in_pred) {
       if (vars_in_cex.find(v) == vars_in_cex.end()) {
-        std::cout << v->to_string() << " ";
+        // std::cout << v->to_string() << " ";
       }
     }
-    std::cout << "\n";
+    // std::cout << "\n";
   }
 
   // Print final selected predicates

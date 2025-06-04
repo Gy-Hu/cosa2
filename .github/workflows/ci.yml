@@ -1,0 +1,77 @@
+on: [push, pull_request]
+name: CI
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Packages (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake \
+            libgmp-dev \
+            openjdk-8-jdk
+
+      - name: Install Packages (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install \
+            gmp
+
+      # install previous version of setuptools as temporary fix
+      # see also recommendations here: https://github.com/pypa/setuptools/issues/3227
+      - name: Python Dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: python3 -m pip install 'setuptools<61'
+
+      - name: Python Dependencies (all)
+        run: python3 -m pip install Cython pytest toml
+
+      - name: Python Dependencies (all)
+        run: python3 -m pip install scikit-build
+
+      - name: Download MathSAT
+        run: ./ci-scripts/setup-msat.sh --auto-yes
+
+      - name: Setup Flex
+        run: ./contrib/setup-flex.sh
+
+      - name: Setup Bison
+        run: ./contrib/setup-bison.sh
+
+      - name: Setup Btor2Tools
+        run: ./contrib/setup-btor2tools.sh
+
+      - name: Setup Smt-Switch
+        run: |
+          ./contrib/setup-smt-switch.sh --with-msat --python
+          python3 -m pip install -e ./deps/smt-switch/build/python
+
+      - name: Configure
+        run: ./configure.sh --with-msat --debug --python
+
+      - name: Build
+        run: |
+          cd build
+          make -j
+
+      - name: Test C++
+        run: |
+          cd build
+          make test
+
+      - name: Install Python Bindings
+        run: python3 -m pip install -e ./build/python[test,pysmt]
+
+      - name: Test Python Bindings
+        run: pytest ./tests

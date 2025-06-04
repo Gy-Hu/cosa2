@@ -1,17 +1,17 @@
 /*********************                                                        */
-/*! \file 
+/*! \file
  ** \verbatim
  ** Top contributors (to current version):
  **   Hongce Zhang
- ** This file is part of the cosa2 project.
+ ** This file is part of the pono project.
  ** Copyright (c) 2019 by the authors listed in the file AUTHORS
  ** in the top-level source directory) and their institutional affiliations.
  ** All rights reserved.  See the file LICENSE in the top-level source
  ** directory for licensing information.\endverbatim
  **
- ** \brief 
+ ** \brief
  **
- ** 
+ **
  **/
 
 #include "utils/logger.h"
@@ -20,20 +20,21 @@
 
 #include "vcd_witness_printer.h"
 
-#include <iostream>
+#include <algorithm>
 #include <fstream>
+#include <iostream>
 
 using namespace smt;
 using namespace std;
 
-namespace cosa {
+namespace pono {
 
 static const char date_time_format [] = "%A %Y/%m/%d  %H:%M:%S";
 // The format of header :
 // $date
 // %date%
 // $end
-// $version COSA2 $end
+// $version PONO $end
 // $timescale 1 ns $end
 
 // ------------- HELPER FUNCTIONS ------------------ //
@@ -73,14 +74,14 @@ static std::string as_bits(std::string val)
   std::string res = val;
 
   if (val.length() < 2) {
-    throw CosaException("Don't know how to interpret value: " + val);
+    throw PonoException("Don't know how to interpret value: " + val);
   }
 
   if (res.substr(0, 2) == "#b") {
     // #b prefix -> b
     res = res.substr(1, val.length() - 1);
   } else if (res.substr(0, 2) == "#x") {
-    throw CosaException("Not supporting hexadecimal format yet.");
+    throw PonoException("Not supporting hexadecimal format yet.");
   } else {
     res = res.substr(5, res.length() - 5);
     std::istringstream iss(res);
@@ -88,7 +89,7 @@ static std::string as_bits(std::string val)
                                     std::istream_iterator<std::string>());
 
     if (tokens.size() != 2) {
-      throw CosaException("Failed to interpret " + val);
+      throw PonoException("Failed to interpret " + val);
     }
 
     res = tokens[0];
@@ -119,7 +120,7 @@ static std::string as_decimal(std::string val)
   std::string res = val;
 
   if (val.length() < 2) {
-    throw CosaException("Don't know how to interpret value: " + val);
+    throw PonoException("Don't know how to interpret value: " + val);
   }
 
   if (res.substr(0, 2) == "#b") {
@@ -128,7 +129,7 @@ static std::string as_decimal(std::string val)
     mpz_class cval(res, 2);
     res = cval.get_str(10);
   } else if (res.substr(0, 2) == "#x") {
-    throw CosaException("Not supporting hexadecimal format yet.");
+    throw PonoException("Not supporting hexadecimal format yet.");
   } else {
     res = res.substr(5, res.length() - 5);
     std::istringstream iss(res);
@@ -136,7 +137,7 @@ static std::string as_decimal(std::string val)
                                     std::istream_iterator<std::string>());
 
     if (tokens.size() != 2) {
-      throw CosaException("Failed to interpret " + val);
+      throw PonoException("Failed to interpret " + val);
     }
 
     res = tokens[0];
@@ -152,20 +153,21 @@ static std::string as_decimal(std::string val)
 
 // ------------- CLASS FUNCTIONS ------------------ //
 
-
-VCDWitnessPrinter::VCDWitnessPrinter(const BTOR2Encoder & btor_enc,
-                    const TransitionSystem & ts,
-                    const std::vector<smt::UnorderedTermMap> & cex) :
-  inputs_(btor_enc.inputsvec()),
-  states_(btor_enc.statesvec()),
-  no_next_states_(btor_enc.no_next_states()),
-  has_states_without_next_(!no_next_states_.empty()),
-  named_terms_(ts.named_terms()),
-  cex_(cex),
-  hash_id_cnt_(0)
+VCDWitnessPrinter::VCDWitnessPrinter(
+    const TransitionSystem & ts, const std::vector<smt::UnorderedTermMap> & cex)
+    : inputs_(ts.inputvars()),
+      states_(ts.statevars()),
+      named_terms_(ts.named_terms()),
+      cex_(cex),
+      hash_id_cnt_(0),
+      property_id_cnt_(0)
 {
   // figure out the variables and their scopes
   for (auto && name_term_pair : named_terms_) {
+    // It seems that next_var now will also go into named_terms
+    if (ts.is_next_var(name_term_pair.second))
+      continue;
+
     bool is_reg = 
       std::find(states_.begin(), states_.end(), name_term_pair.second)
       != states_.end();
@@ -215,25 +217,71 @@ VCDWitnessPrinter::VCDWitnessPrinter(const BTOR2Encoder & btor_enc,
       continue;
     check_insert_scope(input->to_string(), false, input);
   }
+
 } // VCDWitnessPrinter -- constructor
 
-
-void VCDWitnessPrinter::DebugDump() const {
+void VCDWitnessPrinter::debug_dump() const
+{
   for (uint64_t fidx = 0; fidx < cex_.size(); ++ fidx) {
     logger.log(3, "------------- CEX : F{} -----------------", fidx);
     for (auto && t : cex_.at(fidx)) {
       logger.log(3, "{} -> {}", t.first->to_string(), t.second->to_string() );
     }
   }
-} // DebugDump
+}  // debug_dump
 
 std::string VCDWitnessPrinter::new_hash_id() {
   return "v" + std::to_string(hash_id_cnt_++);
 }
 
-void VCDWitnessPrinter::check_insert_scope(const std::string& full_name, bool is_reg,
-  const smt::Term & ast)
+std::string VCDWitnessPrinter::new_property_id() {
+  return "assert(property" + std::to_string(property_id_cnt_++)+")";
+}
+
+bool static is_bad_state_pattern(const std::string & n) {
+  auto dot_pos = n.rfind(':');
+  for (auto pos = dot_pos + 1; pos < n.length(); ++pos) {
+    char ch = n.at(pos);
+    if (isdigit(ch) || ch == '.' || ch == '-')
+      continue;
+    return false;
+  }
+  return true;
+}
+
+void VCDWitnessPrinter::check_insert_scope(std::string full_name,
+                                           bool is_reg,
+                                           const smt::Term & ast)
 {
+  // yosys could use $... for internal unnamed nodes,
+  // which maybe we don't want at all
+
+  if (full_name.front() == '$')
+    return;
+  if (is_bad_state_pattern(full_name))
+    full_name = new_property_id();
+
+  // yosys use " ; " as the separator for comment
+  // HZ: I'm actually surprised that text after ' ; '
+  // is not parsed by Btor2 frontend
+  // so the check is mostly unuseful.
+  // But it does not hurt to have it.
+  // There is just one exception, that is the
+  // name after bad state: 
+  // Yosys will output something like this:
+  //
+  //   155 bad 154 ./ridecore-src-buggy/topsim.v:101.13-112.8|./ridecore-src-buggy/pipeline.v:2005.11-2006.28
+  // 
+  // and the symbols and dots will overwhelm the later code that
+  // tries to sort out the hierarchy of the signal.
+  // Actually this is not signal name at all.
+  // That's why I use `new_property_id` above to replace it
+
+  auto pos = full_name.find(" ; ");
+  if(pos != full_name.npos)
+    full_name = full_name.substr(0,pos);
+  // gtkwave doesn't like colons in name
+  std::replace(full_name.begin(), full_name.end(), ':', '_');
   auto scopes = split(full_name, ".");
   VCDScope * root = & root_scope_;
   for (size_t idx = 0; idx < scopes.size() - 1; ++idx) {
@@ -242,7 +290,7 @@ void VCDWitnessPrinter::check_insert_scope(const std::string& full_name, bool is
     if (pos != root->subscopes.end()) { // we find it
       root = & (pos->second);
     } else { // we need to insert this scope
-      root->subscopes.insert(std::make_pair(next_scope, VCDScope()));
+      root->subscopes.emplace(next_scope, VCDScope());
       root = &( root->subscopes.at(next_scope) );
     }
   } // at the end of this loop, we are at the scope to insert our variable
@@ -252,21 +300,27 @@ void VCDWitnessPrinter::check_insert_scope(const std::string& full_name, bool is
   std::map<std::string, VCDSignal> & signal_set = is_reg ? root->regs : root->wires;
 
   if (signal_set.find(short_name) != signal_set.end()) {
-    logger.log(1, full_name + " has been registered already");
+    // this can happen if the term is registered both under
+    // named_terms_ and statevars/inputvars
+    // we can ignore this issue.
     return;
   }
   auto hashid = new_hash_id();
-  signal_set.insert(std::make_pair(short_name,
+  signal_set.emplace(short_name,
     VCDSignal(
       short_name + width2range(width), 
-      full_name,  hashid , ast, width)));
+      full_name,  hashid , ast, width));
   allsig_bv_.push_back( &(signal_set.at(short_name)) );
 } // end of check_insert_scope
 
-void VCDWitnessPrinter::check_insert_scope_array(const std::string& full_name, 
-  const std::unordered_set<std::string> & indices, bool has_default,
-  const smt::Term & ast) {
-
+void VCDWitnessPrinter::check_insert_scope_array(
+    std::string full_name,
+    const std::unordered_set<std::string> & indices,
+    bool has_default,
+    const smt::Term & ast)
+{
+  // vcd doesn't like colons in name
+  std::replace(full_name.begin(), full_name.end(), ':', '_');
   auto scopes = split(full_name, ".");
   VCDScope * root = & root_scope_;
   for (size_t idx = 0; idx < scopes.size() - 1; ++idx) {
@@ -275,7 +329,7 @@ void VCDWitnessPrinter::check_insert_scope_array(const std::string& full_name,
     if (pos != root->subscopes.end()) { // we find it
       root = & (pos->second);
     } else { // we need to insert this scope
-      root->subscopes.insert(std::make_pair(next_scope, VCDScope()));
+      root->subscopes.emplace(next_scope, VCDScope());
       root = &( root->subscopes.at(next_scope) );
     }
   } // at the end of this loop, we are at the scope to insert our variable
@@ -285,17 +339,18 @@ void VCDWitnessPrinter::check_insert_scope_array(const std::string& full_name,
   std::map<std::string, VCDArray> & signal_set = root->arrays;
 
   if (signal_set.find(short_name) != signal_set.end()) {
-    // TODO: only check in Debug
-    throw CosaException(full_name + " has been registered already");
+    // I actually maybe should use `assert(false)` here, because
+    // the code now should guarantee this will not happen
+    throw PonoException(full_name + " has been registered already");
   }
 
-  signal_set.insert(std::make_pair(short_name,
-    VCDArray(short_name, full_name,  ast, data_width)));
+  signal_set.emplace(short_name,
+    VCDArray(short_name, full_name,  ast, data_width));
   auto & indices2hash = signal_set.at(short_name).indices2hash;
   for (const auto & index : indices)
-    indices2hash.insert(std::make_pair(index, new_hash_id()));
+    indices2hash.emplace(index, new_hash_id());
   if (has_default)
-    indices2hash.insert(std::make_pair("default", new_hash_id()));
+    indices2hash.emplace("default", new_hash_id());
   allsig_array_.push_back( &(signal_set.at(short_name)) );
   // to do: add indices and their hashes
 } // end of check_insert_scope_array
@@ -339,11 +394,11 @@ void VCDWitnessPrinter::GenHeader(std::ostream & fout) const {
     time (&rawtime);
     timeinfo = localtime (&rawtime);
     if ( strftime(buffer, 100, date_time_format, timeinfo) == 0)
-      throw CosaException("Bug: time2string conversion failed.");
+      throw PonoException("Bug: time2string conversion failed.");
     fout << buffer << std::endl;
   }
   fout << "$end" << std::endl;
-  fout << "$version CoSA2 $end" << std::endl;
+  fout << "$version PONO $end" << std::endl;
   fout << "$timescale 1 ns $end" << std::endl;
   DumpScopes(fout);
   fout << "$enddefinitions $end" << std::endl;
@@ -361,10 +416,10 @@ void VCDWitnessPrinter::dump_all(const smt::UnorderedTermMap & valmap,
       continue;
     }
     auto val = as_bits(pos->second->to_string());
-    valbuf.insert(std::make_pair(
+    valbuf.emplace(
       sig_bv_ptr->hash,
       val
-    ));
+    );
     fout << val << " " << sig_bv_ptr->hash << std::endl;
   } // for all bv signals
 
@@ -389,7 +444,7 @@ void VCDWitnessPrinter::dump_all(const smt::UnorderedTermMap & valmap,
       auto data = as_bits(store_children[2]->to_string());
       auto addr_pos = sig_array_ptr->indices2hash.find(addr);
       if (addr_pos != sig_array_ptr->indices2hash.end()) {
-        valbuf.insert(std::make_pair(addr_pos->second, data));
+        valbuf.emplace(addr_pos->second, data);
         fout << data << " " << addr_pos->second << std::endl;
       } else {
         logger.log(1, "missing addr index for array: {}: , addr : {}" ,
@@ -404,7 +459,7 @@ void VCDWitnessPrinter::dump_all(const smt::UnorderedTermMap & valmap,
       auto data_default = as_bits(const_val->to_string());
       auto addr_pos = sig_array_ptr->indices2hash.find("default");
       if (addr_pos != sig_array_ptr->indices2hash.end()) {
-        valbuf.insert(std::make_pair(addr_pos->second, data_default));
+        valbuf.emplace(addr_pos->second, data_default);
         fout << data_default << " " << addr_pos->second << std::endl;
       } else {
         logger.log(1, "missing addr index for array: {}: , addr : {}" ,
@@ -430,7 +485,7 @@ void VCDWitnessPrinter::dump_diff(const smt::UnorderedTermMap & valmap,
     auto val = as_bits(pos->second->to_string());
     auto prev_pos = valprev.find(sig_bv_ptr->hash);
     if (prev_pos == valprev.end()) {
-      valprev.insert(std::make_pair(sig_bv_ptr->hash, val ));
+      valprev.emplace(sig_bv_ptr->hash, val );
       fout << val << " " << sig_bv_ptr->hash << std::endl;
       logger.log(1, "Bug, {} was not cached before time : {}.",
         sig_bv_ptr->full_name, std::to_string(t));
@@ -467,9 +522,14 @@ void VCDWitnessPrinter::dump_diff(const smt::UnorderedTermMap & valmap,
       if (addr_pos != sig_array_ptr->indices2hash.end()) {
         auto prev_pos = valprev.find(addr_pos->second);
         if (prev_pos == valprev.end()) {
-          valprev.insert(std::make_pair(addr_pos->second, data ));
+          valprev.emplace(addr_pos->second, data );
           fout << data << " " << addr_pos->second << std::endl;
-          logger.log(1, "{} was not cached before time : {}.",
+          // this happens if some elements are not assigned by
+          // the solver in the beginning, I think this is also
+          // common and GtkWave is able to handle it (by having X, don't care)
+          // before it is first assigned
+          // so you can consider even remove the logger below
+          logger.log(3, "{} was not cached before time : {}.",
             sig_array_ptr->full_name+"["+addr+"]", std::to_string(t));
         } else {
           if (prev_pos->second != data) {
@@ -478,6 +538,9 @@ void VCDWitnessPrinter::dump_diff(const smt::UnorderedTermMap & valmap,
           }
         } // exists in prev pos or not
       } else {
+        // we should have already recorded all the indices by
+        // going through all the frames earlier on
+        // so if the case happens, it should be a bug actually
         logger.log(1, "missing addr index for array: {}: , addr : {}" ,
           sig_array_ptr->full_name, addr);
       }
@@ -491,9 +554,14 @@ void VCDWitnessPrinter::dump_diff(const smt::UnorderedTermMap & valmap,
       if (addr_pos != sig_array_ptr->indices2hash.end()) {
         auto prev_pos = valprev.find(addr_pos->second);
         if (prev_pos == valprev.end()) {
-          valprev.insert(std::make_pair(addr_pos->second, data_default ));
+          valprev.emplace(addr_pos->second, data_default );
           fout << data_default << " " << addr_pos->second << std::endl;
-          logger.log(1, "{} was not cached before time : {}.",
+          // this happens if some elements are not assigned by
+          // the solver in the beginning, I think this is also
+          // common and GtkWave is able to handle it (by having X, don't care)
+          // before it is first assigned
+          // so you can consider even remove the logger below
+          logger.log(3, "{} was not cached before time : {}.",
             sig_array_ptr->full_name+"[default]", std::to_string(t));
         } else {
           if (prev_pos->second != data_default) {
@@ -502,6 +570,9 @@ void VCDWitnessPrinter::dump_diff(const smt::UnorderedTermMap & valmap,
           }
         } // exists in prev pos or not
       } else {
+        // we should have already recorded all the indices by
+        // going through all the frames earlier on
+        // so if the case happens, it should be a bug actually
         logger.log(1, "missing addr index for array: {}: , addr : {}" ,
           sig_array_ptr->full_name, "-default-");
       }
@@ -515,8 +586,7 @@ void VCDWitnessPrinter::DumpValues(std::ostream & fout) const {
   // see if there is any difference, if not
   // we just skip it
   // finally add an empty time-tick
-  if (cex_.empty())
-    throw CosaException("No trace to dump");
+  if (cex_.empty()) throw PonoException("No trace to dump");
 
   std::unordered_map<std::string, std::string> hash_to_value_map;
   // used to store the previous value for comparison
@@ -529,14 +599,16 @@ void VCDWitnessPrinter::DumpValues(std::ostream & fout) const {
   fout << "#" << cex_.size() << std::endl;
 }
 
-
-void VCDWitnessPrinter::DumpTraceToFile(const std::string & vcd_file_name) const {
+void VCDWitnessPrinter::dump_trace_to_file(
+    const std::string & vcd_file_name) const
+{
   std::ofstream fout(vcd_file_name);
   if (!fout.is_open())
-    throw CosaException("Unable to write to : " + vcd_file_name);
+    throw PonoException("Unable to write to : " + vcd_file_name);
+
   GenHeader(fout);
   DumpValues(fout);
   logger.log(0, "Trace written to " + vcd_file_name);
-}
+}  // dump_trace_to_file
 
-} // namespace cosa
+}  // namespace pono

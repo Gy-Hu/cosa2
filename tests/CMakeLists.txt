@@ -26,18 +26,45 @@ if (WITH_MSAT)
   add_definitions(-DWITH_MSAT)
 endif()
 
-if (WITH_CVC4)
-  add_definitions(-DWITH_CVC4)
-endif()
+add_library(pono-test-lib "${PONO_LIB_TYPE}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/common_ts.cpp"
+)
 
-add_library(available-solvers SHARED
-  "${PROJECT_SOURCE_DIR}/tests/available_solvers.cpp")
-target_include_directories(available-solvers PUBLIC "${PROJECT_SOURCE_DIR}/deps/smt-switch/local/include")
-# Rely on cmake link forwarding to link available-solvers with relevant smt-switch libs
-target_link_libraries(available-solvers PUBLIC cosa2)
+# INCLUDE_DIRS set in top-level CMakeLists.txt
+target_include_directories(pono-test-lib PUBLIC "${INCLUDE_DIRS}")
+target_link_libraries(pono-test-lib pono-lib)
 
-add_executable(test_fts "${PROJECT_SOURCE_DIR}/tests/test_fts.cpp")
-target_link_libraries(test_fts gtest_main)
-target_link_libraries(test_fts cosa2)
-target_link_libraries(test_fts available-solvers)
-add_test(NAME test_fts COMMAND test_fts)
+macro(pono_add_test name)
+  add_executable(${name} "${CMAKE_CURRENT_SOURCE_DIR}/${name}.cpp")
+  target_link_libraries(${name} gtest_main)
+  target_link_libraries(${name} pono-test-lib) # also includes pono-lib because it's linked
+  add_test(NAME ${name} COMMAND ${name})
+endmacro()
+
+include_directories("${PROJECT_SOURCE_DIR}/tests/")
+
+pono_add_test(test_ts)
+pono_add_test(test_unroller)
+pono_add_test(test_modifiers)
+pono_add_test(test_engines)
+pono_add_test(test_utils)
+pono_add_test(test_uf)
+pono_add_test(test_witness)
+pono_add_test(test_control_signal_modifiers)
+pono_add_test(test_coi)
+pono_add_test(test_ts_replace_terms)
+pono_add_test(test_ic3)
+pono_add_test(test_ic3bits)
+pono_add_test(test_ic3ia)
+pono_add_test(test_ic3sa)
+pono_add_test(test_msat_ic3ia)
+pono_add_test(test_ceg_prophecy_arrays)
+pono_add_test(test_cegar_ops_uf)
+pono_add_test(test_cegar_values)
+pono_add_test(test_term_analysis)
+pono_add_test(test_walkers)
+pono_add_test(test_pseudo_init_and_prop)
+pono_add_test(test_promote_inputvars)
+pono_add_test(test_partial_model)
+
+add_subdirectory(encoders)

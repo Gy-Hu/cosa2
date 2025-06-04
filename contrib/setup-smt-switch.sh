@@ -3,6 +3,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DEPS=$DIR/../deps
 
+SMT_SWITCH_VERSION=5227b40f7b75f015ad82eae9fcb1fb9fff3219d4
+
 usage () {
     cat <<EOF
 Usage: $0 [<option> ...]
@@ -10,9 +12,10 @@ Usage: $0 [<option> ...]
 Sets up the smt-switch API for interfacing with SMT solvers through a C++ API.
 
 -h, --help              display this message and exit
---with-cvc4             include CVC4 (default: off)
 --with-msat             include MathSAT which is under a custom non-BSD compliant license (default: off)
--y, --auto-yes          automatically agree to conditions (default: off)
+--with-bitwuzla         build with Bitwuzla  (default: off)
+--cvc5-home             use an already downloaded version of cvc5
+--python                build python bindings (default: off)
 EOF
     exit 0
 }
@@ -23,7 +26,10 @@ die () {
 }
 
 WITH_MSAT=default
-WITH_CVC4=default
+CONF_OPTS=""
+WITH_PYTHON=default
+cvc5_home=default
+WITH_BITWUZLA=default
 
 while [ $# -gt 0 ]
 do
@@ -31,11 +37,24 @@ do
         -h|--help) usage;;
         --with-msat)
             WITH_MSAT=ON
-            CONF_OPTS="$CONF_OPTS --msat";;
-        --with-cvc4)
-            WITH_CVC4=ON
-            CONF_OPTS="$CONF_OPTS --cvc4";;
-        -y|--auto-yes) MSAT_OPTS=--auto-yes;;
+            CONF_OPTS="$CONF_OPTS --msat --msat-home=../mathsat";;
+        --python)
+            WITH_PYTHON=YES
+            CONF_OPTS="$CONF_OPTS --python";;
+        --cvc5-home) die "missing argument to $1 (see -h)" ;;
+        --with-bitwuzla)
+            WITH_BITWUZLA=ON
+            CONF_OPTS="$CONF_OPTS --bitwuzla";;
+        --cvc5-home=*)
+            cvc5_home=${1##*=}
+            # Check if cvc5_home is an absolute path and if not, make it
+            # absolute.
+            case $cvc5_home in
+                /*) ;;                            # absolute path
+                *) cvc5_home=$(pwd)/$cvc5_home ;; # make absolute path
+            esac
+            CONF_OPTS="$CONF_OPTS --cvc5-home=$cvc5_home"
+            ;;
         *) die "unexpected argument: $1";;
     esac
     shift
@@ -45,19 +64,18 @@ mkdir -p $DEPS
 
 if [ ! -d "$DEPS/smt-switch" ]; then
     cd $DEPS
-    git clone https://github.com/makaimann/smt-switch
+    git clone https://github.com/zhanghongce/smt-switch.git
     cd smt-switch
+    git checkout -f $SMT_SWITCH_VERSION
     ./contrib/setup-btor.sh
-
-    if [[ "$WITH_MSAT" != default ]]; then
-        ./contrib/setup-msat.sh $MSAT_OPTS
+    if [ $WITH_BITWUZLA = ON ]; then
+        ./contrib/setup-bitwuzla.sh
     fi
-
-    if [[ "$WITH_CVC4" != default ]]; then
-        ./contrib/setup-cvc4.sh
+    if [ $cvc5_home = default ]; then
+        ./contrib/setup-cvc5.sh
     fi
-
-    ./configure.sh --btor $CONF_OPTS --prefix=local
+    # pass bison/flex directories from smt-switch perspective
+    ./configure.sh --btor --bitwuzla --cvc5 $CONF_OPTS --prefix=local --static --smtlib-reader --bison-dir=../bison/bison-install --flex-dir=../flex/flex-install
     cd build
     make -j$(nproc)
     make test
@@ -68,8 +86,8 @@ else
 fi
 
 if [ 0 -lt $(ls $DEPS/smt-switch/local/lib/libsmt-switch* 2>/dev/null | wc -w) ]; then
-    echo "It appears smt-switch with boolector was successfully installed to $DEPS/smt-switch/local."
-    echo "You may now build cosa2 with: ./configure.sh && cd build && make"
+    echo "It appears smt-switch with boolector and cvc5 was successfully installed to $DEPS/smt-switch/local."
+    echo "You may now build pono with: ./configure.sh && cd build && make"
 else
     echo "Building smt-switch failed."
     echo "You might be missing some dependencies."

@@ -314,7 +314,9 @@ target_include_directories(pono-bin PUBLIC
 target_link_libraries(pono-bin PUBLIC pono-lib)
 
 if ("${PONO_STATIC_EXEC}" STREQUAL "YES")
-  target_link_libraries(pono-bin PUBLIC -static)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+  target_link_libraries(pono-bin PUBLIC -static-libgcc -static-libstdc++)
+  target_link_libraries(pono-bin PUBLIC -Wl,--whole-archive -lpthread -Wl,--no-whole-archive)
 endif()
 
 # install smt-switch

@@ -260,7 +260,7 @@ void IC3ng::dump_clause_to_aiger(const std::string & fname) {
 
 
 void IC3ng::aiger_simulate() {
-  #error TODO
+  // #error TODO
   // assert cex->expr,
   // for the input of this aiger
     // if it is a sliced variable, extract its value,
@@ -311,7 +311,7 @@ void IC3ng::load_aiger_internal_nodes(const std::string & fname) {
     internal_nodes_to_aiglit_map.emplace(term4aignode, lhs);
     loaded_preds_from_aiger_.push_back(term4aignode);
   }
-  #error please check if `internal_nodes_to_aiglit_map` and `lit2term_map` matches the loaded aiger!!!
+  // #error please check if `internal_nodes_to_aiglit_map` and `lit2term_map` matches the loaded aiger!!!
   // HZ: we don't really care about the clauses
   // no need to rewrite existing ones, because they are equivalent anyway
   // the point is, can we get some useful internal nodes from LS?

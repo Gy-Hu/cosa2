@@ -23,6 +23,7 @@ Configures the CMAKE build environment.
 --python                compile with python bindings (default: off)
 --static-lib            build a static library (default: shared)
 --static                build a static executable (default: dynamic); implies --static-lib
+--with-bitwuzla         build with Bitwuzla  (default: off)
 --with-profiling        build with gperftools for profiling (default: off)
 EOF
   exit 0
@@ -92,6 +93,7 @@ do
             static_exec=YES;
             lib_type=STATIC;
             ;;
+        --with-bitwuzla) with_bitwuzla=ON;;
         --with-profiling) with_profiling=ON;;
         *) die "unexpected argument: $1";;
     esac

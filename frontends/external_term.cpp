@@ -35,7 +35,7 @@ ExternalTermInterface::ExternalTermInterface(const std::string & filename, Trans
         assertions_.push_back(n_prop.second);
       if(n_prop.first.find("predicate.") == 0)
         predicates_.push_back(n_prop.second);
-      if(n_prop.first.find("f1clause.") == 0)
+      if(n_prop.first.find("f1clause.") == 0 || n_prop.first.find("clause.") == 0)
         clauses_.push_back(n_prop.second);
 
       // For augmenting transition systems

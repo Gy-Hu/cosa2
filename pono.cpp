@@ -347,6 +347,23 @@ int main(int argc, char ** argv)
                    pono_options.external_clauses_file_);
       }
 
+      // -----------------------Load external helpers (mixed file)------------------
+      if (!pono_options.external_helpers_file_.empty()) {
+        ExternalTermInterface term_if(pono_options.external_helpers_file_, fts);
+        auto preds = term_if.GetExternalPredicates();
+        auto asserts = term_if.GetAugmentingAssertions();
+        auto clauses = term_if.GetExternalClauses();
+        external_predicates.insert(external_predicates.end(), preds.begin(), preds.end());
+        augmenting_assertions.insert(augmenting_assertions.end(), asserts.begin(), asserts.end());
+        // clauses from helpers go into both f1_lemma_candidates and external_clauses
+        f1_lemma_candidates.insert(f1_lemma_candidates.end(), clauses.begin(), clauses.end());
+        external_clauses.insert(external_clauses.end(), clauses.begin(), clauses.end());
+        std::cout << "Loaded from helpers: "
+                  << preds.size() << " predicates, "
+                  << asserts.size() << " assertions, "
+                  << clauses.size() << " clauses\n";
+      }
+
       Term prop = propvec[pono_options.prop_idx_];
       if(pono_options.property_file_!=""){
         PropertyInterface assertion(pono_options.property_file_, fts);

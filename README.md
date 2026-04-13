@@ -69,12 +69,12 @@ Each helper is a `define-fun` whose parameters match the state variable names in
   benchmarks/cegis-helper-assert/simple_arithmetic/two_cnt/two_cnt.btor
 ```
 
-**Mixed file** — a single file passed via `--external-predicates` can contain all three prefixes; they are automatically categorized. This is useful when an LLM generates all helpers in one shot:
+**All-in-one helpers** — `--external-helpers` accepts a single file containing all three prefixes, automatically categorized. Useful when an LLM generates all helpers in one shot:
 
 ```bash
 # xp2 benchmark with mixed helpers (2 predicates + 2 clauses + 1 assertion)
 ./build/pono -e ic3ng-bits --promote-inputvars \
-  --external-predicates benchmarks/side-load-clause/xp2.mixed_helpers.smt2 \
+  --external-helpers benchmarks/side-load-clause/xp2.mixed_helpers.smt2 \
   benchmarks/side-load-clause/xp2.btor2
 ```
 

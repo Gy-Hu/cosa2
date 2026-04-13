@@ -122,6 +122,7 @@ class BzlaSolver : public AbsSmtSolver
       const TermVec & term,
       const UnorderedTermMap & substitution_map) const override;
   void dump_smt2(std::string filename) const override;
+  Term simplify_term(const Term & t) override;
 
   // getters for solver-specific objects
   // for interacting with third-party Bitwuzla-specific software

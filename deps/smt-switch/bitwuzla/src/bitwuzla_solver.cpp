@@ -764,6 +764,21 @@ void BzlaSolver::dump_smt2(std::string filename) const
   get_bitwuzla()->print_formula(out, "smt2");
 }
 
+Term BzlaSolver::simplify_term(const Term & t)
+{
+  std::shared_ptr<BzlaTerm> bterm = std::static_pointer_cast<BzlaTerm>(t);
+  try
+  {
+    bitwuzla::Term simplified = get_bitwuzla()->simplify(bterm->term);
+    return std::make_shared<BzlaTerm>(simplified);
+  }
+  catch (std::exception & e)
+  {
+    // If simplification fails, return the original term
+    return t;
+  }
+}
+
 void BzlaInterpolatingSolver::set_opt(const std::string option,
                                       const std::string value)
 {

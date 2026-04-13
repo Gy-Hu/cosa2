@@ -130,6 +130,13 @@ class AbsSmtSolver
 
   virtual void get_unsat_assumptions(TermList & out);
 
+  /** Simplify a term using solver-internal rewriting.
+   *  Default implementation returns the term unchanged.
+   *  @param t the term to simplify
+   *  @return the simplified term
+   */
+  virtual Term simplify_term(const Term & t) { return t; }
+
   /* Make an uninterpreted sort
    * SMTLIB: (declare-sort <name> <arity>)
    * @param name the name of the sort

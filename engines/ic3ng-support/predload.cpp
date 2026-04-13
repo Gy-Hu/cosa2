@@ -1,5 +1,6 @@
 #include "engines/ic3ng.h"
 
+#include <chrono>
 #include <fstream>
 
 #include "smt-switch/smtlib_reader.h"
@@ -129,7 +130,11 @@ bool static has_intersection(const smt::UnorderedTermSet & a, const smt::Unorder
 
 // s 00 a 0001 b 0011
 // s ==00 ->  a > b   a == b a>=b 
+static double total_extend_pred_time_ms = 0;
+static unsigned total_extend_pred_calls = 0;
+
 unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
+  auto t_start = std::chrono::steady_clock::now();
   auto model_info_pos = model_info_map_.find(cex);
   PerUnslicedVarInfo * var_info = cex->get_per_unslicedvar_info();
 
@@ -163,93 +168,55 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
       disable_all_labels();
       solver_->assert_formula(cex->to_expr(solver_));
 
-      // First check subset vars, double check
+      // Get a model for evaluation — one SAT call instead of 2*N
+      auto sat_result = solver_->check_sat();
+      assert(sat_result.is_sat());
+
+      // Evaluate each predicate under the cex model via get_value
       for (const auto & p : var_info->preds_w_subset_vars) {
-        // check p
-        auto r = solver_->check_sat_assuming({p});
-        if (r.is_unsat()) {
+        auto val = solver_->get_value(p);
+        // val is a boolean constant — check if it's true or false
+        if (val->to_int() == 0) {
+          // p is false under cex → cex implies ¬p, so add ¬p
           predicates_to_use.push_back(smart_not(p));
-          continue;
-        }
-        // check not(p)
-        r = solver_->check_sat_assuming({smart_not(p)});
-        if (r.is_unsat()) {
+        } else {
+          // p is true under cex → cex implies p, so add p
           predicates_to_use.push_back(p);
         }
       }
 
-      // HZ: is this substitution really helpful?
-      // always handle related vars, no matter how many subset vars found
+      // Handle related vars: substitute external vars with their model values
       const auto & vars_in_cex = cex->get_varset_unslice();
       for (const auto & p : var_info->preds_w_related_vars) {
-        // achieve the vars in p but not in cex
         smt::UnorderedTermSet vars_in_pred;
         smt::get_free_symbolic_consts(p, vars_in_pred);
-        smt::UnorderedTermSet external_vars; // external_vars = vars_in_pred - vars_in_cex
+
+        // Substitute external vars with their values from the model
+        smt::UnorderedTermMap subst_map;
         for (const auto & v : vars_in_pred) {
           if (vars_in_cex.find(v) == vars_in_cex.end()) {
-            external_vars.insert(v);
-          }
-        }
-
-        // Try different values for each external variable
-        bool found_useful = false;
-        for (const auto & ext_var : external_vars) {
-          // Get the sort of the variable
-          auto var_sort = ext_var->get_sort();
-          
-          // Try special values based on the bit-width
-          std::vector<int64_t> test_values;
-          if (var_sort->get_sort_kind() == smt::BV) {
-            uint32_t width = var_sort->get_width();
-            test_values = {0, 1};  // Always safe values
-            if (width > 1) {
-              test_values.push_back((1ll << (width-1)) - 1);  // Maximum positive value
-              test_values.push_back(-(1ll << (width-1)));     // Minimum negative value
-            }
-          } else {
-            // For non-bitvector sorts, use simple values
-            test_values = {0, 1, -1};
-          }
-          
-          for (auto val : test_values) {
             try {
-              // Create a constant of appropriate width
-              auto const_val = solver_->make_term(val, var_sort);
-              
-              // Create substitution map
-              smt::UnorderedTermMap subst_map;
-              subst_map[ext_var] = const_val;
-              
-              // Create terms vector with single term
-              smt::TermVec terms;
-              terms.push_back(p);
-              
-              // Replace the external variable
-              auto subst_terms = solver_->substitute_terms(terms, subst_map);
-              auto subst_p = subst_terms[0];  // We only substituted one term
-              
-              // Check the substituted predicate (bi-directional check)
-              auto r1 = solver_->check_sat_assuming({subst_p});
-              if (r1.is_unsat()) {
-                predicates_to_use.push_back(smart_not(subst_p));
-                found_useful = true;
-                break;
-              }
-              
-              auto r2 = solver_->check_sat_assuming({smart_not(subst_p)});
-              if (r2.is_unsat()) {
-                predicates_to_use.push_back(subst_p);
-                found_useful = true;
-                break;
-              }
-            } catch (const std::exception & e) {
-              // If we get an exception creating the constant, skip this value
+              subst_map[v] = solver_->get_value(v);
+            } catch (const std::exception &) {
+              // variable not in model, skip this predicate
               continue;
             }
           }
-          
-          if (found_useful) break;
+        }
+        if (subst_map.empty()) continue;
+
+        try {
+          auto subst_p = solver_->substitute(p, subst_map);
+          // Simplify the substituted predicate if the solver supports it
+          subst_p = solver_->simplify_term(subst_p);
+          auto val = solver_->get_value(subst_p);
+          if (val->to_int() == 0) {
+            predicates_to_use.push_back(smart_not(subst_p));
+          } else {
+            predicates_to_use.push_back(subst_p);
+          }
+        } catch (const std::exception &) {
+          continue;
         }
       }
       solver_->pop();
@@ -263,7 +230,9 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
   auto num_preds = preds.size();
 
   if (num_preds == 0) {
-    // if we find no additional predicates, we will just return
+    auto t_end = std::chrono::steady_clock::now();
+    total_extend_pred_time_ms += std::chrono::duration<double, std::milli>(t_end - t_start).count();
+    total_extend_pred_calls++;
     return 0;
   }
   // conj_inout := VectorConcat(preds, conj_inout)
@@ -330,7 +299,14 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
 
   std::cout << "\nTotal predicates selected: " << num_preds << "\n";
   std::cout << "================================\n\n";
-  
+
+  auto t_end = std::chrono::steady_clock::now();
+  double elapsed_ms = std::chrono::duration<double, std::milli>(t_end - t_start).count();
+  total_extend_pred_time_ms += elapsed_ms;
+  total_extend_pred_calls++;
+  logger.log(1, "[extend_pred] call #{}: {:.2f}ms (cumulative: {:.2f}ms)",
+             total_extend_pred_calls, elapsed_ms, total_extend_pred_time_ms);
+
   return num_preds;
 } // end of extend_predicates
 

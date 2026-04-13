@@ -315,7 +315,7 @@ void IC3ng::reduce_unsat_core_linear_backwards(const smt::Term & F_and_T,
 
 // remove from conjs_list those elements that are not in (core1 union core2)
 // and also remove its next state version from conjs_next
-static void update_list_based_on_core(smt::TermList & conjs_list, smt::TermList & conjs_next, 
+static void update_list_based_on_core(smt::TermList & conjs_list, smt::TermList & conjs_next,
   // core1 and core1 are all on current variables
   const smt::TermList & core1, const smt::TermList & core2)
 {
@@ -334,10 +334,11 @@ static void update_list_based_on_core(smt::TermList & conjs_list, smt::TermList 
   }
 }
 
-bool IC3ng::ic3_down(smt::TermList & conjs_list, smt::TermList & conjs_next, 
+bool IC3ng::ic3_down(smt::TermList & conjs_list, smt::TermList & conjs_next,
     const smt::Term & Trans, unsigned fidx,
-    std::unordered_map<smt::Term, size_t> & conjnxt_to_idx_map, smt::TermVec all_conjs_curr) 
-{  // now let's check (1) init /\ conj_list 
+    std::unordered_map<smt::Term, size_t> & conjnxt_to_idx_map, smt::TermVec all_conjs_curr,
+    unsigned npred)
+{  // now let's check (1) init /\ conj_list
   while(true) {
     solver_->push();
     assert_init();
@@ -351,17 +352,43 @@ bool IC3ng::ic3_down(smt::TermList & conjs_list, smt::TermList & conjs_next,
     assert_frame(fidx);
     solver_->assert_formula(smart_not(smart_and(conjs_list)));
     solver_->assert_formula(Trans);
-    res = solver_->check_sat_assuming_list(conjs_next);
+    // Weight strategy: assert helper pred next-state as hard constraints,
+    // only use bit-level assignments as assumptions for core extraction.
+    // This way helper preds can never be dropped by unsat core.
+    smt::TermList non_pred_next;
+    if (npred > 0) {
+      for (auto it = conjs_next.begin(); it != conjs_next.end(); ++it) {
+        auto idx_it = conjnxt_to_idx_map.find(*it);
+        if (idx_it != conjnxt_to_idx_map.end() && idx_it->second < npred) {
+          solver_->assert_formula(*it); // hard assert helper pred
+        } else {
+          non_pred_next.push_back(*it);
+        }
+      }
+    } else {
+      non_pred_next = conjs_next;
+    }
+    res = solver_->check_sat_assuming_list(npred > 0 ? non_pred_next : conjs_next);
     if (res.is_unsat()) {
-      // yes, we can remove, 
+      // yes, we can remove,
       smt::UnorderedTermSet unsatcore_next;
-      solver_->get_unsat_assumptions(unsatcore_next); // unsatcore_next would be a subset of conjs_nxt
+      solver_->get_unsat_assumptions(unsatcore_next);
+      // Add back the helper pred next-state terms — they were asserted, not assumed,
+      // so they're implicitly in the "core" (always active)
+      if (npred > 0) {
+        for (auto it = conjs_next.begin(); it != conjs_next.end(); ++it) {
+          auto idx_it = conjnxt_to_idx_map.find(*it);
+          if (idx_it != conjnxt_to_idx_map.end() && idx_it->second < npred) {
+            unsatcore_next.insert(*it);
+          }
+        }
+      }
       solver_->pop();
       // map cores to curr state version
       smt::TermList unsatcore_curr;
       for (const auto & t : unsatcore_next) // map to curr
         unsatcore_curr.push_back(all_conjs_curr.at(conjnxt_to_idx_map.at(t)));
-      // now we need to make sure, this has no intersection with init 
+      // now we need to make sure, this has no intersection with init
       // (init /\ the remaining conjs)  should be unsat
       solver_->push();
       assert_init();
@@ -399,7 +426,15 @@ bool IC3ng::ic3_down(smt::TermList & conjs_list, smt::TermList & conjs_next,
           pos != conjs_list.end(); ) {
         const auto & t = *pos;
         auto val = solver_->get_value(t);
-        if (extract_bit_from_val(val) != true ) { 
+        if (extract_bit_from_val(val) != true ) {
+          // Before removing, check if it's a helper predicate
+          if (npred > 0) {
+            auto it = conjnxt_to_idx_map.find(*pos_next);
+            if (it != conjnxt_to_idx_map.end() && it->second < npred) {
+              ++pos; ++pos_next;
+              continue; // protect helper predicate
+            }
+          }
           // remove this
           pos = conjs_list.erase(pos);
           pos_next = conjs_next.erase(pos_next);
@@ -442,13 +477,18 @@ void IC3ng::inductive_generalization_mic(unsigned fidx, Model *cex, LCexOrigin o
     std::cout << " " << i++ << ": " << e->to_string() << "\n";
   std::cout << "------------------\n";
 #endif
-  
+
+  logger.log(1, "[ig-mic] all_conjs size={} (npred={})", all_conjs.size(), npred);
+  for (unsigned dbg_i = 0; dbg_i < all_conjs.size(); ++dbg_i) {
+    logger.log(1, "[ig-mic]   conj[{}]{}: {}", dbg_i, (dbg_i < npred ? " (PRED)" : ""), all_conjs[dbg_i]->to_string());
+  }
 
   assert(!all_conjs.empty());
   if (all_conjs.size() == 1) { // a short-cut
     auto cex_expr = smart_not(smart_and(all_conjs));
     D(3,"[ig] F{} get lemma:{}", fidx+1, cex_expr->to_string());
-    auto lemma = new_lemma(cex_expr, cex, origin, std::move(all_conjs)); // it does not matter whether we have the NOT 
+    logger.log(1, "[ig-mic] shortcut: only 1 conj, skipping MIC loop");
+    auto lemma = new_lemma(cex_expr, cex, origin, std::move(all_conjs)); // it does not matter whether we have the NOT
     add_lemma_to_frame(lemma,fidx+1);
     return;
   }
@@ -489,13 +529,22 @@ void IC3ng::inductive_generalization_mic(unsigned fidx, Model *cex, LCexOrigin o
     smt::Term term_to_remove_curr = *to_remove_pos_curr_term;
     smt::Term term_to_remove_next = *to_remove_pos_next_term;
 
+    // Force-keep helper predicates: don't try to remove them
+    {
+      auto it = conjnxt_to_idx_map.find(term_to_remove_next);
+      if (it != conjnxt_to_idx_map.end() && it->second < npred) {
+        logger.log(1, "[ig-mic] force-keeping helper pred idx={}: {}", it->second, term_to_remove_curr->to_string());
+        continue; // skip removal attempt for helper predicates
+      }
+    }
+
     auto pos_after_conj_curr = conjs_list.erase(to_remove_pos_curr_term); // let's try to remove it
     auto pos_after_conj_next = conjs_nxt.erase(to_remove_pos_next_term);
     
     auto conjs_list_copy = conjs_list;
     auto conjs_nxt_copy  = conjs_nxt;
 
-    bool res = ic3_down(conjs_list_copy, conjs_nxt_copy, Trans, fidx, conjnxt_to_idx_map, all_conjs);
+    bool res = ic3_down(conjs_list_copy, conjs_nxt_copy, Trans, fidx, conjnxt_to_idx_map, all_conjs, npred);
 
     to_remove_pos_curr_term = conjs_list.insert(pos_after_conj_curr, term_to_remove_curr); // will insert before pos_after_conj
     to_remove_pos_next_term = conjs_nxt.insert(pos_after_conj_next, term_to_remove_next);
@@ -525,6 +574,83 @@ void IC3ng::inductive_generalization_mic(unsigned fidx, Model *cex, LCexOrigin o
     }
   }
 #endif
+
+  logger.log(1, "[ig-mic] Phase 1 done: {} conjs survived (first {} are preds)",
+             conjs_list.size(), npred);
+
+  // ============================================================
+  // Phase 2: Selectively remove redundant helper predicates
+  // After Phase 1, we have (all implied preds) + (minimal bits).
+  // Now try removing each pred — if the cube stays inductive
+  // without it, the pred is redundant and can be dropped.
+  // This naturally handles interaction effects: removing pred A
+  // may make pred B essential (or vice versa).
+  // ============================================================
+  if (npred > 0) {
+    // Collect surviving pred positions for Phase 2 processing
+    // Iterate forward through conjs_list, try removing each helper pred
+    auto pos_curr = conjs_list.begin();
+    auto pos_nxt = conjs_nxt.begin();
+    while (pos_curr != conjs_list.end()) {
+      // Check if this element is a helper predicate
+      auto idx_it = conjnxt_to_idx_map.find(*pos_nxt);
+      if (idx_it == conjnxt_to_idx_map.end() || idx_it->second >= npred) {
+        ++pos_curr; ++pos_nxt;
+        continue; // not a pred, skip
+      }
+
+      if (conjs_list.size() <= 1) {
+        ++pos_curr; ++pos_nxt;
+        continue; // don't remove the last element
+      }
+
+      // Tentatively remove this pred
+      smt::Term removed_curr = *pos_curr;
+      smt::Term removed_nxt = *pos_nxt;
+      auto after_curr = conjs_list.erase(pos_curr);
+      auto after_nxt = conjs_nxt.erase(pos_nxt);
+
+      // Check 1: init ∧ cube → UNSAT? (cube must not intersect init)
+      solver_->push();
+      assert_init();
+      auto init_res = solver_->check_sat_assuming_list(conjs_list);
+      solver_->pop();
+
+      bool keep = false;
+      if (init_res.is_sat()) {
+        // Removing this pred makes cube intersect init — must keep
+        keep = true;
+      } else {
+        // Check 2: F(i) ∧ ¬cube ∧ T ∧ cube' → UNSAT? (inductive)
+        solver_->push();
+        assert_frame(fidx);
+        solver_->assert_formula(smart_not(smart_and(conjs_list)));
+        solver_->assert_formula(Trans);
+        auto ind_res = solver_->check_sat_assuming_list(conjs_nxt);
+        solver_->pop();
+
+        if (ind_res.is_sat()) {
+          // Not inductive without this pred — must keep
+          keep = true;
+        }
+      }
+
+      if (keep) {
+        // Re-insert and move past it
+        pos_curr = conjs_list.insert(after_curr, removed_curr);
+        pos_nxt = conjs_nxt.insert(after_nxt, removed_nxt);
+        logger.log(1, "[ig-mic] Phase 2: KEEP pred (essential): {}", removed_curr->to_string());
+        ++pos_curr; ++pos_nxt;
+      } else {
+        // Successfully removed — the pred was redundant
+        logger.log(1, "[ig-mic] Phase 2: DROP pred (redundant): {}", removed_curr->to_string());
+        pos_curr = after_curr;
+        pos_nxt = after_nxt;
+      }
+    }
+
+    logger.log(1, "[ig-mic] Phase 2 done: {} conjs remain", conjs_list.size());
+  }
 
   auto cex_expr = smart_not(smart_and(conjs_list));
   D(1,"[ig] F{} get lemma size:{}", fidx+1, conjs_list.size());

@@ -168,37 +168,61 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
       disable_all_labels();
       solver_->assert_formula(cex->to_expr(solver_));
 
-      // Get a model for evaluation — one SAT call instead of 2*N
-      auto sat_result = solver_->check_sat();
-      assert(sat_result.is_sat());
+      // DEBUG: print cex details to understand partial vs complete assignment
+      logger.log(1, "[extend_pred] === DEBUG: cex analysis ===");
+      logger.log(1, "[extend_pred] cex conjs (partial cube):");
+      for (const auto & eq : cex->to_expr_conj()) {
+        logger.log(1, "[extend_pred]   {}", eq->to_string());
+      }
+      const auto & vars_in_cex_dbg = cex->get_varset_unslice();
+      logger.log(1, "[extend_pred] #vars in cex (unsliced): {}", vars_in_cex_dbg.size());
+      logger.log(1, "[extend_pred] #subset_var preds: {}, #related_var preds: {}",
+                 var_info->preds_w_subset_vars.size(), var_info->preds_w_related_vars.size());
 
-      // Evaluate each predicate under the cex model via get_value
+      // Use check_sat_assuming (old correct method) for subset vars
       for (const auto & p : var_info->preds_w_subset_vars) {
-        auto val = solver_->get_value(p);
-        // val is a boolean constant — check if it's true or false
-        if (val->to_int() == 0) {
-          // p is false under cex → cex implies ¬p, so add ¬p
+        auto r_pos = solver_->check_sat_assuming({p});
+        if (r_pos.is_unsat()) {
+          // cex ⊨ ¬p
           predicates_to_use.push_back(smart_not(p));
-        } else {
-          // p is true under cex → cex implies p, so add p
+          logger.log(1, "[extend_pred] subset pred IMPLIED ¬p: {}", p->to_string());
+          continue;
+        }
+        auto r_neg = solver_->check_sat_assuming({smart_not(p)});
+        if (r_neg.is_unsat()) {
+          // cex ⊨ p
           predicates_to_use.push_back(p);
+          logger.log(1, "[extend_pred] subset pred IMPLIED p: {}", p->to_string());
+        } else {
+          // cex does NOT determine p — this is the partial assignment issue!
+          logger.log(1, "[extend_pred] subset pred NOT DETERMINED (partial cex!): {}", p->to_string());
+          // DEBUG: show which vars in p are missing from cex
+          smt::UnorderedTermSet vars_in_pred;
+          smt::get_free_symbolic_consts(p, vars_in_pred);
+          for (const auto & v : vars_in_pred) {
+            bool in_cex = vars_in_cex_dbg.find(v) != vars_in_cex_dbg.end();
+            logger.log(1, "[extend_pred]   var {} in_cex={}", v->to_string(), in_cex);
+          }
         }
       }
 
-      // Handle related vars: substitute external vars with their model values
+      // Handle related vars: use check_sat_assuming for correctness
       const auto & vars_in_cex = cex->get_varset_unslice();
       for (const auto & p : var_info->preds_w_related_vars) {
         smt::UnorderedTermSet vars_in_pred;
         smt::get_free_symbolic_consts(p, vars_in_pred);
 
-        // Substitute external vars with their values from the model
+        // Substitute external vars with their model values
+        // First need a SAT call to get values
+        auto sat_result = solver_->check_sat();
+        if (!sat_result.is_sat()) continue;
+
         smt::UnorderedTermMap subst_map;
         for (const auto & v : vars_in_pred) {
           if (vars_in_cex.find(v) == vars_in_cex.end()) {
             try {
               subst_map[v] = solver_->get_value(v);
             } catch (const std::exception &) {
-              // variable not in model, skip this predicate
               continue;
             }
           }
@@ -207,13 +231,21 @@ unsigned IC3ng::extend_predicates(Model *cex, smt::TermVec & conj_inout) {
 
         try {
           auto subst_p = solver_->substitute(p, subst_map);
-          // Simplify the substituted predicate if the solver supports it
           subst_p = solver_->simplify_term(subst_p);
-          auto val = solver_->get_value(subst_p);
-          if (val->to_int() == 0) {
+
+          // Use check_sat_assuming to verify implication, not just get_value
+          auto r_pos = solver_->check_sat_assuming({subst_p});
+          if (r_pos.is_unsat()) {
             predicates_to_use.push_back(smart_not(subst_p));
-          } else {
+            logger.log(1, "[extend_pred] related pred IMPLIED ¬subst_p: {} (from {})", subst_p->to_string(), p->to_string());
+            continue;
+          }
+          auto r_neg = solver_->check_sat_assuming({smart_not(subst_p)});
+          if (r_neg.is_unsat()) {
             predicates_to_use.push_back(subst_p);
+            logger.log(1, "[extend_pred] related pred IMPLIED subst_p: {} (from {})", subst_p->to_string(), p->to_string());
+          } else {
+            logger.log(1, "[extend_pred] related pred NOT DETERMINED: {} (from {})", subst_p->to_string(), p->to_string());
           }
         } catch (const std::exception &) {
           continue;

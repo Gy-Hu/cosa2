@@ -158,9 +158,10 @@ namespace pono
       smt::TermList &conjs, smt::TermList & conjs_nxt);
 
     // an implementation following the general ic3-mic method, let's see how it works?
-    bool ic3_down(smt::TermList & conjs_list, smt::TermList & conjs_next, 
+    bool ic3_down(smt::TermList & conjs_list, smt::TermList & conjs_next,
       const smt::Term & Trans, unsigned fidx,
-      std::unordered_map<smt::Term, size_t> & conjnxt_to_idx_map, smt::TermVec all_conjs_curr);
+      std::unordered_map<smt::Term, size_t> & conjnxt_to_idx_map, smt::TermVec all_conjs_curr,
+      unsigned npred = 0);
     void inductive_generalization_mic(unsigned fidx, Model *cex, LCexOrigin origin);
     
     void SortCube(std::vector<std::pair<smt::Term, smt::Term>> & inout, bool descending);

@@ -69,14 +69,6 @@ Each helper is a `define-fun` whose parameters match the state variable names in
   benchmarks/cegis-helper-assert/simple_arithmetic/two_cnt/two_cnt.btor
 ```
 
-**Mixed file** — a single file passed via `--external-predicates` can contain all three prefixes (`predicate.`, `clause.`, `assertion.`); they are automatically categorized:
-
-```bash
-./build/pono -e ic3ng-bits --promote-inputvars \
-  --external-predicates benchmarks/side-load-clause/xp2.helper.smt2 \
-  benchmarks/side-load-clause/xp2.btor2
-```
-
 ### How Assertions Work
 
 Unlike predicates and clauses (which are sideloaded as hints), assertions use **property strengthening with refinement**:

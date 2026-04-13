@@ -30,6 +30,10 @@ else()
   set(SHARED_LIB_EXT "so")
 endif()
 
+if (WITH_BITWUZLA)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_BITWUZLA")
+endif()
+
 if (WITH_MSAT)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_MSAT")
 endif()
@@ -71,6 +75,8 @@ set(CMAKE_MODULE_PATH ${SMT_SWITCH_DIR}/cmake)
 find_package(GMP REQUIRED)
 
 # Check that dependencies are there
+list(APPEND CMAKE_PREFIX_PATH "${SMT_SWITCH_DIR}/deps/install")
+
 if (NOT EXISTS "${SMT_SWITCH_DIR}/local/include/smt-switch/smt.h")
   message(FATAL_ERROR "Missing smt-switch headers -- try running ./contrib/setup-smt-switch.sh")
 endif()
@@ -85,6 +91,14 @@ endif()
 
 if (NOT EXISTS "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-cvc5.a")
   message(FATAL_ERROR "Missing smt-switch cvc5 library -- try running ./contrib/setup-smt-switch.sh --with-cvc5")
+endif()
+
+if (WITH_BITWUZLA)
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(BITWUZLA REQUIRED bitwuzla)
+  if (NOT EXISTS "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-bitwuzla.a")
+    message(FATAL_ERROR "Missing smt-switch bitwuzla library -- try running ./contrib/setup-smt-switch.sh --with-bitwuzla")
+  endif()
 endif()
 
 if (WITH_MSAT)
@@ -228,6 +242,11 @@ endif()
 
 target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-btor.a")
 target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-cvc5.a")
+
+if (WITH_BITWUZLA)
+  target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-bitwuzla.a")
+  target_link_libraries(pono-lib PUBLIC ${BITWUZLA_LDFLAGS})
+endif()
 
 if (WITH_MSAT)
   target_link_libraries(pono-lib PUBLIC "${SMT_SWITCH_DIR}/local/lib/libsmt-switch-msat.a")

@@ -41,7 +41,7 @@ class PropertyInterface : public smt::SmtLibReader
  protected:
   // overloaded function, used when arg list of function is parsed
   // NOTE: | |  pipe quotes are removed.
-  virtual smt::Term register_arg(const std::string & name, const smt::Sort & sort) override;
+  smt::Term register_arg(const std::string & name, const smt::Sort & sort) override;
 
   std::string filename_;
 

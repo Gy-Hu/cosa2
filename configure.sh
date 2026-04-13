@@ -22,6 +22,7 @@ Configures the CMAKE build environment.
 --python                compile with python bindings (default: off)
 --static-lib            build a static library (default: shared)
 --static                build a static executable (default: dynamic); implies --static-lib
+--with-bitwuzla         build with Bitwuzla  (default: off)
 --with-profiling        build with gperftools for profiling (default: off)
 EOF
   exit 0
@@ -44,6 +45,7 @@ python=default
 lib_type=SHARED
 static_exec=NO
 with_profiling=default
+with_bitwuzla=default
 
 buildtype=Release
 
@@ -89,6 +91,7 @@ do
             static_exec=YES;
             lib_type=STATIC;
             ;;
+        --with-bitwuzla) with_bitwuzla=ON;;
         --with-profiling) with_profiling=ON;;
         *) die "unexpected argument: $1";;
     esac
@@ -120,6 +123,9 @@ cmake_opts="-DCMAKE_BUILD_TYPE=$buildtype -DPONO_LIB_TYPE=${lib_type} -DPONO_STA
 
 [ $with_profiling != default ] \
     && cmake_opts="$cmake_opts -DWITH_PROFILING=$with_profiling"
+
+[ $with_bitwuzla != default ] \
+    && cmake_opts="$cmake_opts -DWITH_BITWUZLA=$with_bitwuzla"
 
 root_dir=$(pwd)
 

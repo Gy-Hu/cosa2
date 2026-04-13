@@ -40,3 +40,19 @@ deps/smt-switch/deps/*/build
 deps/smt-switch/deps/*/test
 deps/smt-switch/tests
 __pycache__
+.vscode/
+
+# Patches and temp files from Linux worktree
+*.patch
+output.txt
+repomix_*.txt
+
+# Backup scripts
+contrib/setup-smt-switch-bak.sh
+
+# Large binary toolchains
+oss-cad-suite/
+
+# Test benchmarks and helper data
+samples/llm4pdr_benchmarks/
+helper_assertions/

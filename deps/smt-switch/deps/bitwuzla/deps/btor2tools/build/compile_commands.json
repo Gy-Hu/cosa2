@@ -1,0 +1,62 @@
+[
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/cc  -I/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/.  -W -Wall -Wextra -Wredundant-decls -std=gnu99 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIC -o CMakeFiles/btor2parser.dir/btor2parser/btor2parser.c.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btor2parser/btor2parser.c",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btor2parser/btor2parser.c",
+  "output": "src/CMakeFiles/btor2parser.dir/btor2parser/btor2parser.c.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/.  -W -Wall -Wextra -Wredundant-decls -std=gnu++11 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -Wall -Wfatal-errors -o CMakeFiles/btorsim.dir/btorsim/btorsimam.cpp.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimam.cpp",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimam.cpp",
+  "output": "src/CMakeFiles/btorsim.dir/btorsim/btorsimam.cpp.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/.  -W -Wall -Wextra -Wredundant-decls -std=gnu++11 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -Wall -Wfatal-errors -o CMakeFiles/btorsim.dir/btorsim/btorsimstate.cpp.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimstate.cpp",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimstate.cpp",
+  "output": "src/CMakeFiles/btorsim.dir/btorsim/btorsimstate.cpp.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/.  -W -Wall -Wextra -Wredundant-decls -std=gnu++11 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -Wall -Wfatal-errors -o CMakeFiles/btorsim.dir/btorsim/btorsimvcd.cpp.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimvcd.cpp",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimvcd.cpp",
+  "output": "src/CMakeFiles/btorsim.dir/btorsim/btorsimvcd.cpp.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/.  -W -Wall -Wextra -Wredundant-decls -std=gnu++11 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -Wall -Wfatal-errors -o CMakeFiles/btorsim.dir/btorsim/btorsimhelpers.cpp.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimhelpers.cpp",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimhelpers.cpp",
+  "output": "src/CMakeFiles/btorsim.dir/btorsim/btorsimhelpers.cpp.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++  -I/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/.  -W -Wall -Wextra -Wredundant-decls -std=gnu++11 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -Wall -Wfatal-errors -o CMakeFiles/btorsim.dir/btorsim/btorsim.cpp.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsim.cpp",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsim.cpp",
+  "output": "src/CMakeFiles/btorsim.dir/btorsim/btorsim.cpp.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/cc  -I/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/.  -W -Wall -Wextra -Wredundant-decls -std=gnu99 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -Wall -Wfatal-errors -o CMakeFiles/btorsim.dir/btorsim/btorsimbv.c.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimbv.c",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimbv.c",
+  "output": "src/CMakeFiles/btorsim.dir/btorsim/btorsimbv.c.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/cc  -I/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/.  -W -Wall -Wextra -Wredundant-decls -std=gnu99 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -Wall -Wfatal-errors -o CMakeFiles/btorsim.dir/btorsim/btorsimrng.c.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimrng.c",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsim/btorsimrng.c",
+  "output": "src/CMakeFiles/btorsim.dir/btorsim/btorsimrng.c.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/cc    -W -Wall -Wextra -Wredundant-decls -std=gnu99 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -o CMakeFiles/catbtor.dir/catbtor.c.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/catbtor.c",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/catbtor.c",
+  "output": "src/CMakeFiles/catbtor.dir/catbtor.c.o"
+},
+{
+  "directory": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/build/src",
+  "command": "/Library/Developer/CommandLineTools/usr/bin/c++    -W -Wall -Wextra -Wredundant-decls -std=gnu++11 -O3 -DNDEBUG -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fPIE -o CMakeFiles/btorsplit.dir/btorsplit.cpp.o -c /Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsplit.cpp",
+  "file": "/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/btor2tools/src/btorsplit.cpp",
+  "output": "src/CMakeFiles/btorsplit.dir/btorsplit.cpp.o"
+}
+]

@@ -1,0 +1,5 @@
+#define VERSION "1.0.3"
+#define IDENTIFIER "95859db82fe5b08d063a16d6a7ffe4a941cb0f7d"
+#define COMPILER "Apple clang version 16.0.0 (clang-1600.0.26.6)"
+#define FLAGS "-fPIC -Wall -Wextra -O3 -DNDEBUG -std=c++0x"
+#define DATE "Mon Apr 13 09:52:10 HKT 2026 Darwin MacBook-Pro-9.local 24.6.0 arm64"

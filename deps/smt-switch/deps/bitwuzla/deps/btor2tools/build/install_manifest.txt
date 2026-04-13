@@ -1,0 +1,5 @@
+/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/install/lib/libbtor2parser.a
+/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/install/include/btor2parser.h
+/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/install/bin/btorsim
+/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/install/bin/catbtor
+/Users/huguangyu/coding_env/pono-llm4assert/deps/smt-switch/deps/bitwuzla/deps/install/bin/btorsplit

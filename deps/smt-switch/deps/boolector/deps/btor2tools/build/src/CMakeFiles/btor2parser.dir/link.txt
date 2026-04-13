@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc ../lib/libbtor2parser.a CMakeFiles/btor2parser.dir/btor2parser/btor2parser.c.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib ../lib/libbtor2parser.a

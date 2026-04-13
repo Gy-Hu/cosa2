@@ -33,7 +33,14 @@
 
 build
 deps
+!deps/smt-switch
+deps/smt-switch/build
+deps/smt-switch/local
+deps/smt-switch/deps/*/build
+deps/smt-switch/deps/*/test
+deps/smt-switch/tests
 __pycache__
+.vscode/
 samples/hwmcc_btor2_bv/
 output_ic3ng.md
 additional_materials/

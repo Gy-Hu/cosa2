@@ -32,29 +32,49 @@ Each helper is a `define-fun` whose parameters match the state variable names in
 
 ### Command-Line Usage
 
-**Predicates and Clauses** — loaded from a single SMT-LIB2 file:
+**Predicates** — provide abstraction hints to `ic3ng-bits`:
 
 ```bash
+# simple_arithmetic benchmark with predicate helpers
 ./build/pono -e ic3ng-bits --promote-inputvars \
-  --external-predicates helpers.smt2 \
-  --external-clauses clauses.smt2 \
-  input.btor2
+  --external-predicates benchmarks/side-load-predicate/simple_arithmetic/1.c/1_smaller.c.predicate.smt2 \
+  benchmarks/side-load-predicate/simple_arithmetic/1.c/1_smaller.c.btor
+
+# simplepipe benchmark with predicates
+./build/pono -e ic3ng-bits --promote-inputvars \
+  --external-predicates benchmarks/side-load-predicate/simplepipe/predicates.smt2 \
+  benchmarks/side-load-predicate/simplepipe/wrapper_add_w8.btor2
 ```
 
-**Assertions** — loaded from a folder (one or more `.smt2` files, each containing `assertion.` definitions):
+**Clauses** — provide pre-validated lemmas for frame F1:
 
 ```bash
+# xp2 benchmark with clause helpers
+./build/pono -e ic3ng-bits --promote-inputvars \
+  --external-clauses benchmarks/side-load-clause/xp2.helper_clauses.smt2 \
+  benchmarks/side-load-clause/xp2.btor2
+```
+
+**Assertions** — strengthen the property with CEGIS-style refinement:
+
+```bash
+# two_cnt benchmark with assertion-based property strengthening (ic3ng-bits)
 ./build/pono -e ic3ng-bits --promote-inputvars -k 200 \
-  --assertion-folder ./helper_assertions/ \
-  input.btor2
+  --assertion-folder benchmarks/cegis-helper-assert/helper_assertions/ \
+  benchmarks/cegis-helper-assert/simple_arithmetic/two_cnt/two_cnt.btor
+
+# same benchmark with ic3bits engine
+./build/pono -e ic3bits -k 200 \
+  --assertion-folder benchmarks/cegis-helper-assert/helper_assertions/ \
+  benchmarks/cegis-helper-assert/simple_arithmetic/two_cnt/two_cnt.btor
 ```
 
 **Mixed file** — a single file passed via `--external-predicates` can contain all three prefixes (`predicate.`, `clause.`, `assertion.`); they are automatically categorized:
 
 ```bash
 ./build/pono -e ic3ng-bits --promote-inputvars \
-  --external-predicates mixed_helpers.smt2 \
-  input.btor2
+  --external-predicates benchmarks/side-load-clause/xp2.helper.smt2 \
+  benchmarks/side-load-clause/xp2.btor2
 ```
 
 ### How Assertions Work

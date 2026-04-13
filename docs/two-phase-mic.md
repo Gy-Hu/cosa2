@@ -69,7 +69,7 @@ timeout 120 ./build/pono -e ic3ng-bits --promote-inputvars -k 200 samples/xp2.bt
 
 # 4. Assertion only
 ./build/pono -e ic3ng-bits --promote-inputvars -k 200 \
-  --assertion-folder samples/xp2_assertions/ samples/xp2.btor2
+  --external-assertions samples/xp2.assertion.smt2 samples/xp2.btor2
 
 # 5. Mixed (pred + clause + assertion)
 ./build/pono -e ic3ng-bits --promote-inputvars -k 200 \

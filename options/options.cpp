@@ -65,6 +65,7 @@ enum optionIndex
   PSEUDO_INIT_PROP,
   ASSUME_PROP,
   ASSERTION_FOLDER,
+  EXTERNAL_ASSERTIONS,
   CEGPROPHARR,
   NO_CEGP_TIMED_AXIOM_RED,
   NO_CEGP_CONSEC_AXIOM_RED,
@@ -386,6 +387,13 @@ const option::Descriptor usage[] = {
     "assertion-folder",
     Arg::NonEmpty,
     "  --assertion-folder \tLoad external assertions from folder"
+  },
+  { EXTERNAL_ASSERTIONS,
+    0,
+    "",
+    "external-assertions",
+    Arg::NonEmpty,
+    "  --external-assertions <file> \tLoad external assertions from a single SMT-LIB2 file"
   },
   { CEGPROPHARR,
     0,
@@ -804,6 +812,7 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
         case PSEUDO_INIT_PROP: pseudo_init_prop_ = true; break;
         case ASSUME_PROP: assume_prop_ = true; break;
         case ASSERTION_FOLDER: assertion_foler_ = opt.arg; break;
+        case EXTERNAL_ASSERTIONS: external_assertions_file_ = opt.arg; break;
         case CEGPROPHARR: ceg_prophecy_arrays_ = true; break;
         case NO_CEGP_TIMED_AXIOM_RED: cegp_timed_axiom_red_ = false; break;
         case NO_CEGP_CONSEC_AXIOM_RED: cegp_consec_axiom_red_ = false; break;

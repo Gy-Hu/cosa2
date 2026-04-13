@@ -384,6 +384,14 @@ int main(int argc, char ** argv)
         }
       }
 
+      if(!pono_options.external_assertions_file_.empty()) {
+        ExternalTermInterface term_if(pono_options.external_assertions_file_, fts);
+        auto asserts = term_if.GetAugmentingAssertions();
+        augmenting_assertions.insert(augmenting_assertions.end(), asserts.begin(), asserts.end());
+        std::cout << "Loaded " << asserts.size() << " assertions from "
+                  << pono_options.external_assertions_file_ << "\n";
+      }
+
       vector<UnorderedTermMap> cex;
       res = check_prop(pono_options, prop, fts, s, cex,
               external_predicates, augmenting_assertions, f1_lemma_candidates,

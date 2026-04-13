@@ -52,6 +52,7 @@ namespace pono
             PonoOptions opt = PonoOptions());
     virtual void initialize() override;
     virtual ProverResult check_until(int k) override;
+    virtual ProverResult check_until_multi_property(int k, const smt::TermVec & multiprop, std::vector<ProverResult> & results) override;
     ProverResult step(int i);
 
     virtual ~IC3ng(); // for lower cost, we will manage the memory ourselves
@@ -83,6 +84,7 @@ namespace pono
     // smt::Term constraint_label_; ///< label to activate constraints // you can avoid this, because it is directly added to frame
     // smt::Term trans_label_;      ///< label to activate trans // you can avoid using trans_ most of the time
     smt::TermVec frame_labels_;  ///< labels to activate frames
+    unsigned frame_label_cnt_ = 0;  ///< monotonic counter for unique frame label names
     // useful terms
     smt::Term solver_true_;
     smt::Term solver_false_;
@@ -113,6 +115,19 @@ namespace pono
     
     Ic3PriorityQueue proof_goals;
     
+    /** Restart IC3ng with updated bad_ without full re-initialization.
+     *  Resets frames and proof goals, keeps solver state.
+     */
+    void restart_with_new_bad();
+
+    /** Refine property by removing falsified assertions from multiprop.
+     *  Returns true if some assertions were removed (should retry),
+     *  false if the original property itself is violated (real counterexample).
+     */
+    bool refine_property(const fcex_t * cex_at_cycle_0,
+                         const smt::TermVec & multiprop,
+                         std::vector<ProverResult> & results);
+
     /** Perform the base IC3 step (zero case)
      */
     bool check_init_failed(); // return true if failed

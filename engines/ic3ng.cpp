@@ -160,7 +160,7 @@ void IC3ng::append_frame()
   assert(frame_labels_.size() == frames.size());
 
   frame_labels_.push_back(
-      solver_->make_symbol("__frame_label_" + std::to_string(frames.size()),
+      solver_->make_symbol("__frame_label_" + std::to_string(frame_label_cnt_++),
                            solver_->make_sort(smt::BOOL)));
   frames.push_back({});
 }
@@ -498,5 +498,143 @@ bool IC3ng::last_frame_reaches_bad() {
   return true;
 }
 
+
+void IC3ng::restart_with_new_bad()
+{
+  // Update bad_next_trans_subst_ to match new bad_
+  bad_next_trans_subst_ = next_trans_replace(ts_.next(bad_));
+
+  // Reset frames: keep frame 0 (init), rebuild frame 1 with new property
+  frames.clear();
+  frame_labels_.clear();
+  proof_goals.clear();
+
+  append_frame();
+  add_lemma_to_frame(new_lemma(ts_.init(), NULL, LCexOrigin::FromInit()), 0);
+  append_frame();
+  add_lemma_to_frame(new_lemma(all_constraints_, NULL, LCexOrigin::FromConstraint()), 1);
+  add_lemma_to_frame(new_lemma(smart_not(bad_), NULL, LCexOrigin::FromProperty()), 1);
+
+  init_label_ = frame_labels_[0];
+  lowest_frame_touched_ = frames.size() - 1;
+  reached_k_ = -1;
+}
+
+ProverResult IC3ng::check_until_multi_property(
+    int k,
+    const smt::TermVec & multiprop,
+    std::vector<ProverResult> & results)
+{
+  // Strengthen property: prop' = prop AND multiprop[0] AND multiprop[1] AND ...
+  auto new_prop = orig_property_.prop();
+  for (const auto & p : multiprop) {
+    new_prop = solver_->make_term(smt::And, new_prop, p);
+    results.push_back(ProverResult::UNKNOWN);
+  }
+  bad_ = solver_->make_term(smt::Not, new_prop);
+
+  // Initialize IC3ng (first time)
+  initialize();
+  assert(initialized_);
+  // Re-setup frames with the strengthened bad_
+  restart_with_new_bad();
+
+  ProverResult res;
+  int i = reached_k_ + 1;
+  assert(reached_k_ + 1 >= 0);
+  while (i <= k) {
+    res = step(i);
+
+    if (res == ProverResult::FALSE) {
+      // Got a counterexample — check if the original property is really violated
+      fcex_t * cex_at_0 = proof_goals.top();
+      assert(cex_at_0 && cex_at_0->fidx == 0);
+
+      if (refine_property(cex_at_0, multiprop, results)) {
+        std::cout << "refine property at step " << i << std::endl;
+        // Restart with weakened property (bad_ already updated by refine_property)
+        restart_with_new_bad();
+        i = reached_k_ + 1;
+        continue;
+      }
+      return ProverResult::FALSE;
+    } else if (res == ProverResult::TRUE) {
+      logger.log(1, "Verification succeeded! Dumping invariants:");
+      dump_invariants(std::cout);
+      return res;
+    }
+    ++i;
+  }
+
+  return ProverResult::UNKNOWN;
+}
+
+bool IC3ng::refine_property(
+    const fcex_t * cex_at_cycle_0,
+    const smt::TermVec & multiprop,
+    std::vector<ProverResult> & results)
+{
+  // Extract counterexample trace from fcex chain
+  std::vector<Model *> cexs;
+  const fcex_t * ptr = cex_at_cycle_0;
+  while (ptr) {
+    assert(ptr->fidx == cexs.size());
+    cexs.push_back(ptr->cex);
+    ptr = ptr->next;
+  }
+  size_t bnd = cexs.size();
+  assert(bnd > 0);
+
+  // Reconstruct the counterexample using the unroller
+  solver_->push();
+  disable_all_labels();
+  solver_->assert_formula(unroller_.at_time(ts_.init(), 0));
+  for (size_t t = 0; t < bnd; ++t) {
+    solver_->assert_formula(unroller_.at_time(ts_.trans(), t));
+    solver_->assert_formula(unroller_.at_time(cexs[t]->to_expr(solver_), t));
+  }
+  auto r = solver_->check_sat();
+  assert(r.is_sat());
+
+  --bnd;  // last time step
+
+  // Check if the original property (without assertions) is violated
+  auto original_prop_val =
+      solver_->get_value(unroller_.at_time(orig_property_.prop(), bnd))
+          ->to_int();
+  if (original_prop_val == 0) {
+    // Original property itself is violated — real counterexample
+    solver_->pop();
+    return false;
+  }
+
+  // Original property holds, but some assertions are violated.
+  // Remove falsified assertions and rebuild bad_.
+  auto new_prop = orig_property_.prop();
+  std::cout << "refine prop (to remove): ";
+  size_t prop_to_remove = 0;
+  for (size_t idx = 0; idx < multiprop.size(); ++idx) {
+    if (results.at(idx) != ProverResult::UNKNOWN)
+      continue;
+    const auto & p = multiprop.at(idx);
+    auto val =
+        solver_->get_value(unroller_.at_time(p, bnd))->to_int();
+    if (val) {
+      new_prop = solver_->make_term(smt::And, new_prop, p);
+    } else {
+      results.at(idx) = ProverResult::FALSE;
+      prop_to_remove++;
+      std::cout << idx << " ";
+    }
+  }
+  assert(prop_to_remove);
+  std::cout << "\n";
+
+  // Update bad_ for the next round
+  bad_ = solver_->make_term(smt::Not, new_prop);
+
+  solver_->pop();
+  return true;
+}
 
 } // namespace pono

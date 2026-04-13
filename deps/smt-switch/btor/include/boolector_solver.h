@@ -61,7 +61,6 @@ class BoolectorSolver : public AbsSmtSolver
   Result check_sat_assuming(const TermVec & assumptions) override;
   Result check_sat_assuming_list(const TermList & assumptions) override;
   Result check_sat_assuming_set(const UnorderedTermSet & assumptions) override;
-
   void push(uint64_t num = 1) override;
   void pop(uint64_t num = 1) override;
   uint64_t get_context_level() const override;
@@ -70,7 +69,6 @@ class BoolectorSolver : public AbsSmtSolver
                                     Term & out_const_base) const override;
   void get_unsat_assumptions(UnorderedTermSet & out) override;
   void get_unsat_assumptions(TermList & out) override;
-  
   Sort make_sort(const std::string name, uint64_t arity) const override;
   Sort make_sort(SortKind sk) const override;
   Sort make_sort(SortKind sk, uint64_t size) const override;

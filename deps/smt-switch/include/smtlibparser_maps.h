@@ -1,4 +1,5 @@
 #include <string>
+#include <unordered_map>
 
 #include "ops.h"
 
@@ -98,19 +99,20 @@ const std::unordered_map<std::string, std::unordered_map<std::string, PrimOp>>
               { "rotate_right", Rotate_Right } } },
           // Strings
           { "S",
-            { { "str.<", StrLt },
-              { "str.<=", StrLeq },
-              { "str.len", StrLen }, 
-              { "str.++", StrConcat }, 
-              { "str.substr", StrSubstr }, 
-              { "str.at", StrAt },
-              { "str.contains", StrContains },
-              { "str.indexof", StrIndexof },
-              { "str.replace", StrReplace },
-              { "str.replace_all", StrReplaceAll },
-              { "str.prefixof", StrPrefixof },
-              { "str.suffixof", StrSuffixof },
-              { "str.is_digit", StrIsDigit }, 
+            {
+                { "str.<", StrLt },
+                { "str.<=", StrLeq },
+                { "str.len", StrLen },
+                { "str.++", StrConcat },
+                { "str.substr", StrSubstr },
+                { "str.at", StrAt },
+                { "str.contains", StrContains },
+                { "str.indexof", StrIndexof },
+                { "str.replace", StrReplace },
+                { "str.replace_all", StrReplaceAll },
+                { "str.prefixof", StrPrefixof },
+                { "str.suffixof", StrSuffixof },
+                { "str.is_digit", StrIsDigit },
             } },
           // ArraysEx
           { "A",
@@ -123,7 +125,10 @@ const std::unordered_map<std::string, std::unordered_map<std::string, PrimOp>>
     nonstrict_theory2opmap({ { "BVIA",
                                {
                                    { "int2bv", Int_To_BV },
-                                   { "bv2nat", BV_To_Nat },
+                                   { "int_to_bv", Int_To_BV },
+                                   { "bv2nat", UBV_To_Int },
+                                   { "ubv_to_int", UBV_To_Int },
+                                   { "sbv_to_int", SBV_To_Int },
                                } },
                              { "IA", { { "pow", Pow } } } });
 

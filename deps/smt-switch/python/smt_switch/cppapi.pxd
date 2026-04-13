@@ -5,7 +5,7 @@ from libcpp.unordered_map cimport unordered_map
 from libcpp.unordered_set cimport unordered_set
 from libcpp.vector cimport vector
 
-from smt_switch cimport c_PrimOp, c_SortKind
+from .cppenums cimport c_PrimOp, c_SortKind
 
 ctypedef shared_ptr[AbsSort] c_Sort
 ctypedef shared_ptr[AbsTerm] c_Term
@@ -100,6 +100,8 @@ cdef extern from "solver.h" namespace "smt":
         c_Result check_sat_assuming(const c_TermVec & assumptions) except +
         void push(uint64_t num) except +
         void pop(uint64_t num) except +
+        uint64_t get_context_level() except +
+        void pop_all() except +
         c_Term get_value(c_Term& t) except +
         void get_unsat_assumptions(c_UnorderedTermSet& out) except +
         c_Sort make_sort(const string name, uint64_t arity) except +
@@ -127,32 +129,3 @@ cdef extern from "sorting_network.h" namespace "smt":
     cdef cppclass c_SortingNetwork "smt::SortingNetwork":
         c_SortingNetwork(const c_SmtSolver & solver) except +
         c_TermVec sorting_network(const c_TermVec & unsorted) except +
-
-
-cdef extern from "utils.h" namespace "smt":
-    void get_free_symbolic_consts(const c_Term & term, c_UnorderedTermSet & out) except +
-    void get_free_symbols(const c_Term & term, c_UnorderedTermSet & out) except +
-    void op_partition(c_PrimOp po, const c_Term & term, c_TermVec & out) except +
-    void conjunctive_partition(const c_Term & term, c_TermVec & out, bint include_bvand) except +
-
-
-cdef class Op:
-    cdef c_Op op
-
-cdef class Result:
-    cdef c_Result cr
-
-cdef class Sort:
-    cdef c_Sort cs
-    cdef SmtSolver _solver
-
-cdef class Term:
-    cdef c_Term ct
-    cdef SmtSolver _solver
-
-cdef class SmtSolver:
-    cdef c_SmtSolver css
-
-cdef class SortingNetwork:
-    cdef c_SortingNetwork * csn
-    cdef SmtSolver _solver

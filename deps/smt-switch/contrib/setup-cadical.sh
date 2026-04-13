@@ -1,35 +1,28 @@
 #!/bin/bash
-set -o errexit
-set -o pipefail
-set -o nounset
+_version=2.1.3
+git_tag=rel-$_version
+github_owner=arminbiere
 
-CADICAL_VERSION=rel-1.7.4
+configure_step() {
+  ./configure CXXFLAGS="-fPIC"
+}
 
-SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-DEPS_DIR="$ROOT_DIR/deps"
+install_step() {
+  # Bitwuzla expects the Cadical header to be at include/cadical/cadical.hpp,
+  # while Boolector requires include/ccadical.h.
+  install_cadical_includedir="$install_includedir/cadical"
+  install -d "$install_cadical_includedir" "$install_libdir"
+  install -Cm644 src/ccadical.h "$install_includedir"
+  install -Cm644 src/cadical.hpp "$install_cadical_includedir"
+  install -Cm644 src/tracer.hpp "$install_cadical_includedir"
+  install -Cm644 build/libcadical.a "$install_libdir"
 
-# Download
-mkdir -p "$DEPS_DIR"
-cd $DEPS_DIR
-if [[ ! -d "cadical" ]]; then
-    git clone https://github.com/arminbiere/cadical
-fi
+  export install_dir _version
+  mkdir -p "$install_pkgconfigdir"
+  # shellcheck disable=SC2016
+  envsubst '$install_dir $_version' <"$pkg_config_dir/cadical.pc.in" >"$install_pkgconfigdir/cadical.pc"
+  export -n install_dir _version
+}
 
-# Build
-cd cadical
-git checkout $CADICAL_VERSION
-if [[ -d "build" ]]; then
-    echo "$SCRIPT_NAME: $DEPS_DIR/cadical/build exists, skipping configure step"
-else
-    CXXFLAGS=-fPIC ./configure
-fi
-make
-
-# Install
-mkdir -p "$DEPS_DIR/install/lib"
-install -m644 "build/libcadical.a" "$DEPS_DIR/install/lib"
-mkdir -p "$DEPS_DIR/install/include"
-install -m644 "src/ccadical.h" "$DEPS_DIR/install/include"
-install -m644 "src/cadical.hpp" "$DEPS_DIR/install/include"
+# shellcheck source=contrib/make-setup.sh
+source "$(dirname "$0")/make-setup.sh"

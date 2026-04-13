@@ -1,23 +1,134 @@
-from setuptools import setup, find_packages
-from distutils.core import Extension
+from Cython.Build import cythonize
+import os
+import sys
+import sysconfig
+import platform
+from setuptools import setup
+from setuptools.extension import Extension
 
-PYSMT_REQUIRES = ['pysmt']
-TEST_REQUIRES = ['pytest']
+# These variables will be substituted in by CMake during configuration.
+PROJECT_SOURCE_DIR = "@PROJECT_SOURCE_DIR@"
+PROJECT_BINARY_DIR = "@PROJECT_BINARY_DIR@"
+SMT_SWITCH_LIB_TYPE = "@SMT_SWITCH_LIB_TYPE@"
+SOLVER_BACKEND_LIBS = "@SOLVER_BACKEND_LIBS@".split(";")
+BITWUZLA_LDFLAGS = "@BITWUZLA_LDFLAGS@".split(";")
+Z3_LIBRARY_LOCATION = "@Z3_LIBRARY_LOCATION@"
 
-# could probably get cmake to populate this but whatever
-PACKAGE_NAME = 'smt_switch'
+# Get the platform-specific library extension
+if sys.platform == "darwin":
+    lib_ext = ".dylib"
+    static_lib_ext = ".a"
+elif sys.platform == "win32":
+    lib_ext = ".dll"
+    static_lib_ext = ".lib"
+else:  # linux
+    lib_ext = ".so"
+    static_lib_ext = ".a"
 
-setup(name=PACKAGE_NAME,
-      version='0.3.0',
-      long_description='python bindings for the C++ solver-agnostic SMT solving library, smt-switch',
-      url='http://github.com/makaimann/smt-switch',
-      license='BSD',
-      zip_safe=False,
-      packages=[PACKAGE_NAME],
-      py_modules=[PACKAGE_NAME],
-      package_data={PACKAGE_NAME: [f'{PACKAGE_NAME}.so']},
-      extras_require={
-          'pysmt': PYSMT_REQUIRES,
-          'test': TEST_REQUIRES,
-      },
-)
+# Get Python extension suffix
+ext_filename = "smt_switch" + sysconfig.get_config_var("EXT_SUFFIX")
+
+# Handle Cython compilation if the extension hasn't been built yet
+if not os.path.isfile(os.path.join("smt_switch", ext_filename)):
+    # Add flags and directories for compilation.
+    libraries = []
+    library_dirs = [PROJECT_BINARY_DIR]
+    include_dirs = [f"{PROJECT_SOURCE_DIR}/include"]
+    libraries.append("smt-switch")  # needs to come after the solver-specific libraries
+    extra_compile_args = ["-std=c++17"]
+    extra_link_args = []
+
+    # Handle OS-specific settings.
+    if sys.platform == "darwin":
+        mac_ver = os.environ.get("MACOSX_DEPLOYMENT_TARGET")
+        if mac_ver is None:
+            version_str, _, _ = platform.mac_ver()
+            major_minor = version_str.split(".")[:2]
+            mac_ver = ".".join(major_minor)
+            os.environ.setdefault("MACOSX_DEPLOYMENT_TARGET", mac_ver)
+        arch = "@MACOS_ARCH@"  # Set by CMake
+        if not arch:
+            arch = platform.machine()
+        host_platform = "macosx-" + mac_ver + "-" + arch
+        os.environ.setdefault("_PYTHON_HOST_PLATFORM", host_platform)
+        arch_flags = "-arch " + arch
+        os.environ.setdefault("ARCHFLAGS", arch_flags)
+        extra_link_args.append("-Wl,-headerpad_max_install_names")
+    if sys.platform == "win32":
+        extra_compile_args += ["-DMS_WIN64"]
+        os.environ["PATH"] += r";C:\msys64\mingw64\bin"
+
+    # Set up the extension module
+    modules = [
+        "api",
+        "enums",
+        "primops",
+        "solverattr",
+        "solverenums",
+        "sortkinds",
+    ]
+    ext_modules = [
+        Extension(
+            name=f"smt_switch.{module}",
+            sources=[f"smt_switch/{module}.pyx"],
+            libraries=libraries,
+            library_dirs=library_dirs,
+            runtime_library_dirs=library_dirs,
+            include_dirs=include_dirs,
+            language="c++",
+            extra_compile_args=extra_compile_args,
+        )
+        for module in modules
+    ]
+
+    # Set up the smt_solvers module.
+    built_solvers = [lib.removeprefix("smt-switch-") for lib in SOLVER_BACKEND_LIBS]
+    solver_libraries = []
+    solver_library_dirs = library_dirs.copy()
+    solver_include_dirs = include_dirs.copy()
+    for solver in built_solvers:
+        solver_libraries.append(f"smt-switch-{solver}")
+        solver_library_dirs.append(f"{PROJECT_BINARY_DIR}/{solver}")
+        solver_include_dirs.append(f"{PROJECT_SOURCE_DIR}/{solver}/include")
+    solver_libraries.extend(libraries)
+    for path in library_dirs:
+        extra_link_args.append(f"-Wl,-rpath,{path}")
+    if SMT_SWITCH_LIB_TYPE == "STATIC":
+        # When smt-switch is compiled as a static library, we need to link dependencies manually.
+        for gmp_solver in ["cvc5", "msat", "yices2", "z3"]:
+            # Some solver implementations need GMP.
+            if gmp_solver in built_solvers:
+                solver_libraries += ["gmp", "gmpxx"]
+                break
+        # Some solvers have their own linking flags.
+        if "bitwuzla" in built_solvers:
+            extra_link_args += BITWUZLA_LDFLAGS
+        if "z3" in built_solvers:
+            extra_link_args.append(Z3_LIBRARY_LOCATION)
+    ext_modules.append(
+        Extension(
+            name="smt_switch.smt_solvers",
+            sources=["smt_switch/smt_solvers.pyx"],
+            libraries=solver_libraries,
+            library_dirs=solver_library_dirs,
+            runtime_library_dirs=solver_library_dirs,
+            include_dirs=solver_include_dirs,
+            language="c++",
+            extra_compile_args=extra_compile_args,
+            extra_link_args=extra_link_args,
+        )
+    )
+
+    # Cython compilation settings
+    compiler_directives = {
+        "language_level": 3,
+        "binding": False,
+        "embedsignature": True,
+    }
+    setup(
+        ext_modules=cythonize(ext_modules, compiler_directives=compiler_directives),
+    )
+else:
+    setup(
+        has_ext_modules=lambda: True,
+    )

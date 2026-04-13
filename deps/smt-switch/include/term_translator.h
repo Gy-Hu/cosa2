@@ -14,12 +14,17 @@
 **        symbols, which would throw an exception).
 **/
 
+// IWYU pragma: private, include "smt.h"
+
 #pragma once
 
+#include <string>
 #include <unordered_map>
 
+#include "exceptions.h"
 #include "smt_defs.h"
 #include "solver.h"
+#include "solver_enums.h"
 #include "sort.h"
 #include "term.h"
 
@@ -77,7 +82,7 @@ class TermTranslator
    *  @param term the term to transfer to the member variable solver
    *  @return a term belonging to this solver
    */
-  Term transfer_term(const Term & term, bool allow_create_new_symbols = true);
+  Term transfer_term(const Term & term);
 
   /** Transfers a term and casts it to a particular SortKind
    *  for now, only supports Bool <-> BV1 and Int <-> Real
@@ -102,7 +107,7 @@ class TermTranslator
    *  @return a term with the given value
    */
   Term value_from_smt2(const std::string val, const Sort sort);
-  
+
   /** translates an smtlib representation of a const rational "(/ a b)"
    *  into a infix-style representation of a const rational "a / b"
    * @param smtlib is the smtlib representation
@@ -156,4 +161,3 @@ class TermTranslator
   std::unordered_map<std::string, Sort> uninterpreted_sorts;
 };
 }  // namespace smt
-

@@ -187,7 +187,7 @@ if 'btor' in  ss.solvers:
 
     class SwitchBtor(_SwitchSolver):
         LOGICS = _build_logics(logics_params)
-        _create_solver = ft.partial(ss.create_btor_solver, False)
+        _create_solver = staticmethod(ft.partial(ss.create_btor_solver, False))
 
         @clear_pending_pop
         def _reset_assertions(self):
@@ -210,7 +210,7 @@ if 'bitwuzla' in  ss.solvers:
 
     class SwitchBitwuzla(_SwitchSolver):
         LOGICS = _build_logics(logics_params)
-        _create_solver = ft.partial(ss.create_bitwuzla_solver, False)
+        _create_solver = staticmethod(ft.partial(ss.create_bitwuzla_solver, False))
 
     SWITCH_SOLVERS['bitwuzla'] = SwitchBitwuzla
 
@@ -230,7 +230,7 @@ if 'msat' in ss.solvers:
 
     class SwitchMsat(_SwitchSolver):
         LOGICS = _build_logics(logics_params)
-        _create_solver = ft.partial(ss.create_msat_solver, False)
+        _create_solver = staticmethod(ft.partial(ss.create_msat_solver, False))
 
     SWITCH_SOLVERS['msat'] = SwitchMsat
 
@@ -249,7 +249,7 @@ if 'cvc5' in ss.solvers:
 
     class SwitchCvc5(_SwitchSolver):
         LOGICS = _build_logics(logics_params)
-        _create_solver = ft.partial(ss.create_cvc5_solver, False)
+        _create_solver = staticmethod(ft.partial(ss.create_cvc5_solver, False))
 
         def _exit(self):
             super()._exit()
@@ -465,6 +465,8 @@ class SwitchConverter(Converter, DagWalker):
     walk_bv_srem = make_walk_binary(ss.primops.BVSrem)
     walk_bv_sub = make_walk_binary(ss.primops.BVSub)
     walk_bv_tonatural = make_walk_unary(ss.primops.BV_To_Nat)
+    walk_ubv_to_int = make_walk_unary(ss.primops.UBV_To_Int)
+    walk_sbv_to_int = make_walk_unary(ss.primops.SBV_To_Int)
     walk_bv_udiv = make_walk_binary(ss.primops.BVUdiv)
     walk_bv_ule = make_walk_binary(ss.primops.BVUle)
     walk_bv_ult = make_walk_binary(ss.primops.BVUlt)
@@ -530,6 +532,8 @@ class BackVisitor(ss.TermDagVisitor):
             ss.primops.BVXnor: mgr.BVXnor,
             ss.primops.BVXor: mgr.BVXor,
             ss.primops.BV_To_Nat: mgr.BVToNatural,
+            ss.primops.UBV_To_Int: mgr.BVToNatural,
+            # ss.primops.SBV_To_Int: NOT SUPPORTED BY PYSMT
             ss.primops.Concat: mgr.BVConcat,
             ss.primops.Distinct: mgr.AllDifferent,
             ss.primops.Div: mgr.Div,
@@ -592,7 +596,7 @@ class BackVisitor(ss.TermDagVisitor):
         else:
             assert term.get_sort().get_sort_kind() is ss.sortkinds.FUNCTION
             sort = self._convert_sort(term.get_sort())
-            return slf.mgr.Symbol(str(term), sort)
+            return self.mgr.Symbol(str(term), sort)
 
     def _convert_sort(self, sort):
         kind = sort.get_sort_kind()

@@ -14,34 +14,41 @@
 **        symbols, which would throw an exception).
 **/
 
-#include <iterator>
-#include <sstream>
-#include <unordered_map>
-#include <unordered_set>
-#include "assert.h"
-
-#include "sort_inference.h"
-#include "utils.h"
 #include "term_translator.h"
 
-using namespace std;
+#include <cassert>
+#include <cstddef>
+#include <iterator>
+#include <sstream>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+#include "exceptions.h"
+#include "ops.h"
+#include "smt_defs.h"
+#include "sort.h"
+#include "sort_inference.h"
+#include "term.h"
 
 namespace smt {
 
 // boolean ops
-const unordered_set<PrimOp> bool_ops({ And, Or, Xor, Not, Implies });
+const std::unordered_set<PrimOp> bool_ops({ And, Or, Xor, Not, Implies });
 
-const unordered_set<PrimOp> bv_ops({
+const std::unordered_set<PrimOp> bv_ops({
     Concat,      Extract,     BVNot,  BVNeg,       BVAnd,        BVOr,
     BVXor,       BVNand,      BVNor,  BVXnor,      BVAdd,        BVSub,
     BVMul,       BVUdiv,      BVSdiv, BVUrem,      BVSrem,       BVSmod,
     BVShl,       BVAshr,      BVLshr, BVComp,      BVUlt,        BVUle,
     BVUgt,       BVUge,       BVSlt,  BVSle,       BVSgt,        BVSge,
     Zero_Extend, Sign_Extend, Repeat, Rotate_Left, Rotate_Right, BV_To_Nat,
+    UBV_To_Int,  SBV_To_Int,
 });
 
 // boolean ops that can easily be represented with bit-vector operators
-const unordered_map<PrimOp, PrimOp> bool_to_bv_ops({
+const std::unordered_map<PrimOp, PrimOp> bool_to_bv_ops({
     { And, BVAnd },
     { Or, BVOr },
     { Xor, BVXor },
@@ -50,14 +57,16 @@ const unordered_map<PrimOp, PrimOp> bool_to_bv_ops({
 });
 
 // bitvector ops that can easily be represented with boolean operators
-const unordered_map<PrimOp, PrimOp> bv_to_bool_ops({ { BVAnd, And },
-                                                     { BVOr, Or },
-                                                     { BVXor, Xor },
-                                                     { BVNot, Not },
-                                                     { BVComp, Equal } });
+const std::unordered_map<PrimOp, PrimOp> bv_to_bool_ops({
+    { BVAnd, And },
+    { BVOr, Or },
+    { BVXor, Xor },
+    { BVNot, Not },
+    { BVComp, Equal },
+});
 
 // helper function used for debugging asserts
-bool uses_uninterp_sort(const smt::Sort & sort)
+bool uses_uninterp_sort(const Sort & sort)
 {
   bool res = false;
   SortKind sk = sort->get_sort_kind();
@@ -116,7 +125,7 @@ Sort TermTranslator::transfer_sort(const Sort & sort)
   else if (sk == UNINTERPRETED)
   {
     assert(sort->get_arity() == 0);
-    string name = sort->get_uninterpreted_name();
+    std::string name = sort->get_uninterpreted_name();
     auto it = uninterpreted_sorts.find(name);
     if (it != uninterpreted_sorts.end())
     {
@@ -136,7 +145,7 @@ Sort TermTranslator::transfer_sort(const Sort & sort)
   }
 }
 
-Term TermTranslator::transfer_term(const Term & term, bool allow_create_new_symbols)
+Term TermTranslator::transfer_term(const Term & term)
 {
   if (cache.find(term) != cache.end())
   {
@@ -186,7 +195,7 @@ Term TermTranslator::transfer_term(const Term & term, bool allow_create_new_symb
       if (t->is_symbol())
       {
         s = transfer_sort(t->get_sort());
-        string name = t->to_string();
+        std::string name = t->to_string();
         try
         {
           Term sym = solver->get_symbol(name);
@@ -205,9 +214,6 @@ Term TermTranslator::transfer_term(const Term & term, bool allow_create_new_symb
         }
         catch (IncorrectUsageException & e)
         {
-          if (!allow_create_new_symbols)
-            throw SmtException("Try to create symbol : " + t->to_string() + " of type "
-                     + t->get_sort()->to_string() + ", which is not allowed.");
           cache[t] = solver->make_symbol(name, s);
         }
       }
@@ -331,22 +337,27 @@ Term TermTranslator::transfer_term(const Term & term, const SortKind sk)
     Sort sort = solver->make_sort(INT);
     return cast_term(transferred_term, sort);
   }
-  else if (transferred_sk == STRING){
+  else if (transferred_sk == STRING)
+  {
     Sort sort = solver->make_sort(STRING);
     return cast_term(transferred_term, sort);
-  }else{
-    string msg("Cannot cast ");
-    msg += transferred_term->to_string() + " to " + smt::to_string(sk);
+  }
+  else
+  {
+    std::string msg("Cannot cast ");
+    msg += transferred_term->to_string() + " to " + to_string(sk);
     throw IncorrectUsageException(msg);
   }
 }
 
-std::string TermTranslator::infixize_rational(const std::string smtlib) const {
+std::string TermTranslator::infixize_rational(const std::string smtlib) const
+{
   // smtlib: (/ up down)
   // ind -- index
   std::string op;
   int ind_of_up_start = smtlib.find_first_of("/");
-  if (ind_of_up_start == std::string::npos) {
+  if (ind_of_up_start == std::string::npos)
+  {
     return smtlib;
   }
   ind_of_up_start += 2;
@@ -355,21 +366,25 @@ std::string TermTranslator::infixize_rational(const std::string smtlib) const {
   int ind_of_up_end;
   if (smtlib.substr(ind_of_up_start, 2) == "(-")
   {
-    //std::cout<<"1 "<<std::endl;    
     ind_of_up_end = smtlib.find_first_of(')', ind_of_up_start);
-    new_up = "- "+smtlib.substr(ind_of_up_start+3, ind_of_up_end-ind_of_up_start-3);
-  } else {
-    //std::cout<<"2 "<<std::endl;    
+    new_up = "- "
+             + smtlib.substr(ind_of_up_start + 3,
+                             ind_of_up_end - ind_of_up_start - 3);
+  }
+  else
+  {
     ind_of_up_end = smtlib.find_first_of(' ', ind_of_up_start);
     assert(ind_of_up_end != std::string::npos);
     ind_of_up_end -= 1;
-    new_up = smtlib.substr(ind_of_up_start, ind_of_up_end - ind_of_up_start +1);
+    new_up =
+        smtlib.substr(ind_of_up_start, ind_of_up_end - ind_of_up_start + 1);
   }
   int ind_of_down_start = ind_of_up_end + 2;
   int ind_of_down_end = smtlib.find_first_of(')', ind_of_down_start);
   assert(ind_of_down_end != std::string::npos);
   ind_of_down_end -= 1;
-  std::string new_down = smtlib.substr(ind_of_down_start, ind_of_down_end - ind_of_down_start +1);
+  std::string new_down =
+      smtlib.substr(ind_of_down_start, ind_of_down_end - ind_of_down_start + 1);
   std::string new_string = new_up + " " + op + " " + new_down;
   return new_string;
 }
@@ -433,8 +448,9 @@ Term TermTranslator::value_from_smt2(const std::string val,
     else
     {
       std::string mval = infixize_rational(val);
-      if (mval.substr(0,2) == "- "){
-        std::string posval = mval.substr(2, mval.length() - 2);      
+      if (mval.substr(0, 2) == "- ")
+      {
+        std::string posval = mval.substr(2, mval.length() - 2);
         Term posterm = solver->make_term(posval, sort);
         return solver->make_term(Negate, posterm);
       }
@@ -454,8 +470,25 @@ Term TermTranslator::value_from_smt2(const std::string val,
       return solver->make_term(val == "true");
     }
   }
-  else if (sk == STRING){
-    return solver->make_term(val, false, sort);
+  else if (sk == STRING)
+  {
+    // The SMT-LIB representation of a string will be wrapped in double quotes.
+    // These need to be stripped.
+    std::string strval = val.substr(1, val.size() - 2);
+    // Additionally, SMT-LIB escapes internal double quotes by doubling them.
+    // We need to replace them each by a single double quote.
+    std::string::size_type startpos = 0;
+    while (startpos < strval.size())
+    {
+      auto pos = strval.find("\"\"", startpos);
+      if (pos == strval.npos)
+      {
+        break;
+      }
+      strval.erase(pos, 1);
+      startpos = pos + 1;
+    }
+    return solver->make_term(strval, true, sort);
   }
   {
     throw NotImplementedException(
@@ -592,7 +625,7 @@ Term TermTranslator::cast_op(Op op, const TermVec & terms) const
   // default case
   else
   {
-    string msg("Cannot cast this operation: (");
+    std::string msg("Cannot cast this operation: (");
     msg += op.to_string();
     for (auto t : terms)
     {
@@ -651,7 +684,7 @@ Term TermTranslator::cast_value(const Term & term, const Sort & sort) const
 
   if (sk == BOOL && cur_sk == BV)
   {
-    string term_repr = term->to_string();
+    std::string term_repr = term->to_string();
     if (term_repr == "(_ bv1 1)" || term_repr == "#b1" || term_repr == "#x1")
     {
       return solver->make_term(true);
@@ -675,7 +708,7 @@ Term TermTranslator::cast_value(const Term & term, const Sort & sort) const
                          + sort->to_string());
     }
 
-    string term_repr = term->to_string();
+    std::string term_repr = term->to_string();
     if (term_repr == "true")
     {
       return solver->make_term(1, sort);

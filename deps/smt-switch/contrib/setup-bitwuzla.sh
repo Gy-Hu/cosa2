@@ -1,21 +1,13 @@
 #!/bin/bash
-set -e
+git_commit=4b4384fe43e03d0a941c6f5b1107fad86960b623
 
-BITWUZLA_VERSION=f516ce42c79cd42aa7b51f52d1b262e1336a0642
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-DEPS="$(dirname "$DIR")/deps"
+prepare_step() {
+  "$contrib_dir/setup-cadical.sh"
+}
 
-mkdir -p $DEPS
+configure_step() {
+  ./configure.py --prefix "$install_dir"
+}
 
-if [ ! -d "$DEPS/bitwuzla" ]; then
-    cd $DEPS
-    git clone https://github.com/bitwuzla/bitwuzla.git
-    cd bitwuzla
-    git checkout -f $BITWUZLA_VERSION
-    ./configure.py --prefix $DEPS/install
-    cd build
-    meson compile
-    meson install
-else
-    echo "$DEPS/bitwuzla already exists. If you want to rebuild, please remove it manually."
-fi
+# shellcheck source=contrib/meson-setup.sh
+source "$(dirname "$(realpath "$0")")/meson-setup.sh"

@@ -489,7 +489,6 @@ void BoolectorSolver::get_unsat_assumptions(UnorderedTermSet & out)
   }
 }
 
-
 void BoolectorSolver::get_unsat_assumptions(TermList & out)
 {
   BoolectorNode ** bcore = boolector_get_failed_assumptions(btor);
@@ -500,7 +499,6 @@ void BoolectorSolver::get_unsat_assumptions(TermList & out)
     ++bcore;
   }
 }
-
 
 Sort BoolectorSolver::make_sort(const std::string name, uint64_t arity) const
 {
@@ -794,6 +792,7 @@ void BoolectorSolver::reset()
   boolector_release_all(btor);
   boolector_delete(btor);
   btor = boolector_new();
+  symbol_table.clear();
 }
 
 void BoolectorSolver::reset_assertions()

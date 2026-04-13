@@ -148,8 +148,11 @@ ProverResult check_prop(PonoOptions pono_options,
   } else if (!external_clauses.empty()) {
     prover->set_helper_term_clauses(external_clauses);
   }
-  if (!augmenting_assertions.empty())
-    throw PonoException("Augmented assertion not implemented. Future work.");
+  // Merge augmenting_assertions into multiprop for refinement-based checking
+  TermVec all_multiprop(multiprop.begin(), multiprop.end());
+  for (const auto & a : augmenting_assertions) {
+    all_multiprop.push_back(a);
+  }
 
   // TODO: handle this in a more elegant way in the future
   //       consider calling prover for CegProphecyArrays (so that underlying
@@ -160,11 +163,11 @@ ProverResult check_prop(PonoOptions pono_options,
     // HACK MSAT_IC3IA does not support check_until
     r = prover->prove();
   } else {
-    if (multiprop.empty())
+    if (all_multiprop.empty())
       r = prover->check_until(pono_options.bound_);
     else {
       std::vector<ProverResult> results;
-      r = prover->check_until_multi_property(pono_options.bound_, multiprop, results);
+      r = prover->check_until_multi_property(pono_options.bound_, all_multiprop, results);
     }
   }
 

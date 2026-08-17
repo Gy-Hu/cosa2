@@ -193,7 +193,10 @@ ProverResult CegProphecyArrays<Prover_T>::check_until(int k)
         }
       }
       reached_k_++;
-    } while (num_added_axioms_ && reached_k_ <= k);
+    } while ((num_added_axioms_
+              || reached_k_
+                     < static_cast<int>(super::options_.cegp_bmc_warmup_))
+             && reached_k_ <= k);
 
     if constexpr (std::is_same<Prover_T, IC3IA>::value) {
       if (bandit_batch_active_) {

@@ -30,6 +30,14 @@ STRATEGY_FLAGS = {
         "--ic3ia-fallback-preds",
         "32",
     ],
+    "warmup10": ["--cegp-bmc-warmup", "10"],
+    "ucb_fallback32_warmup10": [
+        "--cegp-bandit",
+        "--ic3ia-fallback-preds",
+        "32",
+        "--cegp-bmc-warmup",
+        "10",
+    ],
 }
 
 

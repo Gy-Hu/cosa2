@@ -82,6 +82,7 @@ enum optionIndex
   NO_CEGP_CONSEC_AXIOM_RED,
   NO_CEGP_NONCONSEC_AXIOM_RED,
   CEGP_BANDIT,
+  CEGP_BMC_WARMUP,
   CEGP_FORCE_RESTART,
   CEGP_ABS_VALS,
   CEGP_ABS_VALS_CUTOFF,
@@ -492,6 +493,13 @@ const option::Descriptor usage[] = {
     Arg::None,
     "  --cegp-bandit \tUse an online UCB controller to select CEG-Prophecy "
     "array refinement strength." },
+  { CEGP_BMC_WARMUP,
+    0,
+    "",
+    "cegp-bmc-warmup",
+    Arg::Numeric,
+    "  --cegp-bmc-warmup \tRefine the array abstraction with BMC through "
+    "this bound before running the underlying prover (default: 0)." },
   { CEGP_FORCE_RESTART,
     0,
     "",
@@ -991,6 +999,13 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
           cegp_nonconsec_axiom_red_ = false;
           break;
         case CEGP_BANDIT: cegp_bandit_ = true; break;
+        case CEGP_BMC_WARMUP:
+          cegp_bmc_warmup_ = std::stoul(opt.arg);
+          if (cegp_bmc_warmup_ >= INT_MAX) {
+            throw PonoException("--cegp-bmc-warmup must be less than "
+                                + std::to_string(INT_MAX) + ".");
+          }
+          break;
         case CEGP_FORCE_RESTART: cegp_force_restart_ = true; break;
         case CEGP_ABS_VALS: cegp_abs_vals_ = true; break;
         case CEGP_ABS_VALS_CUTOFF:

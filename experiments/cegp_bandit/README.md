@@ -15,6 +15,8 @@ enabled for every strategy.
 | `ucb` | selected online | selected online |
 | `fallback32` | baseline | baseline, plus stalled-IC3IA recovery |
 | `ucb_fallback32` | selected online | selected online, plus recovery |
+| `warmup10` | baseline after BMC pre-refinement | baseline |
+| `ucb_fallback32_warmup10` | selected online after BMC pre-refinement | selected online, plus recovery |
 
 All runs use:
 
@@ -36,6 +38,10 @@ when sequence interpolation returns no fresh predicate. This is a sound
 precision-increasing recovery from IC3IA's otherwise terminal `REFINE_FAIL`;
 it is kept as a separate ablation because it is complementary to array axiom
 reduction policy selection.
+
+The warmup variant checks BMC bounds 0 through 10 before the first IC3IA
+epoch. This gives safe instances an opportunity to inject useful array theory
+information before IC3IA can terminate on a predicate-refinement stall.
 
 The benchmark manifest contains the 12 HWMCC'25 word-level array
 liveness-to-safety instances.  Each file has one bad property.

@@ -160,6 +160,7 @@ class PonoOptions
         cegp_consec_axiom_red_(default_cegp_consec_axiom_red_),
         cegp_nonconsec_axiom_red_(default_cegp_nonconsec_axiom_red_),
         cegp_bandit_(default_cegp_bandit_),
+        cegp_bmc_warmup_(default_cegp_bmc_warmup_),
         cegp_force_restart_(default_cegp_force_restart_),
         cegp_abs_vals_(default_cegp_abs_vals_),
         cegp_abs_vals_cutoff_(default_cegp_abs_vals_cutoff_),
@@ -284,6 +285,8 @@ class PonoOptions
   bool cegp_nonconsec_axiom_red_;  ///< reduce nonconsecutive axioms before
                                    ///< prophecizing
   bool cegp_bandit_;  ///< use online UCB to choose array refinement strength
+  unsigned long cegp_bmc_warmup_;  ///< pre-refine array abstraction through
+                                   ///< this BMC bound before running the prover
   bool cegp_force_restart_;        ///< force underlying engine to restart after
                                    ///< refinement
   bool cegp_abs_vals_;  ///< abstract values on top of ceg-prophecy-arrays
@@ -436,6 +439,7 @@ class PonoOptions
   static const bool default_cegp_consec_axiom_red_ = true;
   static const bool default_cegp_nonconsec_axiom_red_ = true;
   static const bool default_cegp_bandit_ = false;
+  static const unsigned long default_cegp_bmc_warmup_ = 0;
   static const bool default_cegp_force_restart_ = false;
   static const bool default_cegp_abs_vals_ = false;
   static const unsigned long default_cegp_abs_vals_cutoff_ = 100;

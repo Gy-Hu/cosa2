@@ -70,3 +70,11 @@ python3 experiments/cegp_bandit/summarize.py \
 ```
 
 PAR-2 uses twice the configured timeout for timeout, crash, and unknown runs.
+
+Compare every completed strategy at one commit and compute the fixed-arm
+oracle:
+
+```bash
+python3 experiments/cegp_bandit/compare.py \
+  /hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-results/<commit>
+```

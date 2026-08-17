@@ -7,7 +7,9 @@ case "$strategy" in
   baseline|full_reduce|consec_core|full_add|ucb|fallback32|ucb_fallback32|\
     warmup10|ucb_fallback32_warmup10|bzla_itp|bzla_itp_fallback32|\
     bzla_itp_ucb_fallback32|no_pseudo|no_pseudo_fallback32|\
-    no_pseudo_ucb_fallback32) ;;
+    no_pseudo_ucb_fallback32|no_pseudo_packet_lean_core|\
+    no_pseudo_packet_array_local|no_pseudo_packet_cex_diverse|\
+    no_pseudo_packet_recovery|no_pseudo_mab_ic3ia_refinement) ;;
   *) echo "Unknown strategy: $strategy" >&2; exit 2 ;;
 esac
 

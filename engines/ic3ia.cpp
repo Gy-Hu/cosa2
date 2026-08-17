@@ -30,8 +30,14 @@
 #include "engines/ic3ia.h"
 
 #include <algorithm>
+#include <array>
+#include <cmath>
 #include <cstddef>
+#include <ctime>
 #include <random>
+#include <string>
+#include <unordered_set>
+#include <vector>
 
 #include "core/prop.h"
 #include "core/refineresult.h"
@@ -39,9 +45,11 @@
 #include "core/ts.h"
 #include "options/options.h"
 #include "smt-switch/smt.h"
+#include "smt-switch/utils.h"
 #include "smt/available_solvers.h"
 #include "utils/logger.h"
 #include "utils/term_analysis.h"
+#include "utils/term_walkers.h"
 
 using namespace smt;
 using namespace std;
@@ -64,7 +72,8 @@ IC3IA::IC3IA(const SafetyProperty & p,
       to_interpolator_(interpolator_),
       to_solver_(solver_),
       longest_cex_length_(0),
-      fallback_bandit_(0.5)
+      fallback_bandit_(0.5),
+      refinement_packet_bandit_(0.5)
 {
   // since we passed a fresh RelationalTransitionSystem as the main TS
   // need to point orig_ts_ to the right place
@@ -85,6 +94,185 @@ void IC3IA::add_important_var(Term v)
   }
   logger.log(1, "Adding important variable: {}", v);
   ia_.add_important_var(v);
+  important_vars_.insert(v);
+}
+
+bool IC3IA::semantic_refinement_packets_enabled() const
+{
+  return options_.mab_ic3ia_refinement_
+         || options_.ic3ia_refinement_packet_ > 0;
+}
+
+TermVec IC3IA::transition_predicate_candidates()
+{
+  if (!transition_predicates_cached_) {
+    UnorderedTermSet trans_preds;
+    get_predicates(solver_, conc_ts_.trans(), trans_preds, false, false, true);
+    cached_transition_predicates_.clear();
+    cached_transition_predicates_.reserve(trans_preds.size());
+    for (const auto & p : trans_preds) {
+      Term curr_p = conc_ts_.curr(p);
+      if (conc_ts_.only_curr(curr_p)) {
+        cached_transition_predicates_.push_back(curr_p);
+      }
+    }
+    std::sort(cached_transition_predicates_.begin(),
+              cached_transition_predicates_.end(),
+              [](const Term & left, const Term & right) {
+                return left->to_string() < right->to_string();
+              });
+    cached_transition_predicates_.erase(
+        std::unique(cached_transition_predicates_.begin(),
+                    cached_transition_predicates_.end()),
+        cached_transition_predicates_.end());
+    transition_predicates_cached_ = true;
+  }
+
+  TermVec fresh;
+  for (const auto & p : cached_transition_predicates_) {
+    if (predset_.find(p) == predset_.end()) {
+      fresh.push_back(p);
+    }
+  }
+  return fresh;
+}
+
+TermVec IC3IA::rank_transition_candidates(const TermVec & candidates,
+                                          IC3IARefinementPacket packet) const
+{
+  UnorderedTermSet cex_support;
+  for (const auto & cube : cex_) {
+    get_free_symbolic_consts(cube, cex_support);
+  }
+  UnorderedTermSet bad_support;
+  get_free_symbolic_consts(bad_, bad_support);
+  UnorderedTermSet covered_support;
+  for (const auto & pred : predset_) {
+    get_free_symbolic_consts(pred, covered_support);
+  }
+
+  struct RankedPredicate
+  {
+    Term term;
+    double score;
+    bool array_related;
+    bool important;
+    string support_key;
+  };
+  vector<RankedPredicate> ranked;
+  ranked.reserve(candidates.size());
+  const unordered_set<PrimOp> array_ops({ Select, Store });
+  for (const auto & pred : candidates) {
+    UnorderedTermSet support;
+    get_free_symbolic_consts(pred, support);
+    size_t cex_overlap = 0;
+    size_t bad_overlap = 0;
+    size_t novel_symbols = 0;
+    bool array_related = false;
+    bool important = false;
+    vector<string> support_names;
+    for (const auto & symbol : support) {
+      cex_overlap += cex_support.find(symbol) != cex_support.end();
+      bad_overlap += bad_support.find(symbol) != bad_support.end();
+      novel_symbols += covered_support.find(symbol) == covered_support.end();
+      important =
+          important || important_vars_.find(symbol) != important_vars_.end();
+      array_related =
+          array_related || symbol->get_sort()->get_sort_kind() == ARRAY;
+      support_names.push_back(symbol->to_string());
+    }
+    TermOpCollector collector(solver_);
+    UnorderedTermSet array_terms;
+    collector.find_matching_terms(pred, array_ops, array_terms);
+    array_related = array_related || !array_terms.empty();
+
+    std::sort(support_names.begin(), support_names.end());
+    string support_key;
+    for (const auto & name : support_names) {
+      support_key += name;
+      support_key += '\n';
+    }
+    const double score = 4.0 * cex_overlap + 3.0 * bad_overlap
+                         + 4.0 * static_cast<double>(array_related)
+                         + 5.0 * static_cast<double>(important)
+                         + static_cast<double>(novel_symbols);
+    ranked.push_back({ pred, score, array_related, important, support_key });
+  }
+
+  std::sort(ranked.begin(),
+            ranked.end(),
+            [](const RankedPredicate & left, const RankedPredicate & right) {
+              if (left.score != right.score) {
+                return left.score > right.score;
+              }
+              return left.term->to_string() < right.term->to_string();
+            });
+
+  TermVec result;
+  unordered_set<string> seen_support;
+  TermVec repeated_support;
+  for (const auto & candidate : ranked) {
+    if (packet == IC3IARefinementPacket::ARRAY_LOCAL && !candidate.array_related
+        && !candidate.important) {
+      continue;
+    }
+    if (packet == IC3IARefinementPacket::CEX_DIVERSE
+        && !seen_support.insert(candidate.support_key).second) {
+      repeated_support.push_back(candidate.term);
+      continue;
+    }
+    result.push_back(candidate.term);
+  }
+  result.insert(result.end(), repeated_support.begin(), repeated_support.end());
+  return result;
+}
+
+TermVec IC3IA::build_refinement_packet(
+    IC3IARefinementPacket packet,
+    const TermVec & interp_core,
+    const TermVec & transition_candidates) const
+{
+  TermVec result = interp_core;
+  UnorderedTermSet selected(interp_core.begin(), interp_core.end());
+  if (packet == IC3IARefinementPacket::LEAN_CORE) {
+    return result;
+  }
+
+  const TermVec ranked =
+      rank_transition_candidates(transition_candidates, packet);
+  size_t limit = 0;
+  switch (packet) {
+    case IC3IARefinementPacket::ARRAY_LOCAL: limit = 8; break;
+    case IC3IARefinementPacket::CEX_DIVERSE: limit = 16; break;
+    case IC3IARefinementPacket::RECOVERY:
+      limit = options_.ic3ia_fallback_predicates_
+                  ? options_.ic3ia_fallback_predicates_
+                  : 32;
+      break;
+    case IC3IARefinementPacket::LEAN_CORE:
+    case IC3IARefinementPacket::NUM_PACKETS: break;
+  }
+  size_t added = 0;
+  for (const auto & pred : ranked) {
+    if (added >= limit) {
+      break;
+    }
+    if (selected.insert(pred).second) {
+      result.push_back(pred);
+      added++;
+    }
+  }
+  return result;
+}
+
+bool IC3IA::packet_rules_out_cex(const TermVec & packet)
+{
+  if (packet.empty()) {
+    return false;
+  }
+  TermVec reduced;
+  refinement_packet_reducer_queries_++;
+  return ia_.reduce_predicates(cex_, packet, reduced);
 }
 
 // pure virtual method implementations
@@ -246,6 +434,7 @@ RefineResult IC3IA::refine()
     // if there are no transitions, then this is a concrete CEX
     return REFINE_NONE;
   }
+  const clock_t refinement_start_clock = std::clock();
 
   size_t cex_length = cex_.size();
 
@@ -315,12 +504,159 @@ RefineResult IC3IA::refine()
     }
   }
 
+  if (semantic_refinement_packets_enabled()) {
+    TermVec interp_core = fresh_preds;
+    if (options_.ic3ia_reduce_preds_ && !fresh_preds.empty()) {
+      TermVec reduced;
+      refinement_packet_reducer_queries_++;
+      if (ia_.reduce_predicates(cex_, fresh_preds, reduced)
+          && !reduced.empty()) {
+        interp_core = reduced;
+      }
+    }
+
+    const TermVec transition_candidates = transition_predicate_candidates();
+    array<bool, IC3IARefinementUcbController::num_arms> valid{};
+    valid[static_cast<size_t>(IC3IARefinementPacket::LEAN_CORE)] =
+        !interp_core.empty();
+    valid[static_cast<size_t>(IC3IARefinementPacket::ARRAY_LOCAL)] =
+        !rank_transition_candidates(transition_candidates,
+                                    IC3IARefinementPacket::ARRAY_LOCAL)
+             .empty();
+    valid[static_cast<size_t>(IC3IARefinementPacket::CEX_DIVERSE)] =
+        !transition_candidates.empty();
+    valid[static_cast<size_t>(IC3IARefinementPacket::RECOVERY)] =
+        !transition_candidates.empty() || !interp_core.empty();
+    size_t valid_count = 0;
+    for (bool is_valid : valid) {
+      valid_count += is_valid;
+    }
+    if (!valid_count) {
+      logger.log(1,
+                 "IC3IA: refinement failed couldn't find any semantic "
+                 "packet candidates");
+      return RefineResult::REFINE_FAIL;
+    }
+
+    vector<string> cex_terms;
+    cex_terms.reserve(cex_.size());
+    for (const auto & cube : cex_) {
+      cex_terms.push_back(cube->to_string());
+    }
+    std::sort(cex_terms.begin(), cex_terms.end());
+    string cex_signature;
+    for (const auto & term : cex_terms) {
+      cex_signature += term;
+      cex_signature += '\n';
+    }
+    if (cex_signature == previous_cex_signature_) {
+      repeated_cex_count_++;
+    } else {
+      previous_cex_signature_ = cex_signature;
+      repeated_cex_count_ = 0;
+    }
+
+    IC3IARefinementPacket packet = IC3IARefinementPacket::RECOVERY;
+    bool learning_opportunity =
+        options_.mab_ic3ia_refinement_ && valid_count > 1;
+    if (learning_opportunity) {
+      packet = refinement_packet_bandit_.select(valid);
+    } else if (options_.ic3ia_refinement_packet_) {
+      packet = static_cast<IC3IARefinementPacket>(
+          options_.ic3ia_refinement_packet_ - 1);
+      if (!valid[static_cast<size_t>(packet)]) {
+        packet = IC3IARefinementPacket::RECOVERY;
+      }
+    } else {
+      for (size_t arm = 0; arm < valid.size(); ++arm) {
+        if (valid[arm]) {
+          packet = static_cast<IC3IARefinementPacket>(arm);
+          break;
+        }
+      }
+    }
+    if (repeated_cex_count_ >= 2
+        && valid[static_cast<size_t>(IC3IARefinementPacket::RECOVERY)]) {
+      packet = IC3IARefinementPacket::RECOVERY;
+      learning_opportunity = false;
+    }
+
+    TermVec selected =
+        build_refinement_packet(packet, interp_core, transition_candidates);
+    bool expanded = false;
+    bool safe_fallback = false;
+    if (interp_core.empty() && !packet_rules_out_cex(selected)) {
+      expanded = true;
+      TermVec expansion = rank_transition_candidates(
+          transition_candidates, IC3IARefinementPacket::RECOVERY);
+      UnorderedTermSet selected_set(selected.begin(), selected.end());
+      size_t expansion_target =
+          std::max<size_t>(selected.size() + 1, selected.size() * 2);
+      size_t expansion_pos = 0;
+      while (expansion_pos < expansion.size()) {
+        while (expansion_pos < expansion.size()
+               && selected.size() < expansion_target) {
+          if (selected_set.insert(expansion[expansion_pos]).second) {
+            selected.push_back(expansion[expansion_pos]);
+          }
+          expansion_pos++;
+        }
+        if (packet_rules_out_cex(selected)) {
+          break;
+        }
+        expansion_target =
+            std::min(expansion.size(),
+                     std::max(expansion_target + 1, expansion_target * 2));
+      }
+      if (expansion_pos == expansion.size()
+          && !packet_rules_out_cex(selected)) {
+        // Preserve the legacy sound fallback when a reducer cannot establish
+        // progress (for example because UF unrolling forces incompatible
+        // interpretations).  The full fresh pool is still added.
+        safe_fallback = true;
+      }
+    }
+
+    if (selected.empty()) {
+      logger.log(1, "IC3IA: semantic refinement packet is empty");
+      return RefineResult::REFINE_FAIL;
+    }
+    for (const auto & pred : selected) {
+      const bool new_pred = add_predicate(pred);
+      assert(new_pred);
+    }
+    refinement_decision_id_++;
+    refinement_packet_learning_ = learning_opportunity;
+    refinement_packet_cpu_seconds_for_decision_ =
+        static_cast<double>(std::clock() - refinement_start_clock)
+        / CLOCKS_PER_SEC;
+    logger.log(0,
+               "IC3IA-REFINEMENT select id={} round={} packet={} learning={} "
+               "valid={} interp={} transition={} selected={} repeated={} "
+               "expanded={} safe_fallback={}",
+               refinement_decision_id_,
+               refinement_packet_bandit_.rounds(),
+               to_string(packet),
+               learning_opportunity,
+               valid_count,
+               interp_core.size(),
+               transition_candidates.size(),
+               selected.size(),
+               repeated_cex_count_,
+               expanded,
+               safe_fallback);
+    update_refinement_packet(packet, selected.size());
+    logger.log(1,
+               "{} new predicates added by semantic refinement packet",
+               selected.size());
+    return RefineResult::REFINE_SUCCESS;
+  }
+
   if (!fresh_preds.size() && options_.ic3ia_fallback_predicates_) {
     update_fallback_bandit(ProverResult::UNKNOWN);
 
     UnorderedTermSet trans_preds;
-    get_predicates(
-        solver_, conc_ts_.trans(), trans_preds, false, false, true);
+    get_predicates(solver_, conc_ts_.trans(), trans_preds, false, false, true);
     UnorderedTermSet fallback_set;
     for (const auto & p : trans_preds) {
       Term curr_p = conc_ts_.curr(p);
@@ -427,9 +763,9 @@ void IC3IA::update_fallback_bandit(ProverResult result)
                           - fallback_bandit_start_.propagation_attempts;
   const size_t successes = current.propagation_successes
                            - fallback_bandit_start_.propagation_successes;
-  const size_t frontier = current.propagation_successes_to_frontier
-                          - fallback_bandit_start_
-                                .propagation_successes_to_frontier;
+  const size_t frontier =
+      current.propagation_successes_to_frontier
+      - fallback_bandit_start_.propagation_successes_to_frontier;
   const size_t frames =
       current.frames_created - fallback_bandit_start_.frames_created;
   const double push_rate =
@@ -459,6 +795,100 @@ void IC3IA::update_fallback_bandit(ProverResult result)
   fallback_bandit_pending_ = false;
 }
 
+void IC3IA::update_refinement_packet(IC3IARefinementPacket packet,
+                                     size_t predicates_added)
+{
+  if (refinement_packet_pending_) {
+    logger.log(0,
+               "IC3IA-REFINEMENT censored id={} reason=new_refinement",
+               refinement_decision_id_ - 1);
+  }
+  refinement_packet_ = packet;
+  refinement_packet_start_ = epoch_statistics();
+  refinement_packet_predicates_added_ = predicates_added;
+  refinement_packet_reducer_queries_for_decision_ =
+      refinement_packet_reducer_queries_
+      - refinement_packet_reducer_queries_charged_;
+  refinement_packet_reducer_queries_charged_ =
+      refinement_packet_reducer_queries_;
+  refinement_packet_pending_ = true;
+}
+
+void IC3IA::finish_refinement_packet(ProverResult result)
+{
+  if (!refinement_packet_pending_) {
+    return;
+  }
+
+  const IC3EpochStatistics & current = epoch_statistics();
+  const size_t attempts = current.propagation_attempts
+                          - refinement_packet_start_.propagation_attempts;
+  const size_t successes = current.propagation_successes
+                           - refinement_packet_start_.propagation_successes;
+  const size_t frontier =
+      current.propagation_successes_to_frontier
+      - refinement_packet_start_.propagation_successes_to_frontier;
+  const size_t frames =
+      current.frames_created - refinement_packet_start_.frames_created;
+  const size_t queries =
+      current.solver_queries - refinement_packet_start_.solver_queries;
+  const double push_rate =
+      attempts ? static_cast<double>(successes) / attempts : 0.0;
+  const double frontier_rate =
+      attempts ? static_cast<double>(frontier) / attempts : 0.0;
+  const double frame_progress =
+      std::min(1.0, static_cast<double>(frames) / 2.0);
+  const double terminal_progress = result == ProverResult::TRUE ? 1.0 : 0.0;
+  const double progress = 0.35 * frame_progress + 0.30 * push_rate
+                          + 0.20 * frontier_rate + 0.15 * terminal_progress;
+  const double query_cost =
+      std::min(1.0, std::log1p(static_cast<double>(queries)) / std::log(33.0));
+  const double predicate_cost = std::min(
+      1.0, static_cast<double>(refinement_packet_predicates_added_) / 32.0);
+  const double reducer_cost = std::min(
+      1.0,
+      static_cast<double>(refinement_packet_reducer_queries_for_decision_)
+          / 4.0);
+  const double refinement_cpu_cost = std::min(
+      1.0,
+      std::log1p(refinement_packet_cpu_seconds_for_decision_) / std::log(11.0));
+  const double reward = std::max(
+      -1.0,
+      std::min(1.0,
+               progress - 0.10 * query_cost - 0.12 * predicate_cost
+                   - 0.05 * reducer_cost - 0.08 * refinement_cpu_cost));
+  if (refinement_packet_learning_) {
+    refinement_packet_bandit_.update(refinement_packet_, reward);
+  }
+  logger.log(0,
+             "IC3IA-REFINEMENT update id={} round={} packet={} learning={} "
+             "reward={} progress={} queries={} reducer_queries={} "
+             "refinement_cpu={} predicates={} push={}/{} frontier={} "
+             "frames={} result={}",
+             refinement_decision_id_,
+             refinement_packet_bandit_.rounds(),
+             to_string(refinement_packet_),
+             refinement_packet_learning_,
+             reward,
+             progress,
+             queries,
+             refinement_packet_reducer_queries_for_decision_,
+             refinement_packet_cpu_seconds_for_decision_,
+             refinement_packet_predicates_added_,
+             successes,
+             attempts,
+             frontier,
+             frames,
+             result);
+  refinement_packet_pending_ = false;
+  refinement_packet_learning_ = false;
+}
+
+void IC3IA::on_step_finished(ProverResult result)
+{
+  finish_refinement_packet(result);
+}
+
 void IC3IA::reset_solver()
 {
   super::reset_solver();
@@ -484,6 +914,18 @@ void IC3IA::reabstract()
   // A reabstraction starts a new outer CEGAR epoch, so propagation counters
   // from a pending fallback action are no longer comparable.
   fallback_bandit_pending_ = false;
+  if (refinement_packet_pending_) {
+    logger.log(0,
+               "IC3IA-REFINEMENT censored id={} reason=reabstract "
+               "reducer_queries={} predicates={}",
+               refinement_decision_id_,
+               refinement_packet_reducer_queries_for_decision_,
+               refinement_packet_predicates_added_);
+    refinement_packet_pending_ = false;
+    refinement_packet_learning_ = false;
+  }
+  transition_predicates_cached_ = false;
+  cached_transition_predicates_.clear();
 
   // don't add boolean symbols that are never used in the system
   // this is an optimization and a fix for some options

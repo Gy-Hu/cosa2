@@ -29,8 +29,34 @@ TEST(CegpBanditTest, ExploreThenExploit)
   ASSERT_EQ(controller.rounds(), 3);
   ASSERT_EQ(controller.select(), CegpRefinementMode::CONSEC_CORE);
   ASSERT_EQ(controller.count(CegpRefinementMode::CONSEC_CORE), 1);
-  ASSERT_DOUBLE_EQ(
-      controller.mean_reward(CegpRefinementMode::CONSEC_CORE), 0.9);
+  ASSERT_DOUBLE_EQ(controller.mean_reward(CegpRefinementMode::CONSEC_CORE),
+                   0.9);
+}
+
+TEST(IC3IARefinementBanditTest, MasksInvalidPackets)
+{
+  IC3IARefinementUcbController controller(0.0);
+  array<bool, IC3IARefinementUcbController::num_arms> valid{};
+  valid[static_cast<size_t>(IC3IARefinementPacket::ARRAY_LOCAL)] = true;
+  valid[static_cast<size_t>(IC3IARefinementPacket::CEX_DIVERSE)] = true;
+  valid[static_cast<size_t>(IC3IARefinementPacket::RECOVERY)] = true;
+
+  ASSERT_EQ(controller.select(valid), IC3IARefinementPacket::ARRAY_LOCAL);
+  controller.update(IC3IARefinementPacket::ARRAY_LOCAL, 0.1);
+  ASSERT_EQ(controller.select(valid), IC3IARefinementPacket::CEX_DIVERSE);
+  controller.update(IC3IARefinementPacket::CEX_DIVERSE, 0.9);
+  ASSERT_EQ(controller.select(valid), IC3IARefinementPacket::RECOVERY);
+  controller.update(IC3IARefinementPacket::RECOVERY, 0.2);
+
+  ASSERT_EQ(controller.select(valid), IC3IARefinementPacket::CEX_DIVERSE);
+  ASSERT_EQ(controller.count(IC3IARefinementPacket::LEAN_CORE), 0);
+}
+
+TEST(IC3IARefinementBanditTest, RejectsEmptyMask)
+{
+  IC3IARefinementUcbController controller;
+  array<bool, IC3IARefinementUcbController::num_arms> valid{};
+  ASSERT_THROW(controller.select(valid), invalid_argument);
 }
 
 class CegProphecyArraysTest

@@ -72,6 +72,8 @@ enum optionIndex
   NO_IC3IA_TRACK_IMPORTANT_VARS,
   NO_IC3IA_SIM_CEX,
   IC3IA_FALLBACK_PREDS,
+  IC3IA_REFINEMENT_PACKET,
+  MAB_IC3IA_REFINEMENT,
   NO_IC3SA_FUNC_REFINE,
   MBIC3_INDGEN_MODE,
   PROFILING_LOG_FILENAME,
@@ -422,6 +424,21 @@ const option::Descriptor usage[] = {
     Arg::Numeric,
     "  --ic3ia-fallback-preds \tAdd up to this many fresh transition "
     "predicates when interpolation stalls (default: 0, disabled)." },
+  { IC3IA_REFINEMENT_PACKET,
+    0,
+    "",
+    "ic3ia-refinement-packet",
+    Arg::Numeric,
+    "  --ic3ia-refinement-packet \tUse a fixed semantic refinement packet "
+    "at each spurious abstract counterexample: 1=lean-core, "
+    "2=array-local, 3=cex-diverse, 4=recovery (default: 0, legacy)." },
+  { MAB_IC3IA_REFINEMENT,
+    0,
+    "",
+    "mab-ic3ia-refinement",
+    Arg::None,
+    "  --mab-ic3ia-refinement \tUse masked UCB to select a semantic "
+    "refinement packet at each spurious abstract counterexample." },
   { NO_IC3SA_FUNC_REFINE,
     0,
     "",
@@ -980,6 +997,14 @@ ProverResult PonoOptions::parse_and_set_options(int argc,
         case IC3IA_FALLBACK_PREDS:
           ic3ia_fallback_predicates_ = std::stoul(opt.arg);
           break;
+        case IC3IA_REFINEMENT_PACKET:
+          ic3ia_refinement_packet_ = std::stoul(opt.arg);
+          if (ic3ia_refinement_packet_ > 4) {
+            throw PonoException(
+                "--ic3ia-refinement-packet must be between 0 and 4.");
+          }
+          break;
+        case MAB_IC3IA_REFINEMENT: mab_ic3ia_refinement_ = true; break;
         case NO_IC3SA_FUNC_REFINE: ic3sa_func_refine_ = false; break;
         case PROFILING_LOG_FILENAME:
 #ifndef WITH_PROFILING

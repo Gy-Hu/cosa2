@@ -227,6 +227,9 @@ class IC3Base : public SafetyProver
 
   IC3EpochStatistics epoch_statistics_;
 
+  /** Hook for refinements that consume feedback from exactly one IC3 step. */
+  virtual void on_step_finished(ProverResult result) {}
+
   bool failed_to_reset_solver_;  ///< some solvers don't support reset
                                  ///< assertions. Stop trying for those solvers.
 

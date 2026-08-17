@@ -173,6 +173,7 @@ ProverResult IC3Base::check_until(int k)
   assert(reached_k_ + 1 >= 0);
   while (i <= k) {
     res = step(i);
+    on_step_finished(res);
 
     if (res == ProverResult::FALSE) {
       assert(cex_.size());

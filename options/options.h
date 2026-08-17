@@ -151,6 +151,8 @@ class PonoOptions
         ic3ia_track_important_vars_(default_ic3ia_track_important_vars_),
         ic3ia_sim_cex_(default_ic3ia_sim_cex_),
         ic3ia_fallback_predicates_(default_ic3ia_fallback_predicates_),
+        ic3ia_refinement_packet_(default_ic3ia_refinement_packet_),
+        mab_ic3ia_refinement_(default_mab_ic3ia_refinement_),
         ic3sa_func_refine_(default_ic3sa_func_refine_),
         profiling_log_filename_(default_profiling_log_filename_),
         pseudo_init_prop_(default_pseudo_init_prop_),
@@ -270,10 +272,14 @@ class PonoOptions
   bool ic3ia_reduce_preds_;  ///< reduce predicates with unsatcore in IC3IA
   bool ic3ia_track_important_vars_;  ///< prioritize predicates with marked
                                      ///< important variables
-  bool ic3ia_sim_cex_;      ///< simulate abstract cex during IC3IA's refinement
+  bool ic3ia_sim_cex_;  ///< simulate abstract cex during IC3IA's refinement
   unsigned long ic3ia_fallback_predicates_;  ///< transition predicates to add
                                              ///< when interpolation stalls
-  bool ic3sa_func_refine_;  ///< try functional unrolling in refinement
+  unsigned long ic3ia_refinement_packet_;    ///< fixed semantic packet [1,4],
+                                             ///< or 0 to keep legacy refinement
+  bool mab_ic3ia_refinement_;  ///< select a semantic packet at every spurious
+                               ///< abstract counterexample
+  bool ic3sa_func_refine_;     ///< try functional unrolling in refinement
   std::string profiling_log_filename_;
   bool pseudo_init_prop_;  ///< replace init and prop with boolean state vars
   bool assume_prop_;       ///< assume property in pre-state
@@ -430,6 +436,8 @@ class PonoOptions
   static const bool default_ic3ia_track_important_vars_ = true;
   static const bool default_ic3ia_sim_cex_ = true;
   static const unsigned long default_ic3ia_fallback_predicates_ = 0;
+  static const unsigned long default_ic3ia_refinement_packet_ = 0;
+  static const bool default_mab_ic3ia_refinement_ = false;
   static const bool default_ic3sa_func_refine_ = true;
   static const std::string default_profiling_log_filename_;
   static const bool default_pseudo_init_prop_ = false;

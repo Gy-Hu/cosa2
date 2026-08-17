@@ -52,6 +52,11 @@ STRATEGY_FLAGS = {
         "--ic3ia-fallback-preds",
         "32",
     ],
+    "no_pseudo_packet_lean_core": ["--ic3ia-refinement-packet", "1"],
+    "no_pseudo_packet_array_local": ["--ic3ia-refinement-packet", "2"],
+    "no_pseudo_packet_cex_diverse": ["--ic3ia-refinement-packet", "3"],
+    "no_pseudo_packet_recovery": ["--ic3ia-refinement-packet", "4"],
+    "no_pseudo_mab_ic3ia_refinement": ["--mab-ic3ia-refinement"],
 }
 
 

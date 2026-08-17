@@ -30,6 +30,7 @@
 #pragma once
 
 #include <cstddef>
+#include <string>
 
 #include "core/prop.h"
 #include "core/refineresult.h"
@@ -89,6 +90,37 @@ class IC3IA : public IC3
   IC3EpochStatistics fallback_bandit_start_;
 
   void update_fallback_bandit(ProverResult result);
+
+  IC3IARefinementUcbController refinement_packet_bandit_;
+  bool refinement_packet_pending_ = false;
+  bool refinement_packet_learning_ = false;
+  IC3IARefinementPacket refinement_packet_ = IC3IARefinementPacket::LEAN_CORE;
+  IC3EpochStatistics refinement_packet_start_;
+  size_t refinement_packet_predicates_added_ = 0;
+  size_t refinement_packet_reducer_queries_ = 0;
+  size_t refinement_packet_reducer_queries_charged_ = 0;
+  size_t refinement_packet_reducer_queries_for_decision_ = 0;
+  double refinement_packet_cpu_seconds_for_decision_ = 0.0;
+  size_t refinement_decision_id_ = 0;
+  size_t repeated_cex_count_ = 0;
+  std::string previous_cex_signature_;
+  smt::TermVec cached_transition_predicates_;
+  bool transition_predicates_cached_ = false;
+  smt::UnorderedTermSet important_vars_;
+
+  bool semantic_refinement_packets_enabled() const;
+  smt::TermVec transition_predicate_candidates();
+  smt::TermVec rank_transition_candidates(const smt::TermVec & candidates,
+                                          IC3IARefinementPacket packet) const;
+  smt::TermVec build_refinement_packet(
+      IC3IARefinementPacket packet,
+      const smt::TermVec & interp_core,
+      const smt::TermVec & transition_candidates) const;
+  bool packet_rules_out_cex(const smt::TermVec & packet);
+  void update_refinement_packet(IC3IARefinementPacket packet,
+                                size_t predicates_added);
+  void finish_refinement_packet(ProverResult result);
+  void on_step_finished(ProverResult result) override;
 
   // Since MathSAT is the best solver for IC3IA it helps to use
   // its bool_model_generation option which doesn't enable

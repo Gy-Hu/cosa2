@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-strategy=${1:?usage: submit_lsf.sh STRATEGY [MAX_PARALLEL]}
+strategy=${1:?usage: submit_lsf.sh STRATEGY [MAX_PARALLEL] [START] [END]}
 max_parallel=${2:-12}
 case "$strategy" in
   baseline|full_reduce|consec_core|full_add|ucb|fallback32|ucb_fallback32|\
@@ -17,6 +17,12 @@ result_root=${CEGP_RESULT_ROOT:-/hpc/home/connect.cchen099/gy-env/pono-cegp-band
 timeout_seconds=${CEGP_TIMEOUT:-1000}
 commit=$(git --git-dir="$root/.git" --work-tree="$root" rev-parse --short=12 HEAD)
 count=$(grep -cve '^[[:space:]]*$' "$manifest")
+start=${3:-1}
+end=${4:-$count}
+if ((start < 1 || end < start || end > count)); then
+  echo "Invalid manifest range ${start}-${end}; expected 1-${count}" >&2
+  exit 2
+fi
 log_dir=${result_root}/${commit}/${strategy}/lsf
 mkdir -p "$log_dir"
 
@@ -32,7 +38,7 @@ bsub \
   -n 1 \
   -R "rusage[mem=16384]" \
   -W 00:20 \
-  -J "cegp_${strategy}[1-${count}]%${max_parallel}" \
+  -J "cegp_${strategy}_${start}_${end}[${start}-${end}]%${max_parallel}" \
   -oo "${log_dir}/%I.%J.out" \
   -eo "${log_dir}/%I.%J.err" \
   "$root/experiments/cegp_bandit/lsf_array.sh"

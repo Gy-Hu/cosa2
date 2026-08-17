@@ -103,8 +103,11 @@ Run baseline and the final CPU-only UCB concurrently while respecting the
 ```bash
 export CEGP_MANIFEST=/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-manifests/all-array-310.txt
 export CEGP_TIMEOUT=1000
-experiments/cegp_bandit/submit_lsf.sh baseline 64
-experiments/cegp_bandit/submit_lsf.sh no_pseudo_ucb_fallback32 64
+
+# Split ranges to stay below the cluster pending-job threshold. The third and
+# fourth arguments are one-based inclusive manifest indices.
+experiments/cegp_bandit/submit_lsf.sh baseline 32 1 64
+experiments/cegp_bandit/submit_lsf.sh no_pseudo_ucb_fallback32 32 1 64
 ```
 
 ## Summary

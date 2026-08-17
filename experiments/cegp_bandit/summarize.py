@@ -8,6 +8,10 @@ import json
 from pathlib import Path
 
 
+def is_solved(record: dict) -> bool:
+    return not record["timed_out"] and record["result"] in {"sat", "unsat"}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("result_dir", type=Path)
@@ -24,14 +28,15 @@ def main() -> None:
     solved = 0
     for record in records:
         penalty = 2.0 * float(record["timeout_seconds"])
-        score = float(record["wall_seconds"]) if record["solved"] else penalty
+        record_solved = is_solved(record)
+        score = float(record["wall_seconds"]) if record_solved else penalty
         total_par2 += score
-        solved += int(record["solved"])
+        solved += int(record_solved)
         rows.append(
             {
                 "benchmark": record["benchmark"],
                 "result": record["result"],
-                "solved": record["solved"],
+                "solved": record_solved,
                 "wall_seconds": record["wall_seconds"],
                 "par2": score,
             }

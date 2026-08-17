@@ -16,8 +16,12 @@ def load_strategy(path: Path) -> dict[str, dict]:
     return records
 
 
+def is_solved(record: dict) -> bool:
+    return not record["timed_out"] and record["result"] in {"sat", "unsat"}
+
+
 def par2(record: dict) -> float:
-    if record["solved"]:
+    if is_solved(record):
         return float(record["wall_seconds"])
     return 2.0 * float(record["timeout_seconds"])
 
@@ -46,12 +50,12 @@ def main() -> None:
 
     baseline_records = strategies[args.baseline]
     baseline_total = sum(par2(baseline_records[name]) for name in common)
-    baseline_solved = sum(baseline_records[name]["solved"] for name in common)
+    baseline_solved = sum(is_solved(baseline_records[name]) for name in common)
 
     summary = {}
     for strategy, records in strategies.items():
         total = sum(par2(records[name]) for name in common)
-        solved = sum(records[name]["solved"] for name in common)
+        solved = sum(is_solved(records[name]) for name in common)
         summary[strategy] = {
             "completed_cases": len(records),
             "common_cases": len(common),
@@ -78,7 +82,7 @@ def main() -> None:
         best_score, best_name = min(choices)
         oracle_total += best_score
         oracle_solved += int(any(
-            strategies[name][benchmark]["solved"] for name in fixed_names
+            is_solved(strategies[name][benchmark]) for name in fixed_names
         ))
         oracle_winners[benchmark] = best_name
 

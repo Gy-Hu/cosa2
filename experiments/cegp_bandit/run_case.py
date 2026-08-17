@@ -151,7 +151,9 @@ def main() -> int:
     after = resource.getrusage(resource.RUSAGE_CHILDREN)
 
     result = parse_result(stdout)
-    solved = not timed_out and returncode == 0 and result in {"sat", "unsat"}
+    # Pono uses distinct process exit codes for SAT and UNSAT.  The printed
+    # result is the authoritative model-checking outcome.
+    solved = not timed_out and result in {"sat", "unsat"}
     payload = {
         "schema_version": 1,
         "strategy": args.strategy,

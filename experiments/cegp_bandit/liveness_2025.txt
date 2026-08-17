@@ -1,0 +1,12 @@
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/array-examples/sanfoundry_24-1.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/array-industry-pattern/array_assert_loop_dep.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/loop-crafted/simple_array_index_value_1-1.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/loop-crafted/simple_array_index_value_4.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/reducercommutativity/max.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/reducercommutativity/max10-1.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/termination-crafted/LexIndexValue-Array-1.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-rel/loop-acceleration/array_3-1.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-rel/loop-acceleration/array_3-2.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-rel/loop-crafted/simple_array_index_value_3.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-rel/loops/string-1.btor2
+benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-rel/reducercommutativity/max.btor2

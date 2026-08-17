@@ -84,6 +84,29 @@ array elements. Results are written outside the Git worktree by default:
 
 Override this location with `CEGP_RESULT_ROOT` when submitting.
 
+## Full 310-case Array Track
+
+Generate and validate a manifest containing every BTOR2 file in the extracted
+word-level array archive:
+
+```bash
+python3 experiments/cegp_bandit/make_manifest.py \
+  --benchmark-root benchmarks/wordlevel/array \
+  --output /hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-manifests/all-array-310.txt \
+  --expect-count 310 \
+  --require-one-bad
+```
+
+Run baseline and the final CPU-only UCB concurrently while respecting the
+128-slot per-user limit:
+
+```bash
+export CEGP_MANIFEST=/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-manifests/all-array-310.txt
+export CEGP_TIMEOUT=1000
+experiments/cegp_bandit/submit_lsf.sh baseline 64
+experiments/cegp_bandit/submit_lsf.sh no_pseudo_ucb_fallback32 64
+```
+
 ## Summary
 
 ```bash

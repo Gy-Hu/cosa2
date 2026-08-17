@@ -44,14 +44,40 @@ submit_range()
   printf '%s\n' "$job_id"
 }
 
-wait_for_job_array "$current_job"
+job_ids=("$current_job")
+ranges=($remaining_ranges)
+next_range=0
 
-for range in $remaining_ranges; do
-  start=${range%%:*}
-  end=${range##*:}
-  current_job=$(submit_range "$start" "$end")
-  echo "range=${start}-${end} strategy=${strategy} job=${current_job}"
-  wait_for_job_array "$current_job"
+active_elements()
+{
+  local total=0
+  local job_id count
+  for job_id in "${job_ids[@]}"; do
+    count=$(bjobs -a -o "stat" "$job_id" 2>/dev/null \
+      | tail -n +2 \
+      | grep -Ec '^[[:space:]]*(PEND|RUN|PSUSP|USUSP|SSUSP|WAIT)' || true)
+    total=$((total + count))
+  done
+  printf '%s\n' "$total"
+}
+
+while true; do
+  active=$(active_elements)
+  if ((next_range < ${#ranges[@]} && active <= max_parallel)); then
+    range=${ranges[$next_range]}
+    start=${range%%:*}
+    end=${range##*:}
+    current_job=$(submit_range "$start" "$end")
+    job_ids+=("$current_job")
+    next_range=$((next_range + 1))
+    echo "range=${start}-${end} strategy=${strategy} job=${current_job} active_before=${active}"
+    continue
+  fi
+  if ((next_range == ${#ranges[@]} && active == 0)); then
+    break
+  fi
+  echo "pipeline strategy=${strategy} active=${active} submitted_ranges=${next_range}/${#ranges[@]}"
+  sleep 30
 done
 
 echo "all 310 cases completed for ${strategy}"

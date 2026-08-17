@@ -38,6 +38,7 @@
 #include "modifiers/implicit_predicate_abstractor.h"
 #include "options/options.h"
 #include "smt-switch/smt.h"
+#include "utils/cegp_bandit.h"
 
 namespace pono {
 
@@ -79,6 +80,11 @@ class IC3IA : public IC3
 
   size_t longest_cex_length_;  ///< keeps track of longest (abstract)
                                ///< counterexample
+
+  ThreeArmUcbController fallback_bandit_;
+  bool fallback_bandit_pending_ = false;
+  size_t fallback_bandit_arm_ = 0;
+  IC3EpochStatistics fallback_bandit_start_;
 
   // Since MathSAT is the best solver for IC3IA it helps to use
   // its bool_model_generation option which doesn't enable

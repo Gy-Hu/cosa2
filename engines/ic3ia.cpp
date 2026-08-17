@@ -63,7 +63,8 @@ IC3IA::IC3IA(const SafetyProperty & p,
                                           options_.smt_interpolator_opts_)),
       to_interpolator_(interpolator_),
       to_solver_(solver_),
-      longest_cex_length_(0)
+      longest_cex_length_(0),
+      fallback_bandit_(0.5)
 {
   // since we passed a fresh RelationalTransitionSystem as the main TS
   // need to point orig_ts_ to the right place
@@ -239,6 +240,39 @@ void IC3IA::abstract()
 
 RefineResult IC3IA::refine()
 {
+  if (fallback_bandit_pending_) {
+    const IC3EpochStatistics & current = epoch_statistics();
+    const size_t attempts = current.propagation_attempts
+                            - fallback_bandit_start_.propagation_attempts;
+    const size_t successes = current.propagation_successes
+                             - fallback_bandit_start_.propagation_successes;
+    const size_t frontier =
+        current.propagation_successes_to_frontier
+        - fallback_bandit_start_.propagation_successes_to_frontier;
+    const size_t frames =
+        current.frames_created - fallback_bandit_start_.frames_created;
+    const double push_rate =
+        attempts ? static_cast<double>(successes) / attempts : 0.0;
+    const double frontier_rate =
+        attempts ? static_cast<double>(frontier) / attempts : 0.0;
+    const double frame_progress =
+        std::min(1.0, static_cast<double>(frames) / 4.0);
+    const double reward =
+        0.6 * push_rate + 0.2 * frontier_rate + 0.2 * frame_progress;
+    fallback_bandit_.update(fallback_bandit_arm_, reward);
+    logger.log(0,
+               "IC3IA-FALLBACK-BANDIT update round={} arm={} reward={} "
+               "push={}/{} frontier={} frames={}",
+               fallback_bandit_.rounds(),
+               fallback_bandit_arm_,
+               reward,
+               successes,
+               attempts,
+               frontier,
+               frames);
+    fallback_bandit_pending_ = false;
+  }
+
   // counterexample trace should have been populated
   assert(cex_.size());
   if (cex_.size() == 1) {
@@ -333,8 +367,26 @@ RefineResult IC3IA::refine()
               [](const Term & left, const Term & right) {
                 return left->to_string() < right->to_string();
               });
-    if (fresh_preds.size() > options_.ic3ia_fallback_predicates_) {
-      fresh_preds.resize(options_.ic3ia_fallback_predicates_);
+    size_t fallback_limit = options_.ic3ia_fallback_predicates_;
+    if (options_.cegp_bandit_ && fresh_preds.size()) {
+      fallback_bandit_arm_ = fallback_bandit_.select();
+      if (fallback_bandit_arm_ == 1) {
+        fallback_limit = std::max<size_t>(1, (fallback_limit + 1) / 2);
+      } else if (fallback_bandit_arm_ == 2) {
+        fallback_limit = std::max<size_t>(1, (fallback_limit + 3) / 4);
+      }
+      fallback_bandit_start_ = epoch_statistics();
+      fallback_bandit_pending_ = true;
+      logger.log(0,
+                 "IC3IA-FALLBACK-BANDIT select round={} arm={} limit={} "
+                 "candidates={}",
+                 fallback_bandit_.rounds(),
+                 fallback_bandit_arm_,
+                 fallback_limit,
+                 fresh_preds.size());
+    }
+    if (fresh_preds.size() > fallback_limit) {
+      fresh_preds.resize(fallback_limit);
     }
     logger.log(1,
                "IC3IA: interpolation stalled, using {} transition predicate "
@@ -412,6 +464,10 @@ bool IC3IA::is_global_label(const Term & l) const
 
 void IC3IA::reabstract()
 {
+  // A reabstraction starts a new outer CEGAR epoch, so propagation counters
+  // from a pending fallback action are no longer comparable.
+  fallback_bandit_pending_ = false;
+
   // don't add boolean symbols that are never used in the system
   // this is an optimization and a fix for some options
   // if using mathsat with bool_model_generation

@@ -31,28 +31,26 @@ inline const char * to_string(CegpRefinementMode mode)
   throw std::invalid_argument("invalid CEGP refinement mode");
 }
 
-/** A deterministic, CPU-only UCB1 controller.
+/** A deterministic, CPU-only three-arm UCB1 controller.
  *
  * Each arm is sampled once before UCB scores are used.  This keeps the policy
- * transparent and reproducible while allowing the outer CEGAR loop to update
- * it online after each refinement/IC3 epoch.
+ * transparent and reproducible.
  */
-class CegpUcbController
+class ThreeArmUcbController
 {
  public:
-  static constexpr size_t num_arms =
-      static_cast<size_t>(CegpRefinementMode::NUM_MODES);
+  static constexpr size_t num_arms = 3;
 
-  explicit CegpUcbController(double exploration = 0.5)
+  explicit ThreeArmUcbController(double exploration = 0.5)
       : exploration_(exploration)
   {
   }
 
-  CegpRefinementMode select() const
+  size_t select() const
   {
     for (size_t arm = 0; arm < num_arms; ++arm) {
       if (!counts_[arm]) {
-        return static_cast<CegpRefinementMode>(arm);
+        return arm;
       }
     }
 
@@ -66,14 +64,13 @@ class CegpUcbController
         best_score = arm_score;
       }
     }
-    return static_cast<CegpRefinementMode>(best_arm);
+    return best_arm;
   }
 
-  void update(CegpRefinementMode mode, double reward)
+  void update(size_t arm, double reward)
   {
-    const size_t arm = static_cast<size_t>(mode);
     if (arm >= num_arms) {
-      throw std::invalid_argument("invalid CEGP refinement arm");
+      throw std::invalid_argument("invalid UCB arm");
     }
     counts_[arm]++;
     reward_sums_[arm] += reward;
@@ -81,13 +78,9 @@ class CegpUcbController
   }
 
   size_t rounds() const { return rounds_; }
-  size_t count(CegpRefinementMode mode) const
+  size_t count(size_t arm) const { return counts_.at(arm); }
+  double mean_reward(size_t arm) const
   {
-    return counts_.at(static_cast<size_t>(mode));
-  }
-  double mean_reward(CegpRefinementMode mode) const
-  {
-    const size_t arm = static_cast<size_t>(mode);
     return counts_.at(arm) ? reward_sums_.at(arm) / counts_.at(arm) : 0.0;
   }
 
@@ -103,6 +96,39 @@ class CegpUcbController
   size_t rounds_ = 0;
   std::array<size_t, num_arms> counts_{};
   std::array<double, num_arms> reward_sums_{};
+};
+
+/** Typed wrapper for CEG prophecy refinement modes. */
+class CegpUcbController
+{
+ public:
+  explicit CegpUcbController(double exploration = 0.5)
+      : controller_(exploration)
+  {
+  }
+
+  CegpRefinementMode select() const
+  {
+    return static_cast<CegpRefinementMode>(controller_.select());
+  }
+
+  void update(CegpRefinementMode mode, double reward)
+  {
+    controller_.update(static_cast<size_t>(mode), reward);
+  }
+
+  size_t rounds() const { return controller_.rounds(); }
+  size_t count(CegpRefinementMode mode) const
+  {
+    return controller_.count(static_cast<size_t>(mode));
+  }
+  double mean_reward(CegpRefinementMode mode) const
+  {
+    return controller_.mean_reward(static_cast<size_t>(mode));
+  }
+
+ private:
+  ThreeArmUcbController controller_;
 };
 
 }  // namespace pono

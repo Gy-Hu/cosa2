@@ -45,6 +45,7 @@ STRATEGY_FLAGS = {
         "--ic3ia-fallback-preds",
         "32",
     ],
+    "no_pseudo": [],
     "no_pseudo_fallback32": ["--ic3ia-fallback-preds", "32"],
     "no_pseudo_ucb_fallback32": [
         "--cegp-bandit",

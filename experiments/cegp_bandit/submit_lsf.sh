@@ -6,7 +6,7 @@ max_parallel=${2:-12}
 case "$strategy" in
   baseline|full_reduce|consec_core|full_add|ucb|fallback32|ucb_fallback32|\
     warmup10|ucb_fallback32_warmup10|bzla_itp|bzla_itp_fallback32|\
-    bzla_itp_ucb_fallback32|no_pseudo_fallback32|\
+    bzla_itp_ucb_fallback32|no_pseudo|no_pseudo_fallback32|\
     no_pseudo_ucb_fallback32) ;;
   *) echo "Unknown strategy: $strategy" >&2; exit 2 ;;
 esac

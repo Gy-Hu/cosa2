@@ -1,0 +1,33 @@
+{
+  "benchmark": "benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/loop-crafted/simple_array_index_value_1-1.btor2",
+  "command": [
+    "build/pono",
+    "--engine",
+    "ic3ia",
+    "--bound",
+    "2147483646",
+    "--pseudo-init-prop",
+    "--ceg-prophecy-arrays",
+    "--verbosity",
+    "0",
+    "benchmarks/wordlevel/array/2025/sosylab/liveness-l2s-func/loop-crafted/simple_array_index_value_1-1.btor2"
+  ],
+  "cpu_system_seconds": 2.316567,
+  "cpu_user_seconds": 995.026838,
+  "finished_at_utc": "2026-08-17T06:45:26.115249+00:00",
+  "hostname": "bmcpu09",
+  "lsf_job_id": "460210",
+  "lsf_job_index": "3",
+  "max_rss_kib": 532840,
+  "result": "missing",
+  "returncode": 124,
+  "schema_version": 1,
+  "solved": false,
+  "started_at_utc": "2026-08-17T06:28:45.946286+00:00",
+  "stderr_tail": "",
+  "stdout_tail": "",
+  "strategy": "baseline",
+  "timed_out": true,
+  "timeout_seconds": 1000.0,
+  "wall_seconds": 1000.1689246175811
+}

@@ -17,14 +17,19 @@ enabled for every strategy.
 | `ucb_fallback32` | selected online | selected online, plus recovery |
 | `warmup10` | baseline after BMC pre-refinement | baseline |
 | `ucb_fallback32_warmup10` | selected online after BMC pre-refinement | selected online, plus recovery |
+| `bzla_itp` | baseline | baseline, using Bitwuzla interpolation |
+| `bzla_itp_fallback32` | baseline | baseline, using Bitwuzla interpolation plus recovery |
+| `bzla_itp_ucb_fallback32` | selected online | selected online, using Bitwuzla interpolation plus recovery |
 
 All runs use:
 
 - `--engine ic3ia`
 - `--ceg-prophecy-arrays`
 - `--pseudo-init-prop`
-- cvc5 as both SMT solver and interpolator (Bitwuzla returns unsupported/unknown
-  on several of these UF-heavy instances)
+- cvc5 as the SMT solver; default strategies also use cvc5 interpolation
+  (Bitwuzla as the main solver returns unsupported/unknown on several of these
+  UF-heavy instances), while the explicitly named `bzla_itp` variants retain
+  cvc5 for solving and use Bitwuzla only for interpolation
 - an effectively unbounded model-checking bound
 - one CPU slot per benchmark
 - a 1000 second process timeout by default

@@ -38,6 +38,13 @@ STRATEGY_FLAGS = {
         "--cegp-bmc-warmup",
         "10",
     ],
+    "bzla_itp": [],
+    "bzla_itp_fallback32": ["--ic3ia-fallback-preds", "32"],
+    "bzla_itp_ucb_fallback32": [
+        "--cegp-bandit",
+        "--ic3ia-fallback-preds",
+        "32",
+    ],
 }
 
 
@@ -72,7 +79,7 @@ def main() -> int:
     parser.add_argument("--timeout", type=float, default=1000.0)
     parser.add_argument("--pono", default="./build/pono")
     parser.add_argument("--smt-solver", default="cvc5")
-    parser.add_argument("--smt-interpolator", default="cvc5")
+    parser.add_argument("--smt-interpolator")
     parser.add_argument("--verbosity", type=int, default=0)
     args = parser.parse_args()
 
@@ -82,6 +89,10 @@ def main() -> int:
         parser.error(f"benchmark does not exist: {benchmark}")
     if not pono.is_file():
         parser.error(f"Pono executable does not exist: {pono}")
+
+    smt_interpolator = args.smt_interpolator or (
+        "bzla" if args.strategy.startswith("bzla_itp") else "cvc5"
+    )
 
     command = [
         str(pono),
@@ -94,7 +105,7 @@ def main() -> int:
         "--smt-solver",
         args.smt_solver,
         "--smt-interpolator",
-        args.smt_interpolator,
+        smt_interpolator,
         "--verbosity",
         str(args.verbosity),
         *STRATEGY_FLAGS[args.strategy],
@@ -136,7 +147,7 @@ def main() -> int:
         "schema_version": 1,
         "strategy": args.strategy,
         "smt_solver": args.smt_solver,
-        "smt_interpolator": args.smt_interpolator,
+        "smt_interpolator": smt_interpolator,
         "benchmark": str(benchmark),
         "command": command,
         "timeout_seconds": args.timeout,

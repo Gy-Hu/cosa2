@@ -17,6 +17,7 @@ root=${CEGP_PONO_ROOT:-/hpc/home/connect.cchen099/gy-env/pono}
 manifest=${CEGP_MANIFEST:-${root}/experiments/cegp_bandit/liveness_2025.txt}
 result_root=${CEGP_RESULT_ROOT:-/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-results}
 timeout_seconds=${CEGP_TIMEOUT:-1000}
+wall_time=${CEGP_WALL_TIME:-00:20}
 commit=${CEGP_COMMIT:-$(git --git-dir="$root/.git" --work-tree="$root" rev-parse --short=12 HEAD)}
 count=$(grep -cve '^[[:space:]]*$' "$manifest")
 start=${3:-1}
@@ -39,7 +40,7 @@ bsub \
   -q bmcpu \
   -n 1 \
   -R "rusage[mem=16384]" \
-  -W 00:20 \
+  -W "$wall_time" \
   -J "cegp_${strategy}_${start}_${end}[${start}-${end}]%${max_parallel}" \
   -oo "${log_dir}/%I.%J.out" \
   -eo "${log_dir}/%I.%J.err" \

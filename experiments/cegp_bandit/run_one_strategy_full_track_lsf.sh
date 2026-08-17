@@ -7,6 +7,7 @@ current_job=${2:?usage: run_one_strategy_full_track_lsf.sh STRATEGY FIRST_JOB}
 root=${CEGP_PONO_ROOT:-/hpc/home/connect.cchen099/gy-env/pono}
 manifest=${CEGP_MANIFEST:-/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-manifests/all-array-310.txt}
 timeout_seconds=${CEGP_TIMEOUT:-1000}
+wall_time=${CEGP_WALL_TIME:-00:20}
 max_parallel=${CEGP_MAX_PARALLEL:-64}
 remaining_ranges=${CEGP_REMAINING_RANGES:-"65:128 129:192 193:256 257:310"}
 
@@ -29,6 +30,7 @@ submit_range()
     CEGP_PONO_ROOT="$root" \
     CEGP_MANIFEST="$manifest" \
     CEGP_TIMEOUT="$timeout_seconds" \
+    CEGP_WALL_TIME="$wall_time" \
       "$root/experiments/cegp_bandit/submit_lsf.sh" \
         "$strategy" "$max_parallel" "$start" "$end" 2>&1
   )

@@ -9,6 +9,7 @@ manifest=${CEGP_MANIFEST:-/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-man
 timeout_seconds=${CEGP_TIMEOUT:-1000}
 wall_time=${CEGP_WALL_TIME:-00:20}
 max_parallel=${CEGP_MAX_PARALLEL:-64}
+submit_threshold=${CEGP_SUBMIT_THRESHOLD:-$max_parallel}
 remaining_ranges=${CEGP_REMAINING_RANGES:-"65:128 129:192 193:256 257:310"}
 
 wait_for_job_array()
@@ -65,7 +66,7 @@ active_elements()
 
 while true; do
   active=$(active_elements)
-  if ((next_range < ${#ranges[@]} && active <= max_parallel)); then
+  if ((next_range < ${#ranges[@]} && active <= submit_threshold)); then
     range=${ranges[$next_range]}
     start=${range%%:*}
     end=${range##*:}

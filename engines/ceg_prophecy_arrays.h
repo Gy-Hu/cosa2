@@ -26,8 +26,18 @@
 #include "modifiers/prophecy_modifier.h"
 #include "options/options.h"
 #include "refiners/array_axiom_enumerator.h"
+#include "utils/cegp_bandit.h"
 
 namespace pono {
+
+struct CegpBatchStatistics
+{
+  size_t consecutive_candidates = 0;
+  size_t consecutive_kept = 0;
+  size_t prophecy_target_candidates = 0;
+  size_t prophecy_targets_kept = 0;
+  size_t auxiliary_statevars_added = 0;
+};
 
 template <class Prover_T>
 class CegProphecyArrays : public CEGAR<Prover_T>
@@ -70,6 +80,11 @@ class CegProphecyArrays : public CEGAR<Prover_T>
   int reached_k_;  ///< local variable to check the length of BMC refinement run
 
   size_t num_added_axioms_;  ///< set by refine to the number of added axioms
+
+  CegpUcbController bandit_;
+  bool bandit_batch_active_;
+  CegpRefinementMode bandit_mode_;
+  CegpBatchStatistics bandit_batch_statistics_;
 
   smt::UnorderedTermMap labels_;  ///< labels for unsat core minimization
 
@@ -116,6 +131,12 @@ class CegProphecyArrays : public CEGAR<Prover_T>
   void refine_subprover_ts(const smt::UnorderedTermSet & consecutive_axioms);
 
   void add_important_var(const smt::Term & v);
+
+  bool use_nonconsecutive_reduction() const;
+  bool use_consecutive_reduction() const;
+  void maybe_start_bandit_batch(size_t num_consecutive,
+                                size_t num_nonconsecutive_targets);
+  void finish_bandit_epoch(ProverResult result);
 };
 
 }  // namespace pono

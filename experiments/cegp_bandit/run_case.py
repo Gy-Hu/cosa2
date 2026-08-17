@@ -23,6 +23,7 @@ STRATEGY_FLAGS = {
         "--no-cegp-nonconsec-axiom-red",
         "--no-cegp-consec-axiom-red",
     ],
+    "ucb": ["--cegp-bandit"],
 }
 
 
@@ -56,6 +57,8 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--timeout", type=float, default=1000.0)
     parser.add_argument("--pono", default="./build/pono")
+    parser.add_argument("--smt-solver", default="cvc5")
+    parser.add_argument("--smt-interpolator", default="cvc5")
     parser.add_argument("--verbosity", type=int, default=0)
     args = parser.parse_args()
 
@@ -74,6 +77,10 @@ def main() -> int:
         "2147483646",
         "--pseudo-init-prop",
         "--ceg-prophecy-arrays",
+        "--smt-solver",
+        args.smt_solver,
+        "--smt-interpolator",
+        args.smt_interpolator,
         "--verbosity",
         str(args.verbosity),
         *STRATEGY_FLAGS[args.strategy],
@@ -114,6 +121,8 @@ def main() -> int:
     payload = {
         "schema_version": 1,
         "strategy": args.strategy,
+        "smt_solver": args.smt_solver,
+        "smt_interpolator": args.smt_interpolator,
         "benchmark": str(benchmark),
         "command": command,
         "timeout_seconds": args.timeout,

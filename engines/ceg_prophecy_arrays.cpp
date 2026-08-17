@@ -20,8 +20,10 @@
 
 #include "engines/ceg_prophecy_arrays.h"
 
+#include <algorithm>
 #include <cassert>
 #include <map>
+#include <type_traits>
 
 #include "core/rts.h"
 #include "engines/bmc.h"
@@ -47,6 +49,16 @@ using namespace std;
 
 namespace pono {
 
+static size_t count_unique_prophecy_targets(const AxiomVec & axioms)
+{
+  UnorderedTermSet targets;
+  for (const auto & axiom : axioms) {
+    assert(axiom.instantiations.size() == 1);
+    targets.insert(*axiom.instantiations.begin());
+  }
+  return targets.size();
+}
+
 template <class Prover_T>
 CegProphecyArrays<Prover_T>::CegProphecyArrays(const SafetyProperty & p,
                                                const TransitionSystem & ts,
@@ -67,12 +79,25 @@ CegProphecyArrays<Prover_T>::CegProphecyArrays(const SafetyProperty & p,
            has_finite_index_sort_),
       pm_(abs_ts_),
       reached_k_(-1),
-      num_added_axioms_(0)
+      num_added_axioms_(0),
+      bandit_(0.5),
+      bandit_batch_active_(false),
+      bandit_mode_(CegpRefinementMode::FULL_REDUCE)
 {
   // point orig_ts_ to the correct one
   super::orig_ts_ = ts;
-  if (super::options_.cegp_consec_axiom_red_) {
+  if (super::options_.cegp_consec_axiom_red_
+      || super::options_.cegp_bandit_) {
     super::solver_->set_opt("produce-unsat-assumptions", "true");
+  }
+  if (super::options_.cegp_bandit_) {
+    if (!std::is_same<Prover_T, IC3IA>::value) {
+      throw PonoException("--cegp-bandit currently requires engine ic3ia");
+    }
+    if (super::options_.cegp_force_restart_) {
+      throw PonoException(
+          "--cegp-bandit does not support --cegp-force-restart");
+    }
   }
 }
 
@@ -170,6 +195,12 @@ ProverResult CegProphecyArrays<Prover_T>::check_until(int k)
       reached_k_++;
     } while (num_added_axioms_ && reached_k_ <= k);
 
+    if constexpr (std::is_same<Prover_T, IC3IA>::value) {
+      if (bandit_batch_active_) {
+        super::reset_epoch_statistics();
+      }
+    }
+
     if (super::options_.cegp_force_restart_ || super::engine_ != IC3IA_ENGINE) {
       SafetyProperty latest_prop(super::solver_,
                                  super::solver_->make_term(Not, super::bad_));
@@ -206,6 +237,7 @@ ProverResult CegProphecyArrays<Prover_T>::check_until(int k)
       }
     } else {
       res = super::check_until(k);
+      finish_bandit_epoch(res);
       if (res == ProverResult::FALSE) {
         // use witness length
         reached_k_ = super::reached_k_;
@@ -305,6 +337,15 @@ bool CegProphecyArrays<Prover_T>::cegar_refine()
   UnorderedTermSet consecutive_axioms = aae_.get_consecutive_axioms();
   AxiomVec nonconsecutive_axioms = aae_.get_nonconsecutive_axioms();
 
+  const size_t prophecy_target_candidates =
+      count_unique_prophecy_targets(nonconsecutive_axioms);
+  maybe_start_bandit_batch(consecutive_axioms.size(),
+                           prophecy_target_candidates);
+  if (bandit_batch_active_) {
+    bandit_batch_statistics_.prophecy_target_candidates +=
+        prophecy_target_candidates;
+  }
+
   bool found_nonconsecutive_axioms = nonconsecutive_axioms.size();
 
   if (found_nonconsecutive_axioms) {
@@ -312,7 +353,7 @@ bool CegProphecyArrays<Prover_T>::cegar_refine()
     //       variables at the correct time
     //       for now, easier to just search for consecutive axioms
 
-    if (super::options_.cegp_nonconsec_axiom_red_) {
+    if (use_nonconsecutive_reduction()) {
       // update the trace formula with the consecutive axioms
       // needed for it to be unsat with all the nonconsecutive axioms
       // it will be updated again later anyway
@@ -326,6 +367,11 @@ bool CegProphecyArrays<Prover_T>::cegar_refine()
 
       nonconsecutive_axioms =
           reduce_nonconsecutive_axioms(abs_bmc_formula, nonconsecutive_axioms);
+    }
+
+    if (bandit_batch_active_) {
+      bandit_batch_statistics_.prophecy_targets_kept +=
+          count_unique_prophecy_targets(nonconsecutive_axioms);
     }
 
     // First collect all the indices used in nonconsecutive axioms
@@ -343,6 +389,7 @@ bool CegProphecyArrays<Prover_T>::cegar_refine()
     // first: prophecy variable
     // second: target (a history variable for non-zero delay)
     vector<pair<Term, Term>> proph_vars;
+    const size_t statevars_before_prophecy = abs_ts_.statevars().size();
     for (auto timed_idx : instantiations) {
       // number of steps before the property violation
       size_t delay = reached_k_ + 1 - abs_unroller_.get_curr_time(timed_idx);
@@ -355,6 +402,10 @@ bool CegProphecyArrays<Prover_T>::cegar_refine()
       // Prophecy Modifier will add prophecy and history variables
       // automatically here but it does NOT update the property
       proph_vars.push_back(pm_.get_proph(idx, delay));
+    }
+    if (bandit_batch_active_) {
+      bandit_batch_statistics_.auxiliary_statevars_added +=
+          abs_ts_.statevars().size() - statevars_before_prophecy;
     }
 
     assert(instantiations.size() == proph_vars.size());
@@ -391,8 +442,16 @@ bool CegProphecyArrays<Prover_T>::cegar_refine()
     assert(!aae_.get_nonconsecutive_axioms().size());
   }
 
-  if (super::options_.cegp_consec_axiom_red_ && consecutive_axioms.size()) {
+  if (bandit_batch_active_) {
+    bandit_batch_statistics_.consecutive_candidates += consecutive_axioms.size();
+  }
+
+  if (consecutive_axioms.size() && use_consecutive_reduction()) {
     reduce_consecutive_axioms(abs_bmc_formula, consecutive_axioms);
+  }
+
+  if (bandit_batch_active_) {
+    bandit_batch_statistics_.consecutive_kept += consecutive_axioms.size();
   }
 
   if (consecutive_axioms.size() > 0) {
@@ -403,6 +462,126 @@ bool CegProphecyArrays<Prover_T>::cegar_refine()
 
   // able to successfully refine
   return true;
+}
+
+template <class Prover_T>
+bool CegProphecyArrays<Prover_T>::use_nonconsecutive_reduction() const
+{
+  if (!super::options_.cegp_bandit_) {
+    return super::options_.cegp_nonconsec_axiom_red_;
+  }
+  assert(bandit_batch_active_);
+  return bandit_mode_ == CegpRefinementMode::FULL_REDUCE;
+}
+
+template <class Prover_T>
+bool CegProphecyArrays<Prover_T>::use_consecutive_reduction() const
+{
+  if (!super::options_.cegp_bandit_) {
+    return super::options_.cegp_consec_axiom_red_;
+  }
+  assert(bandit_batch_active_);
+  return bandit_mode_ != CegpRefinementMode::FULL_ADD;
+}
+
+template <class Prover_T>
+void CegProphecyArrays<Prover_T>::maybe_start_bandit_batch(
+    size_t num_consecutive, size_t num_nonconsecutive_targets)
+{
+  if (!super::options_.cegp_bandit_ || bandit_batch_active_
+      || (!num_consecutive && !num_nonconsecutive_targets)) {
+    return;
+  }
+
+  bandit_mode_ = bandit_.select();
+  bandit_batch_active_ = true;
+  bandit_batch_statistics_ = {};
+  logger.log(0,
+             "CEGP-BANDIT select round={} mode={} consecutive={} targets={}",
+             bandit_.rounds(),
+             to_string(bandit_mode_),
+             num_consecutive,
+             num_nonconsecutive_targets);
+}
+
+template <class Prover_T>
+void CegProphecyArrays<Prover_T>::finish_bandit_epoch(ProverResult result)
+{
+  if (!bandit_batch_active_) {
+    return;
+  }
+
+  if constexpr (std::is_same<Prover_T, IC3IA>::value) {
+    const IC3EpochStatistics & ic3 = super::epoch_statistics();
+    double compactness = 0.0;
+    size_t compactness_components = 0;
+    if (bandit_batch_statistics_.consecutive_candidates) {
+      assert(bandit_batch_statistics_.consecutive_kept
+             <= bandit_batch_statistics_.consecutive_candidates);
+      compactness +=
+          1.0
+          - static_cast<double>(bandit_batch_statistics_.consecutive_kept)
+                / bandit_batch_statistics_.consecutive_candidates;
+      compactness_components++;
+    }
+    if (bandit_batch_statistics_.prophecy_target_candidates) {
+      assert(bandit_batch_statistics_.prophecy_targets_kept
+             <= bandit_batch_statistics_.prophecy_target_candidates);
+      compactness +=
+          1.0
+          - static_cast<double>(bandit_batch_statistics_.prophecy_targets_kept)
+                / bandit_batch_statistics_.prophecy_target_candidates;
+      compactness_components++;
+    }
+    if (compactness_components) {
+      compactness /= compactness_components;
+    }
+
+    const double push_success =
+        ic3.propagation_attempts
+            ? static_cast<double>(ic3.propagation_successes)
+                  / ic3.propagation_attempts
+            : 0.0;
+    const double frontier_success =
+        ic3.propagation_attempts
+            ? static_cast<double>(ic3.propagation_successes_to_frontier)
+                  / ic3.propagation_attempts
+            : 0.0;
+    const double blocking_distance =
+        ic3.blocking_clauses
+            ? std::min(
+                  1.0,
+                  static_cast<double>(ic3.blocking_push_distance)
+                      / (ic3.blocking_clauses
+                         * std::max<size_t>(1, ic3.frames_created)))
+            : 0.0;
+    const double terminal_progress = result == ProverResult::TRUE ? 1.0 : 0.0;
+    const double reward = 0.45 * compactness + 0.30 * push_success
+                          + 0.10 * frontier_success
+                          + 0.05 * blocking_distance
+                          + 0.10 * terminal_progress;
+
+    bandit_.update(bandit_mode_, reward);
+    logger.log(
+        0,
+        "CEGP-BANDIT update round={} mode={} reward={} compactness={} "
+        "push={}/{} frontier={} block_distance={} queries={} aux_statevars={} "
+        "result={}",
+        bandit_.rounds(),
+        to_string(bandit_mode_),
+        reward,
+        compactness,
+        ic3.propagation_successes,
+        ic3.propagation_attempts,
+        ic3.propagation_successes_to_frontier,
+        blocking_distance,
+        ic3.solver_queries,
+        bandit_batch_statistics_.auxiliary_statevars_added,
+        result);
+  }
+
+  bandit_batch_active_ = false;
+  bandit_batch_statistics_ = {};
 }
 
 // helpers

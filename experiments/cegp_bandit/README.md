@@ -12,15 +12,22 @@ enabled for every strategy.
 | `baseline` / `full_reduce` | on | on |
 | `consec_core` | off | on |
 | `full_add` | off | off |
+| `ucb` | selected online | selected online |
 
 All runs use:
 
 - `--engine ic3ia`
 - `--ceg-prophecy-arrays`
 - `--pseudo-init-prop`
+- cvc5 as both SMT solver and interpolator (Bitwuzla returns unsupported/unknown
+  on several of these UF-heavy instances)
 - an effectively unbounded model-checking bound
 - one CPU slot per benchmark
 - a 1000 second process timeout by default
+
+The `ucb` policy is implemented in C++ and updates only at complete
+refinement/IC3 epoch boundaries. It does not use a GPU or an external ML
+runtime.
 
 The benchmark manifest contains the 12 HWMCC'25 word-level array
 liveness-to-safety instances.  Each file has one bad property.

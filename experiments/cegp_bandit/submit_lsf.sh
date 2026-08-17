@@ -4,7 +4,7 @@ set -euo pipefail
 strategy=${1:?usage: submit_lsf.sh STRATEGY [MAX_PARALLEL]}
 max_parallel=${2:-12}
 case "$strategy" in
-  baseline|full_reduce|consec_core|full_add) ;;
+  baseline|full_reduce|consec_core|full_add|ucb) ;;
   *) echo "Unknown strategy: $strategy" >&2; exit 2 ;;
 esac
 

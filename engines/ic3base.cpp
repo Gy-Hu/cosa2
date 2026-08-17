@@ -446,6 +446,7 @@ ProverResult IC3Base::step(int i)
   logger.log(1, "Propagation phase at frame {}", i);
   // propagation phase
   push_frame();
+  epoch_statistics_.frames_created++;
   for (size_t j = 1; j < frontier_idx(); ++j) {
     if (propagate(j)) {
       assert(j + 1 < frames_.size());
@@ -681,6 +682,12 @@ bool IC3Base::block_all()
         size_t idx = find_highest_frame(pg->idx, collateral);
         assert(idx >= pg->idx);
 
+        epoch_statistics_.blocking_clauses++;
+        epoch_statistics_.blocking_push_distance += idx - pg->idx;
+        if (idx == frontier_idx()) {
+          epoch_statistics_.blocking_clauses_to_frontier++;
+        }
+
         assert(collateral.disjunction);
         assert(collateral.term);
         assert(collateral.children.size());
@@ -748,11 +755,16 @@ bool IC3Base::propagate(size_t i)
 
     // NOTE: rel_ind_check works on conjunctions
     //       need to negate
+    epoch_statistics_.propagation_attempts++;
     if (rel_ind_check(i + 1, ic3formula_negate(c), gen, false)) {
       // can push to next frame
       // got unsat-core based generalization
       assert(gen.term);
       assert(gen.children.size());
+      epoch_statistics_.propagation_successes++;
+      if (i + 1 == frontier_idx()) {
+        epoch_statistics_.propagation_successes_to_frontier++;
+      }
       constrain_frame(i + 1, ic3formula_negate(gen), false);
     } else {
       // have to keep this one at this frame
@@ -763,6 +775,9 @@ bool IC3Base::propagate(size_t i)
   // get rid of garbage at end of frame
   Fi.resize(k);
 
+  if (Fi.empty()) {
+    epoch_statistics_.empty_frames++;
+  }
   return Fi.empty();
 }
 

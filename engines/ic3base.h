@@ -160,6 +160,25 @@ class ProofGoalQueue
   std::vector<ProofGoal *> store_;
 };
 
+/** Lightweight counters for one externally defined IC3 epoch.
+ *
+ * The counters are intentionally independent of wall-clock time.  A caller
+ * such as an outer CEGAR loop can reset them immediately before invoking IC3
+ * and use the resulting propagation feedback after the invocation returns.
+ */
+struct IC3EpochStatistics
+{
+  size_t solver_queries = 0;
+  size_t frames_created = 0;
+  size_t blocking_clauses = 0;
+  size_t blocking_push_distance = 0;
+  size_t blocking_clauses_to_frontier = 0;
+  size_t propagation_attempts = 0;
+  size_t propagation_successes = 0;
+  size_t propagation_successes_to_frontier = 0;
+  size_t empty_frames = 0;
+};
+
 class IC3Base : public SafetyProver
 {
  public:
@@ -184,6 +203,13 @@ class IC3Base : public SafetyProver
 
   size_t witness_length() const override;
 
+  const IC3EpochStatistics & epoch_statistics() const
+  {
+    return epoch_statistics_;
+  }
+
+  void reset_epoch_statistics() { epoch_statistics_ = {}; }
+
  protected:
   bool compute_witness() override;
 
@@ -198,6 +224,8 @@ class IC3Base : public SafetyProver
   size_t solver_context_;
 
   size_t num_check_sat_since_reset_;
+
+  IC3EpochStatistics epoch_statistics_;
 
   bool failed_to_reset_solver_;  ///< some solvers don't support reset
                                  ///< assertions. Stop trying for those solvers.
@@ -572,12 +600,14 @@ class IC3Base : public SafetyProver
   inline smt::Result check_sat()
   {
     num_check_sat_since_reset_++;
+    epoch_statistics_.solver_queries++;
     return solver_->check_sat();
   }
 
   inline smt::Result check_sat_assuming(const smt::TermVec & assumps)
   {
     num_check_sat_since_reset_++;
+    epoch_statistics_.solver_queries++;
     return solver_->check_sat_assuming(assumps);
   }
 

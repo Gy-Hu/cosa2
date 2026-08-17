@@ -118,6 +118,7 @@ CEGP_MANIFEST=/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-manifests/all-a
 CEGP_TIMEOUT=1000 \
 CEGP_MAX_PARALLEL=64 \
 CEGP_COMMIT=<FIRST_RANGE_RESULT_COMMIT> \
+CEGP_REMAINING_RANGES="65:128 129:192 193:256 257:310" \
   experiments/cegp_bandit/run_full_track_lsf.sh \
     <FIRST_BASELINE_JOB_ID> <FIRST_FINAL_JOB_ID>
 ```

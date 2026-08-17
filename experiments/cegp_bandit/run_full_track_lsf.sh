@@ -8,6 +8,7 @@ root=${CEGP_PONO_ROOT:-/hpc/home/connect.cchen099/gy-env/pono}
 manifest=${CEGP_MANIFEST:-/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-manifests/all-array-310.txt}
 timeout_seconds=${CEGP_TIMEOUT:-1000}
 max_parallel=${CEGP_MAX_PARALLEL:-64}
+remaining_ranges=${CEGP_REMAINING_RANGES:-"65:128 129:192 193:256 257:310"}
 
 wait_for_job_array()
 {
@@ -46,7 +47,7 @@ submit_range()
 wait_for_job_array "$baseline_job"
 wait_for_job_array "$final_job"
 
-for range in 65:128 129:192 193:256 257:310; do
+for range in $remaining_ranges; do
   start=${range%%:*}
   end=${range##*:}
   baseline_job=$(submit_range baseline "$start" "$end")

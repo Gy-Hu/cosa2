@@ -106,8 +106,20 @@ export CEGP_TIMEOUT=1000
 
 # Split ranges to stay below the cluster pending-job threshold. The third and
 # fourth arguments are one-based inclusive manifest indices.
-experiments/cegp_bandit/submit_lsf.sh baseline 32 1 64
-experiments/cegp_bandit/submit_lsf.sh no_pseudo_ucb_fallback32 32 1 64
+experiments/cegp_bandit/submit_lsf.sh baseline 64 1 64
+experiments/cegp_bandit/submit_lsf.sh no_pseudo_ucb_fallback32 64 1 64
+```
+
+After submitting the first pair, the remaining ranges can be queued
+automatically without exceeding the pending-job threshold:
+
+```bash
+CEGP_MANIFEST=/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-manifests/all-array-310.txt \
+CEGP_TIMEOUT=1000 \
+CEGP_MAX_PARALLEL=64 \
+CEGP_COMMIT=<FIRST_RANGE_RESULT_COMMIT> \
+  experiments/cegp_bandit/run_full_track_lsf.sh \
+    <FIRST_BASELINE_JOB_ID> <FIRST_FINAL_JOB_ID>
 ```
 
 ## Summary

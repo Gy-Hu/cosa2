@@ -15,7 +15,7 @@ root=${CEGP_PONO_ROOT:-/hpc/home/connect.cchen099/gy-env/pono}
 manifest=${CEGP_MANIFEST:-${root}/experiments/cegp_bandit/liveness_2025.txt}
 result_root=${CEGP_RESULT_ROOT:-/hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-results}
 timeout_seconds=${CEGP_TIMEOUT:-1000}
-commit=$(git --git-dir="$root/.git" --work-tree="$root" rev-parse --short=12 HEAD)
+commit=${CEGP_COMMIT:-$(git --git-dir="$root/.git" --work-tree="$root" rev-parse --short=12 HEAD)}
 count=$(grep -cve '^[[:space:]]*$' "$manifest")
 start=${3:-1}
 end=${4:-$count}

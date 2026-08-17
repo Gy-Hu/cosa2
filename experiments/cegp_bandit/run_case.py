@@ -45,6 +45,12 @@ STRATEGY_FLAGS = {
         "--ic3ia-fallback-preds",
         "32",
     ],
+    "no_pseudo_fallback32": ["--ic3ia-fallback-preds", "32"],
+    "no_pseudo_ucb_fallback32": [
+        "--cegp-bandit",
+        "--ic3ia-fallback-preds",
+        "32",
+    ],
 }
 
 
@@ -93,6 +99,9 @@ def main() -> int:
     smt_interpolator = args.smt_interpolator or (
         "bzla" if args.strategy.startswith("bzla_itp") else "cvc5"
     )
+    pseudo_init_flags = (
+        [] if args.strategy.startswith("no_pseudo") else ["--pseudo-init-prop"]
+    )
 
     command = [
         str(pono),
@@ -100,7 +109,7 @@ def main() -> int:
         "ic3ia",
         "--bound",
         "2147483646",
-        "--pseudo-init-prop",
+        *pseudo_init_flags,
         "--ceg-prophecy-arrays",
         "--smt-solver",
         args.smt_solver,

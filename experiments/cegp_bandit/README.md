@@ -20,6 +20,8 @@ enabled for every strategy.
 | `bzla_itp` | baseline | baseline, using Bitwuzla interpolation |
 | `bzla_itp_fallback32` | baseline | baseline, using Bitwuzla interpolation plus recovery |
 | `bzla_itp_ucb_fallback32` | selected online | selected online, using Bitwuzla interpolation plus recovery |
+| `no_pseudo_fallback32` | baseline | baseline recovery without pseudo-init/property |
+| `no_pseudo_ucb_fallback32` | selected online | selected online recovery without pseudo-init/property |
 
 All runs use:
 

@@ -3,6 +3,10 @@
 This directory contains all structured experiment results and a compressed
 archive of the complete LSF/diagnostic artifacts.
 
+Commit-like directory names and the `result_commit` CSV column use the original
+cluster experiment IDs. Their GitHub-sanitized commit equivalents are listed
+in `../PUBLISH_COMMIT_MAP.md`.
+
 ## Full 310-case result
 
 | Configuration | Solved | PAR-2 total | PAR-2 mean |

@@ -31,10 +31,10 @@ PAR-2 penalty.
 
 ## Reproduction
 
-Final code commit:
+Final GitHub-sanitized code commit:
 
 ```text
-80f5493 ic3ia: credit fallback actions over complete epochs
+1c13aba9e372 ic3ia: credit fallback actions over complete epochs
 ```
 
 Final command shape:
@@ -77,6 +77,9 @@ Important result directories:
 /hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-results/
 80f549363357/no_pseudo_ucb_fallback32/
 ```
+
+The directory prefixes above are original cluster experiment IDs. Publication
+commit IDs are listed in `PUBLISH_COMMIT_MAP.md`.
 
 ## Learning telemetry
 

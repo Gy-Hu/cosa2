@@ -79,10 +79,10 @@ UCB control and the sound transition-predicate fallback:
   <benchmark.btor2>
 ```
 
-The core final code is commit:
+The core final code is the GitHub-sanitized commit:
 
 ```text
-80f5493 ic3ia: credit fallback actions over complete epochs
+1c13aba9e372 ic3ia: credit fallback actions over complete epochs
 ```
 
 ## Reproduction and raw results
@@ -103,6 +103,9 @@ Raw JSON results are under:
 /hpc/home/connect.cchen099/gy-env/pono-cegp-bandit-results/
 29de180e1f45/no_pseudo_ucb_fallback32/
 ```
+
+`29de180e1f45` is the original cluster experiment ID. Publication commit IDs
+are listed in `PUBLISH_COMMIT_MAP.md`.
 
 LSF job arrays:
 

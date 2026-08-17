@@ -3,7 +3,8 @@
 Full 310-case results are recorded in `RESULTS_FULL_310.md`. The focused
 liveness-to-safety experiments are recorded in `RESULTS.md`. Exported raw
 JSON, complete log archives, per-case solve times, and MAB trigger tables are
-under `published_results/`.
+under `published_results/`. The original-cluster to GitHub commit mapping is in
+`PUBLISH_COMMIT_MAP.md`.
 
 This directory contains the reproducible CPU-only harness used to evaluate
 learning-guided array refinement in `CegProphecyArrays<IC3IA>`.

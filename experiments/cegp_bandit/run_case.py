@@ -24,6 +24,12 @@ STRATEGY_FLAGS = {
         "--no-cegp-consec-axiom-red",
     ],
     "ucb": ["--cegp-bandit"],
+    "fallback32": ["--ic3ia-fallback-preds", "32"],
+    "ucb_fallback32": [
+        "--cegp-bandit",
+        "--ic3ia-fallback-preds",
+        "32",
+    ],
 }
 
 

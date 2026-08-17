@@ -13,6 +13,8 @@ enabled for every strategy.
 | `consec_core` | off | on |
 | `full_add` | off | off |
 | `ucb` | selected online | selected online |
+| `fallback32` | baseline | baseline, plus stalled-IC3IA recovery |
+| `ucb_fallback32` | selected online | selected online, plus recovery |
 
 All runs use:
 
@@ -28,6 +30,12 @@ All runs use:
 The `ucb` policy is implemented in C++ and updates only at complete
 refinement/IC3 epoch boundaries. It does not use a GPU or an external ML
 runtime.
+
+The fallback variants add at most 32 previously unseen transition predicates
+when sequence interpolation returns no fresh predicate. This is a sound
+precision-increasing recovery from IC3IA's otherwise terminal `REFINE_FAIL`;
+it is kept as a separate ablation because it is complementary to array axiom
+reduction policy selection.
 
 The benchmark manifest contains the 12 HWMCC'25 word-level array
 liveness-to-safety instances.  Each file has one bad property.

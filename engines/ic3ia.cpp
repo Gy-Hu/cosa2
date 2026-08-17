@@ -314,6 +314,34 @@ RefineResult IC3IA::refine()
     }
   }
 
+  if (!fresh_preds.size() && options_.ic3ia_fallback_predicates_) {
+    UnorderedTermSet trans_preds;
+    get_predicates(
+        solver_, conc_ts_.trans(), trans_preds, false, false, true);
+    UnorderedTermSet fallback_set;
+    for (const auto & p : trans_preds) {
+      Term curr_p = conc_ts_.curr(p);
+      if (conc_ts_.only_curr(curr_p)
+          && predset_.find(curr_p) == predset_.end()) {
+        fallback_set.insert(curr_p);
+      }
+    }
+    fresh_preds.insert(
+        fresh_preds.end(), fallback_set.begin(), fallback_set.end());
+    std::sort(fresh_preds.begin(),
+              fresh_preds.end(),
+              [](const Term & left, const Term & right) {
+                return left->to_string() < right->to_string();
+              });
+    if (fresh_preds.size() > options_.ic3ia_fallback_predicates_) {
+      fresh_preds.resize(options_.ic3ia_fallback_predicates_);
+    }
+    logger.log(1,
+               "IC3IA: interpolation stalled, using {} transition predicate "
+               "fallback(s)",
+               fresh_preds.size());
+  }
+
   if (!fresh_preds.size()) {
     logger.log(1, "IC3IA: refinement failed couldn't find any new predicates");
     return RefineResult::REFINE_FAIL;

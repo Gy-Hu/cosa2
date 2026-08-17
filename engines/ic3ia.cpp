@@ -240,39 +240,6 @@ void IC3IA::abstract()
 
 RefineResult IC3IA::refine()
 {
-  if (fallback_bandit_pending_) {
-    const IC3EpochStatistics & current = epoch_statistics();
-    const size_t attempts = current.propagation_attempts
-                            - fallback_bandit_start_.propagation_attempts;
-    const size_t successes = current.propagation_successes
-                             - fallback_bandit_start_.propagation_successes;
-    const size_t frontier =
-        current.propagation_successes_to_frontier
-        - fallback_bandit_start_.propagation_successes_to_frontier;
-    const size_t frames =
-        current.frames_created - fallback_bandit_start_.frames_created;
-    const double push_rate =
-        attempts ? static_cast<double>(successes) / attempts : 0.0;
-    const double frontier_rate =
-        attempts ? static_cast<double>(frontier) / attempts : 0.0;
-    const double frame_progress =
-        std::min(1.0, static_cast<double>(frames) / 4.0);
-    const double reward =
-        0.6 * push_rate + 0.2 * frontier_rate + 0.2 * frame_progress;
-    fallback_bandit_.update(fallback_bandit_arm_, reward);
-    logger.log(0,
-               "IC3IA-FALLBACK-BANDIT update round={} arm={} reward={} "
-               "push={}/{} frontier={} frames={}",
-               fallback_bandit_.rounds(),
-               fallback_bandit_arm_,
-               reward,
-               successes,
-               attempts,
-               frontier,
-               frames);
-    fallback_bandit_pending_ = false;
-  }
-
   // counterexample trace should have been populated
   assert(cex_.size());
   if (cex_.size() == 1) {
@@ -349,6 +316,8 @@ RefineResult IC3IA::refine()
   }
 
   if (!fresh_preds.size() && options_.ic3ia_fallback_predicates_) {
+    update_fallback_bandit(ProverResult::UNKNOWN);
+
     UnorderedTermSet trans_preds;
     get_predicates(
         solver_, conc_ts_.trans(), trans_preds, false, false, true);
@@ -440,6 +409,54 @@ RefineResult IC3IA::refine()
 
   // able to refine the system to rule out this abstract counterexample
   return RefineResult::REFINE_SUCCESS;
+}
+
+void IC3IA::finish_fallback_bandit(ProverResult result)
+{
+  update_fallback_bandit(result);
+}
+
+void IC3IA::update_fallback_bandit(ProverResult result)
+{
+  if (!fallback_bandit_pending_) {
+    return;
+  }
+
+  const IC3EpochStatistics & current = epoch_statistics();
+  const size_t attempts = current.propagation_attempts
+                          - fallback_bandit_start_.propagation_attempts;
+  const size_t successes = current.propagation_successes
+                           - fallback_bandit_start_.propagation_successes;
+  const size_t frontier = current.propagation_successes_to_frontier
+                          - fallback_bandit_start_
+                                .propagation_successes_to_frontier;
+  const size_t frames =
+      current.frames_created - fallback_bandit_start_.frames_created;
+  const double push_rate =
+      attempts ? static_cast<double>(successes) / attempts : 0.0;
+  const double frontier_rate =
+      attempts ? static_cast<double>(frontier) / attempts : 0.0;
+  const double frame_progress =
+      std::min(1.0, static_cast<double>(frames) / 4.0);
+  const double terminal_progress =
+      result == ProverResult::TRUE
+          ? 1.0
+          : (result == ProverResult::FALSE ? 0.5 : 0.0);
+  const double reward = 0.45 * push_rate + 0.15 * frontier_rate
+                        + 0.15 * frame_progress + 0.25 * terminal_progress;
+  fallback_bandit_.update(fallback_bandit_arm_, reward);
+  logger.log(0,
+             "IC3IA-FALLBACK-BANDIT update round={} arm={} reward={} "
+             "push={}/{} frontier={} frames={} result={}",
+             fallback_bandit_.rounds(),
+             fallback_bandit_arm_,
+             reward,
+             successes,
+             attempts,
+             frontier,
+             frames,
+             result);
+  fallback_bandit_pending_ = false;
 }
 
 void IC3IA::reset_solver()

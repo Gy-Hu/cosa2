@@ -240,6 +240,9 @@ ProverResult CegProphecyArrays<Prover_T>::check_until(int k)
       }
     } else {
       res = super::check_until(k);
+      if constexpr (std::is_same<Prover_T, IC3IA>::value) {
+        super::finish_fallback_bandit(res);
+      }
       finish_bandit_epoch(res);
       if (res == ProverResult::FALSE) {
         // use witness length

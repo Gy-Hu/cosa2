@@ -57,6 +57,8 @@ class IC3IA : public IC3
 
   void add_important_var(smt::Term v);
 
+  void finish_fallback_bandit(ProverResult result);
+
  protected:
   bool compute_witness() override;
 
@@ -85,6 +87,8 @@ class IC3IA : public IC3
   bool fallback_bandit_pending_ = false;
   size_t fallback_bandit_arm_ = 0;
   IC3EpochStatistics fallback_bandit_start_;
+
+  void update_fallback_bandit(ProverResult result);
 
   // Since MathSAT is the best solver for IC3IA it helps to use
   // its bool_model_generation option which doesn't enable

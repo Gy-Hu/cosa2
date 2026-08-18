@@ -1,5 +1,9 @@
 # Full 310-case Array BTOR2 run: semantic IC3IA packet MAB
 
+> **Scope correction:** these are single-engine IC3IA experiments, not the
+> official HWMCC'25 Pono portfolio. The official Pono submission uses 13
+> concurrent engine configurations.
+
 Run configuration:
 
 - Branch: `research/array-ic3ia-mab`
@@ -13,9 +17,9 @@ Run configuration:
 
 | Configuration | Solved | UNSAT | SAT | Timeout | Unknown | PAR-2 total | PAR-2 mean |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Original IC3IA+CEGP baseline | 23/310 | 23 | 0 | 217 | 70 | 575407.95 | 1856.15 |
-| Previous no-pseudo + old UCB fallback32 | 26/310 | 26 | 0 | 235 | 49 | 569129.84 | 1835.90 |
-| New no-pseudo + semantic IC3IA packet MAB | 26/310 | 26 | 0 | 236 | 48 | 569819.44 | 1838.13 |
+| Single-engine IC3IA+CEGP control | 23/310 | 23 | 0 | 217 | 70 | 575407.95 | 1856.15 |
+| Single-engine no-pseudo + old UCB fallback32 | 26/310 | 26 | 0 | 235 | 49 | 569129.84 | 1835.90 |
+| Single-engine no-pseudo + semantic IC3IA packet MAB | 26/310 | 26 | 0 | 236 | 48 | 569819.44 | 1838.13 |
 
 The new semantic-packet MAB solved **26** cases. Relative to the
 original baseline, the solved delta is **+3**

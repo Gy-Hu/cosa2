@@ -1,11 +1,15 @@
 # Full Array BTOR2 results with 3600-second timeout
 
+> **Scope correction:** these are single-engine IC3IA experiments, not the
+> official HWMCC'25 Pono portfolio. The official 165-solved result uses 13
+> concurrent engine configurations on a 16-core node.
+
 Both runs use the same 310-case manifest and a 3600-second per-case timeout.
 
 | Configuration | Solved | UNSAT | SAT | Timeout | Unknown | PAR-2 total | PAR-2 mean |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Baseline IC3IA+CEGP | 24/310 | 24 | 0 | 213 | 73 | 2062631.72 | 6653.65 |
-| Semantic IC3IA packet MAB | 28/310 | 28 | 0 | 231 | 51 | 2036163.45 | 6568.27 |
+| Single-engine IC3IA+CEGP control | 24/310 | 24 | 0 | 213 | 73 | 2062631.72 | 6653.65 |
+| Single-engine semantic IC3IA packet MAB | 28/310 | 28 | 0 | 231 | 51 | 2036163.45 | 6568.27 |
 
 MAB solves **+4** more cases and improves PAR-2 by
 **26468.27**. On the 24

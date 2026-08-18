@@ -67,3 +67,20 @@ lean_core   -> terminal update
 
 This is only a lifecycle and correctness smoke test. It is not a performance
 claim; the fixed-policy oracle-gap experiments above are still required.
+
+## Reports and interpretation
+
+- `RESULTS_FULL_310.md`: 1000-second single-engine results.
+- `RESULTS_FULL_310_3600.md`: 3600-second single-engine results.
+- `full_310_per_case.csv` and `full_310_3600_per_case.csv`: aligned per-case
+  outcomes, times, and visible packet telemetry.
+- `HWMCC25_COUNT_AUDIT.md`: explains why these single-engine results must not
+  be compared directly with the official 165-solved Pono portfolio result.
+- `DECISION_FREQUENCY_AUDIT.md`: records the 170-case trigger coverage, median
+  one decision per triggered case, cold-start limitation, and telemetry needed
+  before a MathSAT factorial experiment.
+
+The current evidence supports improved decision coverage and a reliable
+selection/update lifecycle. It does not yet establish that a per-instance UCB
+learns an effective policy online, because most triggered instances provide
+only one decision and `ARRAY_LOCAL` is effectively invalid.
